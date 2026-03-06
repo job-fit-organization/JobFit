@@ -6,7 +6,7 @@ import { IconName, LUCIDE_ICONS } from '@/app/learning/data/icon'
 
 export default function LearningPage() {
     // --- 상태 관리 --- 데이터형태
-    const [view, setView] = useState<'main' | 'titles' | 'store' | 'quiz'>('main');
+    const [view, setView] = useState<'main' | 'titles' | 'store' | 'quiz' | 'history'>('main');
     const [user, setUser] = useState({
         name: "홍길동",
         mbti: "INTJ",
@@ -140,6 +140,10 @@ export default function LearningPage() {
                         <button onClick={() => setView('store')}
                             className={`px-6 py-3 rounded-2xl font-black text-sm transition-all flex items-center gap-2 ${view === 'store' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'bg-slate-700/50 text-slate-400 hover:text-white'}`}>
                             <ShoppingCart className="w-4 h-4" /> 상점
+                        </button>
+                        <button onClick={() => setView('history')}
+                            className={`px-6 py-3 rounded-2xl font-black text-sm transition-all flex items-center gap-2 ${view === 'history' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-600/30' : 'bg-slate-700/50 text-slate-400 hover:text-white'}`}>
+                            <ShoppingCart className="w-4 h-4" /> 히스토리
                         </button>
                     </nav>
                 </header>
@@ -280,6 +284,55 @@ export default function LearningPage() {
                             </div>
                         </div>
                     )}
+
+                    {view === 'history' && (
+                        <div className="space-y-12 animate-fade-in">
+                            <div className="flex items-center justify-between gap-4 mb-8">
+                                <div className="flex items-center gap-4">
+                                    <div className="p-3 bg-indigo-500 rounded-2xl shadow-lg shadow-indigo-500/20 text-white">
+                                        <ShoppingCart className="w-6 h-6" />
+                                    </div>
+                                    <h2 className="text-3xl font-black text-white">SP Point Store</h2>
+                                </div>
+                                <div className="hidden md:block text-right">
+                                    <p className="text-slate-500 text-sm font-bold uppercase tracking-widest">환상님의 가용 자산</p>
+                                    <p className="text-2xl font-black text-indigo-400">{user.availableSp.toLocaleString()} SP</p>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {STORE_ITEMS.map(item => {
+                                    const isOwned = user.ownedTitles.includes(item.title);
+                                    return (
+                                        <div key={item.id} className="item-card glass-card rounded-[3.5rem] p-10 flex flex-col border border-white/5 relative group transition-all hover:bg-white/[0.03] overflow-hidden">
+                                            <div className="flex justify-between items-start mb-12">
+                                                <div className="w-16 h-16 bg-slate-800/80 rounded-2xl flex items-center justify-center shadow-inner border border-white/5">
+                                                    <div className={`w-8 h-8 ${item.color}`}>
+                                                        {renderIcon(item.icon)}
+                                                    </div>
+                                                </div>
+                                                <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest mt-2">{item.category}</span>
+                                            </div>
+                                            <div className="mb-10">
+                                                <h3 className="text-3xl font-black text-white mb-4 group-hover:text-indigo-400 transition-colors">{item.title}</h3>
+                                                <p className="text-slate-400 text-lg leading-relaxed font-medium opacity-80">{item.desc}</p>
+                                            </div>
+                                            <div className="flex items-center justify-between mt-auto pt-6 border-t border-white/5">
+                                                <div className="flex flex-col">
+                                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">Price</span>
+                                                    <span className="text-2xl font-black text-indigo-400">{item.price.toLocaleString()} <span className="text-sm">SP</span></span>
+                                                </div>
+                                                <button onClick={() => !isOwned && handlePurchaseItem(item)} disabled={isOwned} className={`px-8 py-4 rounded-2xl font-black text-sm transition-all shadow-xl active:scale-95 ${isOwned ? 'bg-emerald-500/10 text-emerald-500 cursor-default border border-emerald-500/20' : 'bg-white text-slate-900 hover:bg-indigo-500 hover:text-white'}`}>
+                                                    {isOwned ? '보유 중' : '구매하기'}
+                                                </button>
+                                            </div>
+                                            <div className="absolute -right-20 -bottom-20 w-40 h-40 bg-indigo-500/5 blur-[80px] rounded-full group-hover:bg-indigo-500/10 transition-colors"></div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+
 
                     {view === 'quiz' && currentQuiz && !quizResult && (
                         <div className="max-w-3xl mx-auto glass-card rounded-[4rem] p-8 md:p-16 shadow-2xl border border-white/10 animate-fade-in">
