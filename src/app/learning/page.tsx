@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { DIFFICULTIES, STORE_ITEMS, Difficulty, StoreItem } from '@/app/learning/data/data';
 import { Award, User, Trophy, Book, ShoppingCart, ShoppingBag, ChartLine, CheckCircle, Lock, LockOpen, Brain, RotateCcw } from 'lucide-react';
 import { IconName, LUCIDE_ICONS } from '@/app/learning/data/icon'
+import TitleCard from '@/app/learning/layout/titlecard'
 
 export default function LearningPage() {
     // --- 상태 관리 --- 데이터형태
@@ -152,11 +153,13 @@ export default function LearningPage() {
                     {view === 'main' && (
                         <>
                             <section className="mb-16">
+                                {/* 상단 구분선: 더 밝은 인디고 그라데이션으로 변경 */}
                                 <div className="flex items-center gap-4 mb-8">
-                                    <div className="h-px flex-1 bg-gradient-to-r from-transparent to-slate-800"></div>
-                                    <h2 className="text-sm font-black text-slate-500 uppercase tracking-[0.3em]">Mastery Path</h2>
-                                    <div className="h-px flex-1 bg-gradient-to-l from-transparent to-slate-800"></div>
+                                    <div className="h-px flex-1 bg-gradient-to-r from-transparent to-indigo-500/40"></div>
+                                    <h2 className="text-sm font-black text-indigo-300 uppercase tracking-[0.3em]">Mastery Path</h2>
+                                    <div className="h-px flex-1 bg-gradient-to-l from-transparent to-indigo-500/40"></div>
                                 </div>
+
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                     {DIFFICULTIES.filter(d => d.type === 'basic').map((diff) => {
                                         const isOwned = user.ownedTitles.includes(diff.title);
@@ -164,17 +167,33 @@ export default function LearningPage() {
                                         const isLocked = diffIndex > 0 && !user.ownedTitles.includes(DIFFICULTIES[diffIndex - 1].title);
 
                                         return (
-                                            <div key={diff.id} className={`relative glass-card p-10 rounded-[3rem] flex flex-col items-center text-center group transition-all shadow-xl ${isOwned ? 'border-emerald-500/30 bg-emerald-500/5' : isLocked ? 'opacity-40 grayscale pointer-events-none' : 'border-white/5 hover:border-indigo-500/40 hover:-translate-y-2'}`}>
-                                                <div className={`w-20 h-20 rounded-[1.5rem] flex items-center justify-center mb-8 transition-all ${isOwned ? 'bg-emerald-500/20 text-emerald-400' : isLocked ? 'bg-slate-800 text-slate-600' : 'bg-slate-700/50 text-indigo-400 group-hover:scale-110'}`}>
+                                            <div
+                                                key={diff.id}
+                                                className={`relative p-8 rounded-[3rem] flex flex-col items-center text-center group transition-all duration-300 border backdrop-blur-xl shadow-2xl ${isOwned
+                                                    ? 'bg-emerald-500/10 border-emerald-500/40 shadow-emerald-900/20'
+                                                    : isLocked
+                                                        ? 'opacity-30 grayscale pointer-events-none border-white/5 bg-transparent'
+                                                        : 'bg-white/10 border-white/20 hover:border-indigo-400/60 hover:-translate-y-2 hover:bg-white/15'}`}
+                                            >
+                                                {/* 아이콘 박스: 배경과 대비되도록 밝기 조절 */}
+                                                <div className={`w-20 h-20 rounded-[1.5rem] flex items-center justify-center mb-8 transition-all shadow-inner ${isOwned ? 'bg-emerald-500/20 text-emerald-400' : isLocked ? 'bg-slate-800 text-slate-600' : 'bg-indigo-500/20 text-indigo-300 group-hover:scale-110'}`}>
                                                     <div className="w-10 h-10 flex items-center justify-center">
                                                         {isOwned ? <CheckCircle className="w-full h-full" /> : isLocked ? <Lock className="w-full h-full" /> : renderIcon(diff.icon)}
                                                     </div>
                                                 </div>
-                                                <h3 className="text-2xl font-black mb-3 text-white">{diff.label} 테스트</h3>
-                                                <p className="text-sm text-slate-500 mb-8 leading-relaxed">
-                                                    {isLocked ? <span className="text-rose-500/70 font-bold">이전 단계 클리어 필요</span> : <>통과 시 <span className="text-indigo-400 font-bold">&quot;{diff.title}&quot;</span> 획득</>}
+
+                                                <h3 className="text-2xl font-black mb-3 text-white drop-shadow-md">{diff.label} 테스트</h3>
+
+                                                {/* 설명 텍스트: 가독성을 위해 밝은 슬레이트로 변경 */}
+                                                <p className="text-sm text-slate-300 mb-8 leading-relaxed font-medium">
+                                                    {isLocked ? <span className="text-rose-400 font-bold opacity-80">이전 단계 클리어 필요</span> : <>통과 시 <span className="text-indigo-300 font-bold">&quot;{diff.title}&quot;</span> 획득</>}
                                                 </p>
-                                                <button onClick={() => !isLocked && handleStartQuiz(diff)} disabled={isLocked} className={`w-full py-5 rounded-[1.5rem] font-black text-sm transition-all shadow-lg active:scale-95 ${isOwned ? 'bg-slate-700 text-slate-300' : isLocked ? 'bg-slate-800 text-slate-600 cursor-not-allowed' : 'bg-white text-slate-900 hover:bg-indigo-500 hover:text-white'}`}>
+
+                                                <button
+                                                    onClick={() => !isLocked && handleStartQuiz(diff)}
+                                                    disabled={isLocked}
+                                                    className={`w-full py-5 rounded-[1.5rem] font-black text-sm transition-all shadow-xl active:scale-95 ${isOwned ? 'bg-slate-700/50 text-slate-300 border border-white/10' : isLocked ? 'bg-slate-800/50 text-slate-600 cursor-not-allowed' : 'bg-indigo-500 text-white hover:bg-indigo-400 shadow-indigo-500/30'}`}
+                                                >
                                                     {isOwned ? '재도전 하기' : isLocked ? '잠겨 있음' : '테스트 시작'}
                                                 </button>
                                             </div>
@@ -198,8 +217,14 @@ export default function LearningPage() {
                                         const isLocked = diffIndex > 0 && !user.ownedTitles.includes(DIFFICULTIES[diffIndex - 1].title);
 
                                         return (
-                                            <div key={diff.id} className={`relative glass-card p-10 rounded-[3rem] flex flex-col items-center text-center group transition-all shadow-xl ${isOwned ? 'border-emerald-500/30 bg-emerald-500/5' : isLocked ? 'opacity-40 grayscale pointer-events-none' : 'border-white/5 hover:border-indigo-500/40 hover:-translate-y-2'}`}>
-                                                <div className={`w-20 h-20 rounded-[1.5rem] flex items-center justify-center mb-8 transition-all ${isOwned ? 'bg-emerald-500/20 text-emerald-400' : isLocked ? 'bg-slate-800 text-slate-600' : 'bg-slate-700/50 text-indigo-400 group-hover:scale-110'}`}>
+                                            <div
+                                                key={diff.id}
+                                                className={`relative p-8 rounded-[3rem] flex flex-col items-center text-center group transition-all duration-300 border backdrop-blur-xl shadow-2xl ${isOwned
+                                                    ? 'bg-emerald-500/10 border-emerald-500/40 shadow-emerald-900/20'
+                                                    : isLocked
+                                                        ? 'opacity-30 grayscale pointer-events-none border-white/5 bg-transparent'
+                                                        : 'bg-white/10 border-white/20 hover:border-indigo-400/60 hover:-translate-y-2 hover:bg-white/15'}`}
+                                            >     <div className={`w-20 h-20 rounded-[1.5rem] flex items-center justify-center mb-8 transition-all ${isOwned ? 'bg-emerald-500/20 text-emerald-400' : isLocked ? 'bg-slate-800 text-slate-600' : 'bg-slate-700/50 text-indigo-400 group-hover:scale-110'}`}>
                                                     <div className="w-10 h-10 flex items-center justify-center">
                                                         {isOwned ? <CheckCircle className="w-full h-full" /> : isLocked ? <Lock className="w-full h-full" /> : renderIcon(diff.icon)}
                                                     </div>
@@ -392,30 +417,6 @@ export default function LearningPage() {
                     </div>
                 </footer>
             </div>
-        </div>
-    );
-}
-
-function TitleCard({ title, label, icon, isOwned, isActive, onEquip, renderIcon }: { title: string, label: string, icon: IconName, isOwned: boolean, isActive: boolean, onEquip: () => void, renderIcon: (iconName: IconName, className?: string) => React.ReactNode }) {
-    return (
-        <div className={`p-8 rounded-[2.5rem] border transition-all flex items-center justify-between relative overflow-hidden group ${isOwned ? (isActive ? 'bg-indigo-500/10 border-indigo-500/50' : 'bg-slate-800/30 border-white/5 hover:border-indigo-500/30') : 'bg-slate-900/50 border-transparent opacity-60'}`}>
-            {!isOwned && <div className="absolute inset-0 z-10 bg-black/40 backdrop-blur-[1px] flex items-center justify-center"><Lock className="w-6 h-6 text-slate-700" /></div>}
-            <div className="flex items-center gap-5">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all ${isOwned ? 'bg-indigo-500/20 text-indigo-400' : 'bg-slate-800 text-slate-700'}`}>
-                    <div className="w-6 h-6">
-                        {renderIcon(icon)}
-                    </div>
-                </div>
-                <div>
-                    <h4 className={`font-black text-lg ${isOwned ? 'text-white' : 'text-slate-600'}`}>&quot;{title}&quot;</h4>
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{label} Reward</p>
-                </div>
-            </div>
-            {isOwned && (
-                <button onClick={onEquip} disabled={isActive} className={`px-5 py-2 rounded-xl text-[10px] font-black transition-all ${isActive ? 'bg-indigo-600 text-white' : 'bg-slate-700 text-slate-400 hover:bg-slate-600 hover:text-white'}`}>
-                    {isActive ? 'EQUIPPED' : 'EQUIP'}
-                </button>
-            )}
         </div>
     );
 }
