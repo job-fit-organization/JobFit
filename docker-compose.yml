@@ -6,10 +6,8 @@ services:
     container_name: jobfit_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: jobfit
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
     ports:
       - "3306:3306"
     volumes:
@@ -31,6 +29,24 @@ services:
     depends_on:
       - db
     command: npm run dev
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: jobfit_backend
+    volumes:
+      - ./backend:/app
+    environment:
+      - DB_NAME=jobfit
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_HOST=db
+      - DB_PORT=3306
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
 
 volumes:
   db_data:
