@@ -1,4 +1,4 @@
-import { Award, CodeXml, ChartBar, LucideIcon, User, Trophy, Book, ShoppingCart, ShoppingBag, ChartLine, CheckCircle, Lock, LockOpen, Brain, RotateCcw, Palette, Lightbulb, HeartPulse, Ghost, Cpu, ShieldHalf, Bookmark, Bolt } from 'lucide-react';
+import { Award, CodeXml, ChartBar, LucideIcon, User, Trophy, Book, ShoppingCart, ShoppingBag, ChartLine, CheckCircle, CheckCircle2, Lock, LockOpen, Brain, RotateCcw, Palette, Lightbulb, HeartPulse, Ghost, Cpu, ShieldHalf, Bookmark, Bolt, Binary, Database, Star, Shield, BookOpen, ZapOff, Check, Zap, X, ChevronRight, LayoutGrid } from 'lucide-react';
 
 export const LUCIDE_ICONS = {
     "CodeXml": CodeXml,
@@ -11,6 +11,7 @@ export const LUCIDE_ICONS = {
     "ShoppingBag": ShoppingBag,
     "ChartLine": ChartLine,
     "CheckCircle": CheckCircle,
+    "CheckCircle2": CheckCircle2,
     "Lock": Lock,
     "LockOpen": LockOpen,
     "Brain": Brain,
@@ -23,6 +24,17 @@ export const LUCIDE_ICONS = {
     "ShieldHalf": ShieldHalf,
     "Bookmark": Bookmark,
     "Bolt": Bolt,
+    "Binary": Binary,
+    "Database": Database,
+    "Star": Star,
+    "Shield": Shield,
+    "BookOpen": BookOpen,
+    "ZapOff": ZapOff,
+    "Check": Check,
+    "Zap": Zap,
+    "X": X,
+    "ChevronRight": ChevronRight,
+    "LayoutGrid": LayoutGrid,
     "fa-bolt": Bolt,
     "fa-shield-halved": ShieldHalf,
     "fa-ghost": Ghost,
@@ -31,7 +43,10 @@ export const LUCIDE_ICONS = {
     "fa-lightbulb": Lightbulb,
     "fa-palette": Palette,
     "fa-heart-pulse": HeartPulse,
-    "fa-award": Award
+    "fa-award": Award,
+    "binary": Binary,
+    "cpu": Cpu,
+    "database": Database
 } as const;
 
 export type IconName = keyof typeof LUCIDE_ICONS;
