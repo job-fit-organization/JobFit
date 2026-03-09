@@ -107,14 +107,14 @@ export default function PythonMasteryExplorer() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0b0b0e] text-slate-200 p-4 md:p-8 font-sans">
+        <div className="min-h-screen bg-background text-slate-200 p-4 md:p-8 font-sans">
             {/* Header */}
             <div className="flex flex-col md:flex-row justify-between items-start mb-10 gap-6">
                 <div>
                     <h1 className="text-4xl font-black italic tracking-tighter text-white">
-                        PYTHON MASTERY <span className="text-indigo-500 underline underline-offset-8">EXPLORER</span>
+                        PYTHON MASTERY <span className="text-primary underline underline-offset-8 decoration-primary/30">EXPLORER</span>
                     </h1>
-                    <p className="text-slate-500 font-medium mt-3">환상 연구원의 지식 계통도 및 칭호 시스템</p>
+                    <p className="text-muted font-medium mt-3">환상 연구원의 지식 계통도 및 칭호 시스템</p>
                 </div>
 
                 <div className="flex gap-4">
@@ -166,8 +166,8 @@ export default function PythonMasteryExplorer() {
             </div>
 
             {/* Canvas Area */}
-            <div className="bg-[#121216] rounded-[2.5rem] border border-white/5 p-12 min-h-[600px] relative overflow-hidden">
-                <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#4f46e5 0.5px, transparent 0.5px)', backgroundSize: '30px 30px' }} />
+            <div className="bg-card/50 rounded-[2.5rem] border border-white/5 p-12 min-h-[600px] relative overflow-hidden">
+                <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(var(--primary) 0.5px, transparent 0.5px)', backgroundSize: '30px 30px' }} />
 
                 <div className="relative flex flex-col items-center">
                     <div className="text-center mb-16">
@@ -210,8 +210,8 @@ export default function PythonMasteryExplorer() {
                                     <button
                                         disabled={!canUnlock}
                                         onClick={() => setModalNode(node.id)}
-                                        className={`group w-44 p-4 rounded-2xl border-2 flex flex-col items-center gap-3 transition-all ${isSolved ? 'bg-indigo-600 border-indigo-400 shadow-[0_0_20px_rgba(99,102,241,0.3)]' :
-                                            canUnlock ? 'bg-slate-800 border-white/10 hover:border-indigo-500' : 'bg-[#1a1a20] border-white/5 opacity-40 grayscale'
+                                        className={`group w-44 p-4 rounded-2xl border-2 flex flex-col items-center gap-3 transition-all ${isSolved ? 'bg-primary/90 border-primary shadow-glow' :
+                                            canUnlock ? 'bg-card border-white/10 hover:border-primary' : 'bg-background border-white/5 opacity-40 grayscale'
                                             }`}
                                     >
                                         <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isSolved ? 'bg-white/20' : 'bg-black/50'}`}>
