@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'jobfit',
+    'recommendation',
     'rest_framework',
     'drf_spectacular',
 ]
@@ -134,3 +135,6 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'JobFit 서비스 API 문서',
     'VERSION': '1.0.0',
 }
+
+# AI Job Recommendation Test
+RECOMMENDATION_QUESTION_COUNT = 10
