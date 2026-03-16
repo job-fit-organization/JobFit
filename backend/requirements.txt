@@ -1,4 +1,4 @@
-Django>=4.2.0
-mysqlclient>=2.2.0
-python-dotenv>=1.0.0
-django-cors-headers>=4.3.0
+django==6.0.3
+mysqlclient==2.2.8
+djangorestframework==3.16.1
+drf-drf-spectacular==0.29.0
