@@ -1,4 +1,4 @@
 django==6.0.3
 mysqlclient==2.2.8
 djangorestframework==3.16.1
-drf-drf-spectacular==0.29.0
+drf-spectacular==0.29.0
