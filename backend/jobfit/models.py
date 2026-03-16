@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.conf import settings
 
 # Create your models here.
 class Category(models.Model): # 대분류 테이블
@@ -78,7 +79,7 @@ class AssessmentAttempt(models.Model): # 퀴즈 응시 이력 테이블
         ('completed', 'Completed'),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assessment_attempts')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='assessment_attempts')
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='attempts')
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
     total_questions = models.PositiveIntegerField(default=5)
@@ -131,7 +132,7 @@ class UserSubCategoryProgress(models.Model): # 응시 현황을 저장하는 테
     attempt_count: 퀴즈 응시 횟수
     last_attempt_at: 최신 응시 시점
     '''
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subcategory_progress')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='subcategory_progress')
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='user_progress')
     is_unlocked = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)
