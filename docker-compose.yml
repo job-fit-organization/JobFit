@@ -32,5 +32,23 @@ services:
       - db
     command: npm run dev
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: jobfit_backend
+    volumes:
+      - ./backend:/app
+    environment:
+      - DB_NAME=jobfit
+      - DB_USER=myuser
+      - DB_PASSWORD=mypassword
+      - DB_HOST=db
+      - DB_PORT=3306
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
 volumes:
   db_data:

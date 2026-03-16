@@ -146,5 +146,5 @@ from dotenv import load_dotenv
 
 load_dotenv(BASE_DIR.parent / '.env') # Load from JobFit/.env
 
-KAKAO_REST_API_KEY = os.environ.get('KAKAO_REST_API_KEY', '')
-KAKAO_REDIRECT_URI = os.environ.get('KAKAO_REDIRECT_URI', 'http://localhost:3000/mypage/login/callback')
+KAKAO_REST_API_KEY = os.environ.get('KAKAO_REST_API_KEY', '').strip()
+KAKAO_REDIRECT_URI = os.environ.get('KAKAO_REDIRECT_URI', 'http://localhost:3000/mypage/login/callback').strip()
