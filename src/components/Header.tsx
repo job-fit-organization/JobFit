@@ -26,6 +26,10 @@ export default function Header() {
                             <GraduationCap className="w-4 h-4" />
                             학습
                         </Link>
+                        <Link href="/survey" className="text-sm font-bold text-muted hover:text-foreground transition-colors flex items-center gap-2">
+                            <GraduationCap className="w-4 h-4" />
+                            설문조사
+                        </Link>
                     </nav>
 
                     <div className="flex items-center gap-4">

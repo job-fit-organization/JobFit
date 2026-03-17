@@ -49,4 +49,11 @@ export const LUCIDE_ICONS = {
     "database": Database
 } as const;
 
+export const ICON_MAP = {
+    "파이썬": Binary,
+    "딥러닝": Cpu,
+    "머신러닝": Brain,
+    "데이터분석": ChartLine,
+};
+
 export type IconName = keyof typeof LUCIDE_ICONS;

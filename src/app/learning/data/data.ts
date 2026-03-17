@@ -1,4 +1,50 @@
 import { IconName } from './icon';
+import axios from 'axios';
+
+// 1. 백엔드 직접 호출을 위해 절대 경로 사용 (Next.js 프록시 우회)
+const API_BASE_URL_TEST = 'http://localhost:8000/api/jobfit';
+
+export const categoryList = async (): Promise<Category[]> => {
+    try {
+        // 2. axios.get 사용 (끝에 슬래시는 백엔드 규칙에 맞춰 유지)
+        const response = await axios.get(`${API_BASE_URL_TEST}/categories/`);
+
+        // axios는 응답 데이터를 response.data 안에 담아줍니다.
+        const data = response.data;
+
+        // 백엔드 구조에 따라 data.categories 혹은 data 자체를 반환
+        return data.categories || data;
+
+    } catch (error: any) {
+        // 3. 에러 처리 (네트워크 에러, 4xx, 5xx 에러 등이 모두 여기로 옵니다)
+        if (axios.isAxiosError(error)) {
+            console.error("Axios 에러 발생:", error.response?.status, error.message);
+        }
+        // 에러 발생 시 빈 배열을 반환하여 UI가 깨지거나 Error Overlay가 뜨는 것을 방지합니다.
+        return [];
+    }
+};
+
+// DB(API)로부터 데이터를 가져오는 함수
+export const fetchSubcategories = async (): Promise<SkillStage[]> => {
+    try {
+        const response = await fetch(API_BASE_URL_TEST + '/subcategories/1/attempts/start/'); // DB API 주소
+        if (!response.ok) throw new Error('데이터를 불러오는데 실패했습니다.');
+
+        const data = await response.json();
+        console.log(data);
+        return data.subcategories;
+    } catch (error) {
+        console.error("Data Fetch Error:", error);
+        return []; // 에러 발생 시 빈 배열 반환
+    }
+};
+
+export interface Category {
+    id: number;
+    name: string;
+    stages: SkillStage[];
+}
 
 export interface Question {
     q: string;
@@ -16,6 +62,14 @@ export interface Difficulty {
     questions: Question[];
 }
 
+export interface SkillStage {
+    id: number;
+    name: string;
+    theme: string;
+    icon: IconName;
+    nodes: SkillNode[];
+}
+
 export interface SkillNode {
     id: string;
     name: string;
@@ -23,14 +77,6 @@ export interface SkillNode {
     y: number;
     type?: 'essential' | 'sub';
     req?: string;
-}
-
-export interface SkillStage {
-    id: number;
-    name: string;
-    theme: string;
-    icon: IconName;
-    nodes: SkillNode[];
 }
 
 export interface Quiz {

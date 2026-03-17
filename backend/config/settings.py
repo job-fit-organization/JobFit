@@ -39,11 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'jobfit',
+    'recommendation',
     'rest_framework',
+    'corsheaders',
     'drf_spectacular',
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,6 +55,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'config.urls'
 
@@ -134,3 +140,6 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'JobFit 서비스 API 문서',
     'VERSION': '1.0.0',
 }
+
+# AI Job Recommendation Test
+RECOMMENDATION_QUESTION_COUNT = 10

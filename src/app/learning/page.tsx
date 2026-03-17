@@ -2,13 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import {
-    Award, User, Trophy, Book, ShoppingCart, ShoppingBag,
-    ChartLine, CheckCircle, CheckCircle2, Lock, LockOpen,
-    Brain, RotateCcw, Check, Zap, ZapOff, X, ChevronRight,
-    Binary, Cpu, Database, LayoutGrid, Star, Shield, BookOpen
+    Award, Trophy, CheckCircle2, Zap, ZapOff, X
 } from 'lucide-react';
-import { IconName, LUCIDE_ICONS } from '@/app/learning/data/icon'
-import { QUIZZES, SKILL_STAGES, TITLES } from '@/app/learning/data/data'
+import { ICON_MAP, LUCIDE_ICONS } from '@/app/learning/data/icon'
+import { QUIZZES, SKILL_STAGES, TITLES, categoryList, Category } from '@/app/learning/data/data'
+import { HelpCircle } from 'lucide-react'; // 기본 아이콘용
 
 // --- Main Component ---
 export default function PythonMasteryExplorer() {
@@ -21,6 +19,13 @@ export default function PythonMasteryExplorer() {
     const [showingResults, setShowingResults] = useState(false);
     const [feedback, setFeedback] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
     const [showCollection, setShowCollection] = useState(false);
+    const [data, setData] = useState<Category[]>([]);
+
+    useEffect(() => {
+        // 여기서 데이터를 불러옵니다.
+        categoryList().then(res => setData(res));
+
+    }, []); // 딱 한 번만 실행!
 
     useEffect(() => {
         setIsMounted(true);
@@ -44,16 +49,16 @@ export default function PythonMasteryExplorer() {
     }, [solved, isMounted]);
 
     const getStageProgress = (stageId: number) => {
-        const stage = SKILL_STAGES.find(s => s.id === stageId);
+        const stage = data.find(s => s.id === stageId);
         if (!stage) return 0;
-        const stageNodes = stage.nodes.map(n => n.id);
-        const solvedCount = Array.isArray(solved) ? solved.filter(id => stageNodes.includes(id)).length : 0;
-        return (stageNodes.length > 0 ? (solvedCount / stageNodes.length) * 100 : 0);
+        // const stageNodes = stage.stages.map(n => n.id);
+        // const solvedCount = Array.isArray(solved) ? solved.filter(id => stageNodes.includes(id)).length : 0;
+        // return (stageNodes.length > 0 ? (solvedCount / stageNodes.length) * 100 : 0);
     };
 
     const isStageUnlocked = (stageId: number) => {
         if (stageId === 1) return true;
-        return getStageProgress(stageId - 1) >= 80;
+        // return getStageProgress(stageId - 1) >= 80;
     };
 
     const totalNodesCount = SKILL_STAGES.reduce((acc, s) => acc + (s.nodes?.length || 0), 0);
@@ -102,7 +107,11 @@ export default function PythonMasteryExplorer() {
     };
 
     const renderIcon = (iconName: string, className: string = "") => {
-        const IconComponent = LUCIDE_ICONS[iconName as IconName] || Zap;
+        const IconComponent =
+            ICON_MAP[iconName as keyof typeof ICON_MAP] ||
+            LUCIDE_ICONS[iconName as keyof typeof LUCIDE_ICONS] ||
+            HelpCircle;
+
         return <IconComponent className={className} />;
     };
 
@@ -134,7 +143,7 @@ export default function PythonMasteryExplorer() {
 
             {/* Stage Selection */}
             <div className="flex gap-3 mb-10 overflow-x-auto pb-4 scrollbar-hide">
-                {SKILL_STAGES.map(stage => {
+                {data.map(stage => {
                     const unlocked = isStageUnlocked(stage.id);
                     const active = currentStageId === stage.id;
                     return (
@@ -147,7 +156,7 @@ export default function PythonMasteryExplorer() {
                         >
                             <div className="flex items-center gap-3 mb-3">
                                 <div className={active ? 'text-indigo-400' : 'text-slate-600'}>
-                                    {renderIcon(stage.icon, "w-5 h-5")}
+                                    {renderIcon(stage.name, "w-5 h-5")}
                                 </div>
                                 <div>
                                     <div className="text-[10px] font-bold text-slate-500">{stage.id}차 전직</div>
