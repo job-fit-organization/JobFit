@@ -1,7 +1,35 @@
 'use client';
 
 import Link from 'next/link';
-import { Brain, GraduationCap, ClipboardList, LogIn } from 'lucide-react';
+import { Brain, GraduationCap, ClipboardList, LogIn, } from 'lucide-react';
+import axios from 'axios';
+
+const API_BASE_URL_TEST = 'http://localhost:8000/api/v1';
+export const login = async (email: string, password: string): Promise<any> => {
+    try {
+        const response = await axios.post(`${API_BASE_URL_TEST}/accounts/login/`, {
+            email,
+            password
+        });
+        return response.data;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error("login 에러:", error.response?.status, error.message);
+        }
+        return null;
+    }
+};
+
+const handleLogin = async () => {
+    const res = await login('dlworjs@example.com', 'test1234!');
+    console.log(res);
+    if (res) {
+        localStorage.setItem('email', res.email);
+        localStorage.setItem('access', res.access);
+        localStorage.setItem('refresh', res.refresh);
+    }
+};
+
 
 export default function Header() {
     return (
@@ -27,19 +55,26 @@ export default function Header() {
                             학습
                         </Link>
                         <Link href="/survey" className="text-sm font-bold text-muted hover:text-foreground transition-colors flex items-center gap-2">
-                            <GraduationCap className="w-4 h-4" />
+                            <ClipboardList className="w-4 h-4" />
                             설문조사
                         </Link>
                     </nav>
 
                     <div className="flex items-center gap-4">
-                        <Link
+                        {/* <Link
                             href="/login"
                             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-sm transition-all shadow-lg active:scale-95"
                         >
                             <LogIn className="w-4 h-4" />
                             로그인
-                        </Link>
+                        </Link> */}
+                        <button
+                            onClick={handleLogin}
+                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-bold text-sm transition-all shadow-lg active:scale-95"
+                        >
+                            <LogIn className="w-4 h-4" />
+                            로그인
+                        </button>
                     </div>
                 </div>
             </div>

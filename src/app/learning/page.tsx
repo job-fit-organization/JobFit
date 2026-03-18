@@ -5,27 +5,103 @@ import {
     Award, Trophy, CheckCircle2, Zap, ZapOff, X
 } from 'lucide-react';
 import { ICON_MAP, LUCIDE_ICONS } from '@/app/learning/data/icon'
-import { QUIZZES, SKILL_STAGES, TITLES, categoryList, Category } from '@/app/learning/data/data'
+import { QUIZZES, QuizData, categoryList, Category, fetchSubcategories } from '@/app/learning/data/data'
 import { HelpCircle } from 'lucide-react'; // 기본 아이콘용
+
+const token = typeof window !== 'undefined' ? localStorage.getItem('access') : null;
+const refresh = typeof window !== 'undefined' ? localStorage.getItem('refresh') : null;
+const email = typeof window !== 'undefined' ? localStorage.getItem('email') : null;
+
+console.log("현재 토큰 상태:", token);
+console.log("현재 리프레시 토큰 상태:", refresh);
+console.log("현재 이메일 상태:", email);
+
+// --- Shared Components ---
+const ProgressBar = ({
+    progress,
+    label,
+    isActive = false,
+    size = 'normal'
+}: {
+    progress: number;
+    label: string;
+    isActive?: boolean;
+    size?: 'normal' | 'large'
+}) => {
+    const isLarge = size === 'large';
+
+    return (
+        <div className={isLarge ? "" : "mt-8"}>
+            <div className={`flex justify-between ${isLarge ? 'items-end mb-4' : 'text-[10px] font-bold uppercase tracking-widest mb-2'}`}>
+                <span className={isLarge ? 'text-slate-400 text-xs font-black uppercase tracking-widest' : (isActive ? 'text-indigo-200' : 'text-slate-500')}>
+                    {label}
+                </span>
+                <span className={isLarge ? 'text-4xl font-black text-white italic' : (isActive ? 'text-white' : 'text-slate-300')}>
+                    {Math.round(progress)}%
+                </span>
+            </div>
+            <div className={`w-full overflow-hidden border ${isLarge ? 'h-3 bg-white/5 rounded-full border-white/5' : `h-1.5 rounded-full ${isActive ? 'bg-black/20 border-transparent' : 'bg-white/5 border-transparent'}`}`}>
+                <div
+                    className={`h-full transition-all duration-1000 ease-out ${isLarge ? 'bg-gradient-to-r from-indigo-600 via-purple-500 to-indigo-400' : (isActive ? 'bg-white' : 'bg-indigo-500/50')}`}
+                    style={{ width: `${progress}%` }}
+                />
+            </div>
+        </div>
+    );
+};
 
 // --- Main Component ---
 export default function PythonMasteryExplorer() {
     const [solved, setSolved] = useState<string[]>([]);
     const [isMounted, setIsMounted] = useState(false);
-    const [currentStageId, setCurrentStageId] = useState(1);
+    const [currentStageId, setCurrentStageId] = useState<number | null>(null);
     const [modalNode, setModalNode] = useState<string | null>(null);
     const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
     const [userAnswers, setUserAnswers] = useState<number[]>([]);
     const [showingResults, setShowingResults] = useState(false);
     const [feedback, setFeedback] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
-    const [showCollection, setShowCollection] = useState(false);
-    const [data, setData] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [subcategories, setSubcategories] = useState<any[]>([]);
+    const [categoryProgress, setCategoryProgress] = useState<Record<number, number>>({});
+    const [globalProgress, setGlobalProgress] = useState(0);
+    const [dynamicQuizzes, setDynamicQuizzes] = useState<QuizData>({});
 
     useEffect(() => {
-        // 여기서 데이터를 불러옵니다.
-        categoryList().then(res => setData(res));
+        categoryList().then(data => {
+            // 각 카테고리에 progress 필드가 없다면 임의로 추가하거나, 
+            // 서버에서 준 데이터(예: cat.proficiency)를 연결합니다.
+            const mappedData = data.map((cat: any) => ({
+                ...cat,
+                currentProgress: cat.proficiency || 0 // 서버 데이터 명칭에 맞춰주세요!
+            }));
+            setCategories(mappedData);
+        });
+    }, []);
 
-    }, []); // 딱 한 번만 실행!
+    useEffect(() => {
+        // 카테고리 목록 불러오기
+        categoryList().then(res => {
+            setCategories(res);
+            if (res.length > 0 && currentStageId === null) {
+                setCurrentStageId(res[0].id);
+            }
+        });
+
+        if (currentStageId) {
+            console.log("email", email);
+            // 서브카테고리 목록 불러오기
+            fetchSubcategories(currentStageId, email).then(res => {
+                console.log('subcategories', res);
+                setSubcategories(res)
+            });
+
+            //서브카테고리별 문제 목록 불러오기
+            // fetchQuestions(currentStageId).then(res => setDynamicQuizzes(res || {}));
+        }
+    }, [currentStageId]);
+
+    console.log('dynamicQuizzes', dynamicQuizzes);
+
 
     useEffect(() => {
         setIsMounted(true);
@@ -48,22 +124,39 @@ export default function PythonMasteryExplorer() {
         }
     }, [solved, isMounted]);
 
-    const getStageProgress = (stageId: number) => {
-        const stage = data.find(s => s.id === stageId);
-        if (!stage) return 0;
-        // const stageNodes = stage.stages.map(n => n.id);
-        // const solvedCount = Array.isArray(solved) ? solved.filter(id => stageNodes.includes(id)).length : 0;
-        // return (stageNodes.length > 0 ? (solvedCount / stageNodes.length) * 100 : 0);
+    // 진행률 통합 계산
+    const updateProgressForCategory = (categoryId: number, currentSolved: string[], nodes: any[]) => {
+        if (nodes.length === 0) return;
+
+        const subIds = nodes.map(s => s.id.toString());
+        const solvedInCat = currentSolved.filter(id => subIds.includes(id)).length;
+        const progress = (solvedInCat / nodes.length) * 100;
+
+        setCategoryProgress(prev => ({
+            ...prev,
+            [categoryId]: progress
+        }));
     };
 
-    const isStageUnlocked = (stageId: number) => {
-        if (stageId === 1) return true;
-        // return getStageProgress(stageId - 1) >= 80;
+    const isStageUnlocked = (categoryId: number) => {
+        if (categories.length > 0 && categoryId === categories[0]?.id) return true;
+        const index = categories.findIndex(c => c.id === categoryId);
+        if (index <= 0) return true;
+        const prevCategory = categories[index - 1];
+        return (categoryProgress[prevCategory.id] || 0) >= 80;
     };
 
-    const totalNodesCount = SKILL_STAGES.reduce((acc, s) => acc + (s.nodes?.length || 0), 0);
+    // 노드 위치 매핑 (데이터베이스 순서에 따라 배치)
+    const getNodePosition = (index: number) => {
+        const positions = [
+            { x: 0.5, y: 0 }, { x: 1.5, y: 0 },
+            { x: 0.5, y: 1 }, { x: 1.5, y: 1 },
+            { x: 0.5, y: 2 }, { x: 1.5, y: 2 },
+        ];
+        return positions[index % positions.length];
+    };
+
     const solvedCount = Array.isArray(solved) ? solved.length : 0;
-    const globalProgress = totalNodesCount > 0 ? (solvedCount / totalNodesCount) * 100 : 0;
 
     const handleQuizAnswer = (idx: number) => {
         if (!modalNode) return;
@@ -76,7 +169,6 @@ export default function PythonMasteryExplorer() {
         if (currentQuestionIdx < quiz.questions.length - 1) {
             setCurrentQuestionIdx(prev => prev + 1);
         } else {
-            // End of quiz, show results
             setShowingResults(true);
         }
     };
@@ -84,7 +176,15 @@ export default function PythonMasteryExplorer() {
     const handleClaimMastery = () => {
         if (!modalNode) return;
         if (!solved.includes(modalNode)) {
-            setSolved(prev => [...prev, modalNode]);
+            const newSolved = [...solved, modalNode];
+            setSolved(newSolved);
+
+            // 현재 카테고리의 점수를 즉시 갱신하여 고정함
+            if (currentStageId) {
+                updateProgressForCategory(currentStageId, newSolved, subcategories);
+            }
+
+            setFeedback({ msg: '지식을 습득했습니다!', type: 'success' });
         }
         closeQuiz();
     };
@@ -107,133 +207,184 @@ export default function PythonMasteryExplorer() {
     };
 
     const renderIcon = (iconName: string, className: string = "") => {
-        const IconComponent =
-            ICON_MAP[iconName as keyof typeof ICON_MAP] ||
-            LUCIDE_ICONS[iconName as keyof typeof LUCIDE_ICONS] ||
-            HelpCircle;
-
+        const IconComponent = LUCIDE_ICONS[iconName as keyof typeof LUCIDE_ICONS] || HelpCircle;
         return <IconComponent className={className} />;
     };
 
+    if (!isMounted) return null;
+
+    const currentCategory = categories.find(c => c.id === currentStageId);
+
     return (
-        <div className="min-h-screen bg-background text-slate-200 p-4 md:p-8 font-sans">
-            {/* Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start mb-10 gap-6">
-                <div>
-                    <h1 className="text-4xl font-black italic tracking-tighter text-white">
-                        PYTHON MASTERY <span className="text-primary underline underline-offset-8 decoration-primary/30">EXPLORER</span>
-                    </h1>
-                    <p className="text-muted font-medium mt-3">환상 연구원의 지식 계통도 및 칭호 시스템</p>
-                </div>
-
-                <div className="flex gap-4">
-                    <button
-                        onClick={() => setShowCollection(true)}
-                        className="bg-[#1a1a22] border border-indigo-500/30 px-5 py-2 rounded-xl hover:bg-indigo-600/10 transition-all flex items-center gap-2"
-                    >
-                        <Award className="w-5 h-5 text-indigo-400" />
-                        <span className="font-bold">칭호 도감</span>
-                    </button>
-                    <div className="bg-[#1a1a22] border border-white/10 px-6 py-2 rounded-xl text-right">
-                        <div className="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Global Progress</div>
-                        <div className="text-xl font-black text-indigo-400">{globalProgress.toFixed(1)}%</div>
-                    </div>
-                </div>
+        <div className="min-h-screen bg-[#050508] text-slate-200 font-sans selection:bg-indigo-500/30">
+            {/* Background Effects */}
+            <div className="fixed inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 blur-[120px] rounded-full" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full" />
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 contrast-150" />
             </div>
 
-            {/* Stage Selection */}
-            <div className="flex gap-3 mb-10 overflow-x-auto pb-4 scrollbar-hide">
-                {data.map(stage => {
-                    const unlocked = isStageUnlocked(stage.id);
-                    const active = currentStageId === stage.id;
-                    return (
-                        <button
-                            key={stage.id}
-                            onClick={() => unlocked && setCurrentStageId(stage.id)}
-                            className={`min-w-[200px] p-5 rounded-2xl border-2 transition-all text-left ${active ? 'bg-indigo-600/20 border-indigo-500 shadow-lg' :
-                                unlocked ? 'bg-slate-900/50 border-white/5 opacity-80' : 'bg-black border-white/5 opacity-30 cursor-not-allowed'
-                                }`}
-                        >
-                            <div className="flex items-center gap-3 mb-3">
-                                <div className={active ? 'text-indigo-400' : 'text-slate-600'}>
-                                    {renderIcon(stage.name, "w-5 h-5")}
-                                </div>
-                                <div>
-                                    <div className="text-[10px] font-bold text-slate-500">{stage.id}차 전직</div>
-                                    <div className="text-sm font-black text-white">{stage.name.split(': ')[1] || stage.name}</div>
-                                </div>
+            <div className="relative max-w-7xl mx-auto px-6 py-12">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 animate-slide-up">
+                    <div>
+                        <div className="flex items-center gap-3 mb-4">
+                            <div className="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-indigo-400 text-xs font-bold tracking-widest uppercase">
+                                Learning Path
                             </div>
-                            <div className="w-full h-1.5 bg-white/5 rounded-full">
-                                <div
-                                    className="h-full bg-indigo-500 transition-all duration-1000"
-                                    style={{ width: `${getStageProgress(stage.id)}%` }}
+                            <div className="w-1 h-1 bg-slate-700 rounded-full" />
+                            <div className="text-slate-500 text-xs font-bold uppercase tracking-widest">
+                                {currentCategory?.name || "Loading..."}
+                            </div>
+                        </div>
+                        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-none italic">
+                            KNOWLEDGE<br />EXPEDITION
+                        </h1>
+                        <p className="max-w-xl text-slate-400 text-lg font-medium leading-relaxed uppercase tracking-tighter opacity-80">
+                            당신의 기술적 한계를 뛰어넘는 여정.<br />각 단계를 정복하고 진정한 마스터가 되십시오.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col items-end gap-6">
+                        <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 min-w-[320px] shadow-2xl relative overflow-hidden group">
+                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <Trophy size={80} />
+                            </div>
+                            <div className="relative">
+                                <ProgressBar
+                                    progress={globalProgress}
+                                    label="Total Progress"
+                                    size="large"
                                 />
+                                <div className="flex items-center justify-between mt-4">
+                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">LV. {Math.floor(globalProgress / 20) + 1} EXPERT</span>
+                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{solvedCount} / {subcategories.length || 0} NODES</span>
+                                </div>
                             </div>
-                        </button>
-                    );
-                })}
-            </div>
+                        </div>
+                    </div>
+                </div>
 
-            {/* Canvas Area */}
-            <div className="bg-card/50 rounded-[2.5rem] border border-white/5 p-12 min-h-[600px] relative overflow-hidden">
-                <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(var(--primary) 0.5px, transparent 0.5px)', backgroundSize: '30px 30px' }} />
+                {/* Stage Selection */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+                    {categories.map((cat, idx) => {
+                        const isUnlocked = isStageUnlocked(cat.id);
+                        const progress = categoryProgress[cat.id] || 0;
+                        const isActive = currentStageId === cat.id;
 
-                <div className="relative flex flex-col items-center">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl font-black text-white mb-2">{SKILL_STAGES.find(s => s.id === currentStageId)?.name}</h2>
-                        <span className="px-4 py-1 bg-white/5 rounded-full text-indigo-400 text-xs font-bold tracking-widest uppercase border border-indigo-500/20">
-                            {SKILL_STAGES.find(s => s.id === currentStageId)?.theme}
-                        </span>
+                        return (
+                            <button
+                                key={cat.id}
+                                onClick={() => isUnlocked && setCurrentStageId(cat.id)}
+                                className={`relative group p-8 rounded-[2rem] border-2 transition-all duration-500 text-left overflow-hidden h-40 ${isActive
+                                    ? 'bg-indigo-600 border-indigo-400 shadow-[0_0_50px_-12px_rgba(79,70,229,0.5)]'
+                                    : isUnlocked
+                                        ? 'bg-white/5 border-white/10 hover:border-indigo-500/50 hover:bg-white/[0.08]'
+                                        : 'bg-black/40 border-white/5 opacity-50 cursor-not-allowed'
+                                    }`}
+                            >
+                                <div className="flex justify-between items-start mb-4">
+                                    <div>
+                                        <div className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 ${isActive ? 'text-indigo-200' : 'text-slate-500'}`}>
+                                            {idx + 1}차 전직
+                                        </div>
+                                        <h3 className={`text-2xl font-black tracking-tight ${isActive ? 'text-white' : 'text-slate-300'}`}>{cat.name}</h3>
+                                    </div>
+                                    <div className={`p-3 rounded-2xl transition-all duration-500 ${isActive ? 'bg-white/20' : 'bg-white/5 group-hover:scale-110'}`}>
+                                        {renderIcon(ICON_MAP[cat.name as keyof typeof ICON_MAP] || "Zap", `w-6 h-6 ${isActive ? 'text-white' : 'text-slate-400'}`)}
+                                    </div>
+                                </div>
+
+                                <ProgressBar
+                                    // 상태에 저장된 값이 있으면 쓰고, 없으면 기본값 사용
+                                    progress={categoryProgress[cat.id] || cat.currentProgress || 0}
+                                    label="Proficiency"
+                                    isActive={isActive}
+                                />
+
+                                {!isUnlocked && (
+                                    <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <ZapOff className="text-white/40 w-8 h-8" />
+                                    </div>
+                                )}
+                            </button>
+                        );
+                    })}
+                </div>
+
+                {/* Canvas Area */}
+                <div className="relative min-h-[600px] bg-white/[0.02] border border-white/5 rounded-[3rem] p-12 overflow-hidden shadow-inner backdrop-blur-3xl animate-fade-in group/canvas">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(79,70,229,0.05),transparent_70%)]" />
+
+                    {/* Stage Details Header */}
+                    <div className="relative flex flex-col items-center mb-20 text-center">
+                        <div className="w-px h-16 bg-gradient-to-b from-transparent to-indigo-500/50 mb-6" />
+                        <h2 className="text-3xl font-black text-white mb-2">{currentCategory?.name || "Loading..."} Core Mastery</h2>
+                        <span className="text-indigo-400 text-xs font-bold tracking-widest uppercase">Select a node to begin the trial</span>
                     </div>
 
-                    <div className="relative w-[800px] h-[400px]">
-                        <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
-                            {SKILL_STAGES.find(s => s.id === currentStageId)?.nodes.map(node => {
-                                if (!node.req) return null;
-                                const currentNodes = SKILL_STAGES.find(s => s.id === currentStageId)?.nodes;
-                                const reqNode = currentNodes?.find(n => n.id === node.req);
-                                if (!reqNode) return null;
-                                const isSolved = solved.includes(node.id);
-                                return (
-                                    <line
-                                        key={`line-${node.id}`}
-                                        x1={reqNode.x * 280 + 80} y1={reqNode.y * 150 + 40}
-                                        x2={node.x * 280 + 80} y2={node.y * 150 + 40}
-                                        stroke={isSolved ? '#6366f1' : '#2d2d35'}
-                                        strokeWidth="3"
-                                        strokeDasharray={!solved.includes(node.req) ? "5,5" : "0"}
-                                    />
-                                );
+                    <div className="relative flex justify-center">
+                        {/* Lines SVG */}
+                        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ minWidth: "600px" }}>
+                            {subcategories.map((node, i) => {
+                                const pos = getNodePosition(i);
+                                const x1 = pos.x * 200 + 100;
+                                const y1 = pos.y * 150 + 44;
+
+                                if (node.req) {
+                                    const reqIndex = subcategories.findIndex(n => n.id === node.req || n.name === node.req);
+                                    if (reqIndex !== -1) {
+                                        const reqPos = getNodePosition(reqIndex);
+                                        const x2 = reqPos.x * 200 + 100;
+                                        const y2 = reqPos.y * 150 + 44;
+                                        const isReqSolved = solved.includes(node.req.toString());
+
+                                        return (
+                                            <line
+                                                key={`line-${node.id}`}
+                                                x1={x2} y1={y2} x2={x1} y2={y1}
+                                                stroke={isReqSolved ? "#6366f1" : "rgba(255,255,255,0.05)"}
+                                                strokeWidth="2"
+                                                strokeDasharray={isReqSolved ? "0" : "8,8"}
+                                                className="transition-all duration-1000"
+                                            />
+                                        );
+                                    }
+                                }
+                                return null;
                             })}
                         </svg>
 
-                        {SKILL_STAGES.find(s => s.id === currentStageId)?.nodes.map(node => {
-                            const isSolved = Array.isArray(solved) && solved.includes(node.id);
-                            const canUnlock = !node.req || (Array.isArray(solved) && solved.includes(node.req));
-                            return (
-                                <div
-                                    key={node.id}
-                                    className="absolute transform -translate-x-1/2"
-                                    style={{ left: node.x * 280 + 80, top: node.y * 150 }}
-                                >
-                                    <button
-                                        disabled={!canUnlock}
-                                        onClick={() => setModalNode(node.id)}
-                                        className={`group w-44 p-4 rounded-2xl border-2 flex flex-col items-center gap-3 transition-all ${isSolved ? 'bg-primary/90 border-primary shadow-glow' :
-                                            canUnlock ? 'bg-card border-white/10 hover:border-primary' : 'bg-background border-white/5 opacity-40 grayscale'
-                                            }`}
+                        {/* Nodes */}
+                        <div className="grid grid-cols-2 gap-x-24 gap-y-20 relative px-12">
+                            {subcategories.map((node, i) => {
+                                const isSolved = solved.includes(node.id.toString());
+                                const canUnlock = node.req ? solved.includes(node.req.toString()) : true;
+
+                                return (
+                                    <div
+                                        key={node.id}
+                                        className="relative flex flex-col items-center"
                                     >
-                                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isSolved ? 'bg-white/20' : 'bg-black/50'}`}>
-                                            {isSolved ? <CheckCircle2 className="text-white w-5 h-5" /> : <Zap className={`${canUnlock ? 'text-indigo-400' : 'text-slate-600'} w-5 h-5`} />}
-                                        </div>
-                                        <div className="text-center">
-                                            <div className={`text-[8px] font-bold uppercase mb-1 ${isSolved ? 'text-indigo-200' : 'text-slate-500'}`}>NODE {node.id}</div>
-                                            <div className="text-xs font-black text-white leading-tight">{node.name}</div>
-                                        </div>
-                                    </button>
-                                </div>
-                            );
-                        })}
+                                        <button
+                                            disabled={!canUnlock}
+                                            onClick={() => setModalNode(node.id.toString())}
+                                            className={`group w-44 p-4 rounded-2xl border-2 flex flex-col items-center gap-3 transition-all ${isSolved ? 'bg-indigo-600 border-indigo-400 shadow-glow' :
+                                                canUnlock ? 'bg-white/5 border-white/10 hover:border-indigo-500' : 'bg-black/40 border-white/5 opacity-40 grayscale'
+                                                }`}
+                                        >
+                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isSolved ? 'bg-white/20' : 'bg-black/50'}`}>
+                                                {isSolved ? <CheckCircle2 className="text-white w-5 h-5" /> : <Zap className={`${canUnlock ? 'text-indigo-400' : 'text-slate-600'} w-5 h-5`} />}
+                                            </div>
+                                            <div className="text-center">
+                                                <div className={`text-[8px] font-bold uppercase mb-1 ${isSolved ? 'text-indigo-200' : 'text-slate-500'}`}>NODE {node.id}</div>
+                                                <div className="text-xs font-black text-white leading-tight">{node.name}</div>
+                                            </div>
+                                        </button>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -252,7 +403,7 @@ export default function PythonMasteryExplorer() {
                                     <div className="text-indigo-400 text-[10px] font-bold tracking-[0.3em] uppercase mb-2">
                                         Knowledge Trial ({currentQuestionIdx + 1} / {QUIZZES[modalNode].questions.length})
                                     </div>
-                                    <h3 className="text-2xl font-black italic">{SKILL_STAGES.flatMap(s => s.nodes).find(n => n.id === modalNode)?.name}</h3>
+                                    <h3 className="text-2xl font-black italic">{subcategories.find(n => n.id.toString() === modalNode)?.name}</h3>
                                     <div className="w-full h-1 bg-white/5 rounded-full mt-4 overflow-hidden">
                                         <div
                                             className="h-full bg-indigo-500 transition-all duration-500"
@@ -309,15 +460,11 @@ export default function PythonMasteryExplorer() {
                                 ) : (
                                     <div>
                                         <div className="bg-rose-500/10 border border-rose-500/20 p-5 rounded-2xl mb-8 text-rose-400 font-bold text-sm">
-                                            아쉽게도 정답률이 부족합니다.<br />(80% 이상 활성화 가능)
+                                            아쉽습니다. 80% 이상의 정답률이 필요합니다.<br />다시 시도해 보시겠습니까?
                                         </div>
                                         <button
-                                            onClick={() => {
-                                                setCurrentQuestionIdx(0);
-                                                setUserAnswers([]);
-                                                setShowingResults(false);
-                                            }}
-                                            className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl font-black text-lg transition-all active:scale-95"
+                                            onClick={closeQuiz}
+                                            className="w-full py-4 bg-white/5 hover:bg-white/10 rounded-2xl font-black text-lg transition-all"
                                         >
                                             다시 도전하기
                                         </button>
@@ -329,43 +476,11 @@ export default function PythonMasteryExplorer() {
                 </div>
             )}
 
-            {/* Title Collection Modal */}
-            {showCollection && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-md p-4">
-                    <div className="bg-[#121216] border border-white/10 w-full max-w-2xl rounded-[2.5rem] p-10 relative animate-scale-in">
-                        <button onClick={() => setShowCollection(false)} className="absolute top-8 right-8 text-slate-500 hover:text-white">
-                            <X className="w-6 h-6" />
-                        </button>
-                        <div className="mb-10 flex items-center gap-4">
-                            <Award className="w-10 h-10 text-indigo-500" />
-                            <div>
-                                <h3 className="text-3xl font-black text-white">환상님의 칭호 도감</h3>
-                                <p className="text-slate-500">연구의 흔적이 기록된 명예의 전당입니다.</p>
-                            </div>
-                        </div>
-
-                        <div className="grid gap-4 max-h-[60vh] overflow-y-auto pr-4 scrollbar-hide">
-                            {TITLES.map(title => {
-                                const isEarned = (title.id === 't1' && solved.includes('1-1')) ||
-                                    (title.id === 't2' && solved.includes('2-2')) ||
-                                    (title.id === 't3' && globalProgress >= 50);
-                                return (
-                                    <div key={title.id} className={`p-6 rounded-2xl border flex items-center gap-6 transition-all ${isEarned ? 'bg-indigo-600/10 border-indigo-500/40 opacity-100' : 'bg-white/5 border-white/5 opacity-40 grayscale'
-                                        }`}>
-                                        <div className="w-12 h-12 rounded-full bg-black flex items-center justify-center text-2xl shadow-inner border border-white/5">
-                                            {isEarned ? renderIcon(title.icon, "w-6 h-6 text-yellow-500") : <ZapOff className="w-6 h-6 text-slate-700" />}
-                                        </div>
-                                        <div className="flex-grow">
-                                            <h4 className="font-black text-white text-lg">{title.name}</h4>
-                                            <p className="text-sm text-slate-400">{title.description}</p>
-                                        </div>
-                                        <div className="text-[10px] font-bold text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full uppercase border border-indigo-500/20">
-                                            {isEarned ? 'Acquired' : 'Locked'}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
+            {feedback && (
+                <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] animate-slide-up">
+                    <div className={`px-8 py-4 rounded-2xl font-black shadow-2xl flex items-center gap-3 border ${feedback.type === 'success' ? 'bg-emerald-500 text-white border-emerald-400' : 'bg-rose-500 text-white border-rose-400'}`}>
+                        {feedback.type === 'success' ? <CheckCircle2 /> : <ZapOff />}
+                        {feedback.msg}
                     </div>
                 </div>
             )}
