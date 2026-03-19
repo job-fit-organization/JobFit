@@ -2,46 +2,76 @@ import React from 'react';
 import { Zap, Sparkles, Target } from 'lucide-react';
 import { INITIAL_JOB_RECOMMENDATION } from '../data';
 
+const STYLES = {
+    section: "bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col gap-6 relative overflow-hidden",
+    blur1: "absolute -top-6 -right-6 w-32 h-32 bg-main-1/10 rounded-full blur-3xl opacity-60",
+    blur2: "absolute bottom-10 left-0 w-24 h-24 bg-main-2/10 rounded-full blur-2xl opacity-40",
+    
+    header: "text-xl font-bold text-gray-800 flex items-center gap-2 relative z-10",
+    
+    matchCard: "text-center py-5 bg-gradient-to-br from-main-1 to-serve-6 rounded-2xl text-white shadow-lg relative z-10 transform transition-transform hover:scale-[1.02]",
+    matchLabel: "text-xs font-semibold uppercase tracking-widest opacity-90 mb-1",
+    matchType: "text-3xl font-black mb-1",
+    matchRate: "text-xs font-bold bg-white/20 inline-block px-3 py-1 rounded-full",
+    
+    descWrapper: "space-y-3 relative z-10",
+    descTitle: "font-bold text-gray-900 text-lg flex items-center gap-2",
+    descText: "text-sm text-gray-600 leading-relaxed",
+    
+    keywordWrapper: "space-y-4 relative z-10",
+    keywordHeader: "text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2",
+    keywordGrid: "flex flex-wrap gap-2",
+    keywordBadge: "bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold px-3 py-1.5 rounded-lg hover:border-main-1/30 hover:text-main-1 transition-colors cursor-default",
+    
+    traitsWrapper: "pt-4 border-t border-gray-100 relative z-10",
+    traitsHeader: "flex justify-between items-center mb-4",
+    traitsTitle: "text-xs font-bold text-gray-400 uppercase tracking-wider",
+    traitsGrid: "flex gap-2",
+    traitBadge: "flex-1 text-center p-2 rounded-xl bg-serve-4/10 text-serve-4 text-xs font-black"
+};
+
 export const JobReport = ({ data }: { data: typeof INITIAL_JOB_RECOMMENDATION }) => (
-    <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col gap-6 relative overflow-hidden">
-        <div className="absolute -top-6 -right-6 w-24 h-24 bg-indigo-50 rounded-full blur-2xl opacity-50"></div>
-        <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-            <Zap className="text-amber-500" size={24} />
+    <section className={STYLES.section}>
+        <div className={STYLES.blur1}></div>
+        <div className={STYLES.blur2}></div>
+        
+        <h3 className={STYLES.header}>
+            <Zap className="text-serve-1" size={24} />
             직무 추천 리포트
         </h3>
 
-        <div className="text-center py-4 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl text-white shadow-lg">
-            <p className="text-xs font-semibold uppercase tracking-widest opacity-80 mb-1">나의 직매칭 유형</p>
-            <p className="text-4xl font-black mb-1">{data.type}</p>
-            <p className="text-sm font-bold bg-white/20 inline-block px-3 py-1 rounded-full">{data.matchRate}% 적합</p>
+        <div className={STYLES.matchCard}>
+            <p className={STYLES.matchLabel}>나의 직매칭 유형</p>
+            <p className={STYLES.matchType}>{data.type}</p>
+            <p className={STYLES.matchRate}>{data.matchRate}% 적합</p>
         </div>
 
-        <div className="space-y-3">
-            <h4 className="font-bold text-gray-900 text-lg flex items-center gap-2">
-                <Sparkles size={18} className="text-indigo-500" />
+        <div className={STYLES.descWrapper}>
+            <h4 className={STYLES.descTitle}>
+                <Sparkles size={18} className="text-main-2" />
                 {data.title}
             </h4>
-            <p className="text-sm text-gray-600 leading-relaxed">{data.description}</p>
+            <p className={STYLES.descText}>{data.description}</p>
         </div>
 
-        <div className="space-y-4">
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+        <div className={STYLES.keywordWrapper}>
+            <p className={STYLES.keywordHeader}>
                 <Target size={14} /> 추천 직무 키워드
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div className={STYLES.keywordGrid}>
                 {data.recommendedJobs.map((job, idx) => (
-                    <span key={idx} className="bg-gray-50 border border-gray-200 text-gray-700 text-xs font-bold px-3 py-1.5 rounded-lg">#{job}</span>
+                    <span key={idx} className={STYLES.keywordBadge}>#{job}</span>
                 ))}
             </div>
         </div>
 
-        <div className="pt-4 border-t border-gray-100">
-            <div className="flex justify-between items-center mb-4">
-                <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">유형 성향</span>
+        <div className={STYLES.traitsWrapper}>
+            <div className={STYLES.traitsHeader}>
+                <span className={STYLES.traitsTitle}>유형 성향</span>
             </div>
-            <div className="flex gap-2">
+            <div className={STYLES.traitsGrid}>
                 {data.traits.map((trait, idx) => (
-                    <div key={idx} className="flex-1 text-center p-2 rounded-xl bg-indigo-50 text-indigo-700 text-xs font-black">{trait}</div>
+                    <div key={idx} className={STYLES.traitBadge}>{trait}</div>
                 ))}
             </div>
         </div>

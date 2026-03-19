@@ -10,6 +10,16 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Design System Colors */
+  --color-main-1: #EA002C;
+  --color-main-2: #F47725;
+  --color-serve-1: #FBBC05;
+  --color-serve-2: #B3CF0A;
+  --color-serve-3: #009A93;
+  --color-serve-4: #0072C6;
+  --color-serve-5: #0E306D;
+  --color-serve-6: #68127A;
 }
 
 @media (prefers-color-scheme: dark) {

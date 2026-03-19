@@ -3,13 +3,38 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft, Github, Chrome, MessageCircle, Mail } from 'lucide-react';
+import { ChevronLeft, Github, Chrome, Zap } from 'lucide-react';
+
+const STYLES = {
+    container: "min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4",
+    card: "w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-10 relative overflow-hidden",
+    bgBlur1: "absolute top-0 right-0 w-40 h-40 bg-main-1/10 rounded-full -mr-16 -mt-16 blur-3xl opacity-60",
+    bgBlur2: "absolute bottom-0 left-0 w-40 h-40 bg-serve-4/10 rounded-full -ml-16 -mb-16 blur-3xl opacity-60",
+    backLink: "inline-flex items-center text-sm font-bold text-gray-500 hover:text-main-1 transition-colors mb-8 group relative z-10",
+    headerContainer: "text-center mb-10 relative z-10",
+    iconWrapper: "w-16 h-16 bg-gradient-to-br from-main-1 to-main-2 rounded-2xl flex items-center justify-center text-white mx-auto mb-4 shadow-lg rotate-3 transition-transform hover:rotate-6",
+    title: "text-3xl font-black text-gray-900 tracking-tight",
+    subtitle: "text-gray-500 mt-2 font-medium",
+    buttonsWrapper: "space-y-4 relative z-10",
+    baseBtn: "w-full flex items-center justify-center gap-3 py-3.5 rounded-xl font-bold transition-all shadow-sm active:scale-[0.98]",
+    googleBtn: "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-main-1/30",
+    kakaoBtn: "bg-[#FEE500] text-[#191919] hover:bg-[#FCE51E]",
+    naverBtn: "bg-[#03C75A] text-white hover:bg-[#02b351]",
+    githubBtn: "bg-[#24292F] text-white hover:bg-[#1c2126]",
+    dividerWrapper: "relative py-4",
+    dividerLine: "w-full border-t border-gray-200",
+    dividerText: "bg-white px-3 text-xs font-semibold text-gray-400 uppercase tracking-widest",
+    demoBtn: "bg-serve-3/10 border border-serve-3/20 text-serve-3 hover:bg-serve-3/20 hover:border-serve-3/30",
+    footerText: "mt-10 text-center relative z-10",
+    footerLinks: "text-xs text-gray-400 leading-relaxed",
+    linkText: "underline cursor-pointer hover:text-main-2",
+    orgText: "mt-8 text-sm font-black text-gray-300 tracking-[0.2em] uppercase"
+};
 
 export default function LoginPage() {
     const router = useRouter();
 
     const handleTestLogin = () => {
-        // mypage API(userId '1')에 맞춘 더미 사용자 데이터
         const dummyUser = {
             id: 1, 
             username: "1", 
@@ -23,101 +48,75 @@ export default function LoginPage() {
         
         alert("데모 테스트 계정으로 로그인되었습니다! 🚀");
         router.push('/mypage');
-        router.refresh(); // 필요 시 상태 갱신을 위해 추가
+        router.refresh();
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
-            <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-10 relative overflow-hidden">
+        <div className={STYLES.container}>
+            <div className={STYLES.card}>
+                <div className={STYLES.bgBlur1}></div>
+                <div className={STYLES.bgBlur2}></div>
 
-                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-50 rounded-full -mr-16 -mt-16 blur-3xl opacity-50"></div>
-                <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-50 rounded-full -ml-16 -mb-16 blur-3xl opacity-50"></div>
-
-                <Link
-                    href="/"
-                    className="inline-flex items-center text-sm font-bold text-gray-500 hover:text-indigo-600 transition-colors mb-8 group"
-                >
+                <Link href="/" className={STYLES.backLink}>
                     <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-                    홈으로 달아기
+                    홈으로 돌아가기
                 </Link>
 
-                <div className="text-center mb-10">
-                    <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white mx-auto mb-4 shadow-lg rotate-3">
+                <div className={STYLES.headerContainer}>
+                    <div className={STYLES.iconWrapper}>
                         <Zap size={32} fill="currentColor" />
                     </div>
-                    <h1 className="text-3xl font-black text-gray-900 tracking-tight">로그인</h1>
-                    <p className="text-gray-500 mt-2 font-medium">JobFit과 함께 학습을 시작해보세요</p>
+                    <h1 className={STYLES.title}>로그인</h1>
+                    <p className={STYLES.subtitle}>JobFit과 함께 학습을 시작해보세요</p>
                 </div>
 
-                <div className="space-y-4">
-                    <button className="w-full flex items-center justify-center gap-3 bg-white border border-gray-200 py-3.5 rounded-xl font-bold text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-all shadow-sm active:scale-[0.98]">
-                        <Chrome size={20} className="text-red-500" />
+                <div className={STYLES.buttonsWrapper}>
+                    <button className={`${STYLES.baseBtn} ${STYLES.googleBtn}`}>
+                        <Chrome size={20} className="text-serve-4" />
                         Google로 시작하기
                     </button>
 
                     <Link href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`}
-                        className="w-full flex items-center justify-center gap-3 bg-[#FEE500] py-3.5 rounded-xl font-bold text-[#191919] hover:bg-[#FADA0A] transition-all shadow-sm active:scale-[0.98]">
+                        className={`${STYLES.baseBtn} ${STYLES.kakaoBtn}`}>
                         <div className="w-5 h-5 bg-[#191919] rounded-full flex items-center justify-center">
                             <span className="text-[10px] text-[#FEE500] font-black">K</span>
                         </div>
                         카카오로 시작하기
                     </Link>
 
-                    <button className="w-full flex items-center justify-center gap-3 bg-[#03C75A] py-3.5 rounded-xl font-bold text-white hover:bg-[#02b351] transition-all shadow-sm active:scale-[0.98]">
+                    <button className={`${STYLES.baseBtn} ${STYLES.naverBtn}`}>
                         <span className="text-lg font-black mr-1">N</span>
                         네이버로 시작하기
                     </button>
 
-                    <button className="w-full flex items-center justify-center gap-3 bg-[#24292F] py-3.5 rounded-xl font-bold text-white hover:bg-[#1c2126] transition-all shadow-sm active:scale-[0.98]">
+                    <button className={`${STYLES.baseBtn} ${STYLES.githubBtn}`}>
                         <Github size={20} />
                         GitHub으로 시작하기
                     </button>
 
-                    <div className="relative py-4">
+                    <div className={STYLES.dividerWrapper}>
                         <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                            <div className="w-full border-t border-gray-200" />
+                            <div className={STYLES.dividerLine} />
                         </div>
                         <div className="relative flex justify-center">
-                            <span className="bg-white px-3 text-xs font-semibold text-gray-400 uppercase tracking-widest">or</span>
+                            <span className={STYLES.dividerText}>or</span>
                         </div>
                     </div>
 
-                    <button 
-                        onClick={handleTestLogin}
-                        className="w-full flex items-center justify-center gap-3 bg-indigo-50 border border-indigo-100 py-3.5 rounded-xl font-bold text-indigo-600 hover:bg-indigo-100 hover:border-indigo-200 transition-all shadow-sm active:scale-[0.98]"
-                    >
+                    <button onClick={handleTestLogin} className={`${STYLES.baseBtn} ${STYLES.demoBtn}`}>
                         ⚡ 개발용 데모 테스트 로그인
                     </button>
                 </div>
 
-                <div className="mt-10 text-center">
-                    <p className="text-xs text-gray-400 leading-relaxed">
-                        계속 진행하면 JobFit의 <span className="underline cursor-pointer hover:text-gray-600">이용약관</span> 및 <br />
-                        <span className="underline cursor-pointer hover:text-gray-600">개인정보처리방침</span>에 동의하게 됩니다.
+                <div className={STYLES.footerText}>
+                    <p className={STYLES.footerLinks}>
+                        계속 진행하면 JobFit의 <span className={STYLES.linkText}>이용약관</span> 및 <br />
+                        <span className={STYLES.linkText}>개인정보처리방침</span>에 동의하게 됩니다.
                     </p>
                 </div>
             </div>
 
-            <p className="mt-8 text-sm font-black text-gray-300 tracking-[0.2em] uppercase">
-                JobFit Organization
-            </p>
+            <p className={STYLES.orgText}>JobFit Organization</p>
         </div>
     );
-}
-
-function Zap({ size, fill }: { size: number, fill: string }) {
-    return (
-        <svg
-            width={size}
-            height={size}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" fill={fill} />
-        </svg>
-    )
 }

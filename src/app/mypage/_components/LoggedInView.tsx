@@ -6,10 +6,42 @@ import { User, CalendarDays, Award, BookOpen, Briefcase } from 'lucide-react';
 import RankAnimation from '../RankAnimation';
 import { INITIAL_PROFILE, INITIAL_JOB_RECOMMENDATION, INITIAL_OVERALL_STATISTICS } from '../data';
 import { UserProfile, TestResult } from '../types';
-import { LevelBadge, ExpBar, ScoreCard } from './common';
+import { LevelBadge, ExpBar, ScoreCard, ThemeClasses } from './common';
 import { TestHistorySection } from './TestHistorySection';
 import { JobReport } from './JobReport';
 import { StatsSection } from './StatsSection';
+
+const THEME_PYTHON: ThemeClasses = { text: "text-serve-4", bgLight: "bg-serve-4/10", bgHover: "hover:bg-serve-4/10", borderHover: "hover:border-serve-4/30" };
+const THEME_MLOPS: ThemeClasses = { text: "text-serve-2", bgLight: "bg-serve-2/10", bgHover: "hover:bg-serve-2/10", borderHover: "hover:border-serve-2/30" };
+const THEME_LLM: ThemeClasses = { text: "text-serve-6", bgLight: "bg-serve-6/10", bgHover: "hover:bg-serve-6/10", borderHover: "hover:border-serve-6/30" };
+const THEME_DL: ThemeClasses = { text: "text-main-1", bgLight: "bg-main-1/10", bgHover: "hover:bg-main-1/10", borderHover: "hover:border-main-1/30" };
+const THEME_LEARNING: ThemeClasses = { text: "text-serve-3", bgLight: "bg-serve-3/10", bgHover: "hover:bg-serve-3/10", borderHover: "hover:border-serve-3/30" };
+const THEME_JOB: ThemeClasses = { text: "text-serve-5", bgLight: "bg-serve-5/10", bgHover: "hover:bg-serve-5/10", borderHover: "hover:border-serve-5/30" };
+
+const STYLES = {
+    layout: "space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700",
+    loadingView: "flex justify-center items-center py-32",
+    spinner: "animate-spin rounded-full h-12 w-12 border-b-2 border-main-1",
+    
+    profileSection: "bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center md:items-start relative overflow-hidden",
+    avatarWrapper: "h-24 w-24 rounded-full bg-gradient-to-br from-main-1 to-main-2 flex items-center justify-center text-white shadow-inner flex-shrink-0",
+    
+    infoWrapper: "flex-1 space-y-4 text-center md:text-left w-full z-10",
+    nameRow: "text-2xl font-bold text-gray-900 flex items-center justify-center md:justify-start flex-wrap gap-2",
+    email: "text-gray-500 text-sm mt-1",
+    
+    statsRow: "flex flex-col gap-4 pt-2",
+    statsHeaderRow: "flex justify-center md:justify-start gap-6",
+    statsHeaderItem: "flex items-center gap-2 text-gray-700",
+    statsHighlight: "font-bold",
+    
+    scoresGrid: "grid grid-cols-2 md:grid-cols-4 gap-3 w-full",
+    rankWrapper: "hidden md:block absolute top-6 right-8",
+    
+    bentoGrid: "grid grid-cols-1 lg:grid-cols-10 gap-8",
+    bentoLeft: "lg:col-span-7 space-y-8",
+    bentoRight: "lg:col-span-3 space-y-8"
+};
 
 export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
     const [learningPage, setLearningPage] = useState(0);
@@ -23,8 +55,6 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
     const ITEMS_PER_PAGE = 5;
 
     useEffect(() => {
-        // 실제 로그인된 사용자의 Kakao ID를 사용합니다.
-        // 현재 DB에 저장된 user.username (kakao_id)을 사용합니다.
         const userId = currentUser?.username || '1';
 
         const fetchMyPageData = async () => {
@@ -109,60 +139,59 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
 
     if (isLoading) {
         return (
-            <div className="flex justify-center items-center py-32">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <div className={STYLES.loadingView}>
+                <div className={STYLES.spinner}></div>
             </div>
         );
     }
 
     return (
-        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className={STYLES.layout}>
             {/* Profile Section */}
-            <section className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center md:items-start relative overflow-hidden">
-                <div className="h-24 w-24 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-inner flex-shrink-0">
+            <section className={STYLES.profileSection}>
+                <div className={STYLES.avatarWrapper}>
                     <User size={48} />
                 </div>
 
-                <div className="flex-1 space-y-4 text-center md:text-left w-full z-10">
+                <div className={STYLES.infoWrapper}>
                     <div>
-                        <h2 className="text-2xl font-bold text-gray-900 flex items-center flex-wrap gap-2">
+                        <h2 className={STYLES.nameRow}>
                             {profile.name}
-                            <span className="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full border border-gray-200">LV.{profile.level}</span>
                             <LevelBadge level={profile.level} />
                         </h2>
-                        <p className="text-gray-500 text-sm mt-1">{profile.email}</p>
+                        <p className={STYLES.email}>{profile.email}</p>
                     </div>
 
                     <ExpBar exp={profile.exp} />
 
-                    <div className="flex flex-col gap-4 pt-2">
-                        <div className="flex justify-center md:justify-start gap-6">
-                            <div className="flex items-center gap-2 text-gray-700">
-                                <CalendarDays className="text-indigo-500" size={20} />
-                                <span className="font-bold">출석 {profile.attendanceDays}일</span>
+                    <div className={STYLES.statsRow}>
+                        <div className={STYLES.statsHeaderRow}>
+                            <div className={STYLES.statsHeaderItem}>
+                                <CalendarDays className="text-main-1" size={20} />
+                                <span className={STYLES.statsHighlight}>출석 {profile.attendanceDays}일</span>
                             </div>
-                            <div className="flex items-center gap-2 text-gray-700">
-                                <Award className="text-yellow-500" size={20} />
-                                <span className="font-bold">분야별 진행 현황</span>
+                            <div className={STYLES.statsHeaderItem}>
+                                <Award className="text-serve-1" size={20} />
+                                <span className={STYLES.statsHighlight}>분야별 진행 현황</span>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 w-full">
-                            <ScoreCard label="Python" score={profile.averageScore.python} color="blue" unit="회" />
-                            <ScoreCard label="MLops" score={profile.averageScore.mlops} color="emerald" unit="회" />
-                            <ScoreCard label="LLM" score={profile.averageScore.llm} color="purple" unit="회" />
-                            <ScoreCard label="딥러닝" score={profile.averageScore.deepLearning} color="rose" unit="회" />
+                        <div className={STYLES.scoresGrid}>
+                            <ScoreCard label="Python" score={profile.averageScore.python} theme={THEME_PYTHON} unit="회" />
+                            <ScoreCard label="MLops" score={profile.averageScore.mlops} theme={THEME_MLOPS} unit="회" />
+                            <ScoreCard label="LLM" score={profile.averageScore.llm} theme={THEME_LLM} unit="회" />
+                            <ScoreCard label="딥러닝" score={profile.averageScore.deepLearning} theme={THEME_DL} unit="회" />
                         </div>
                     </div>
                 </div>
 
-                <div className="hidden md:block absolute top-6 right-8">
+                <div className={STYLES.rankWrapper}>
                     <RankAnimation level={profile.level} userName={profile.name} />
                 </div>
             </section>
 
-            <div className="grid grid-cols-1 lg:grid-cols-10 gap-8">
-                <div className="lg:col-span-7 space-y-8">
+            <div className={STYLES.bentoGrid}>
+                <div className={STYLES.bentoLeft}>
                     <TestHistorySection
                         title="학습 테스트 기록"
                         icon={BookOpen}
@@ -170,7 +199,7 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                         page={learningPage}
                         setPage={setLearningPage}
                         itemsPerPage={ITEMS_PER_PAGE}
-                        color="indigo"
+                        theme={THEME_LEARNING}
                     />
                     <TestHistorySection
                         title="직무 역량 테스트 기록"
@@ -179,11 +208,11 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                         page={jobPage}
                         setPage={setJobPage}
                         itemsPerPage={ITEMS_PER_PAGE}
-                        color="blue"
+                        theme={THEME_JOB}
                     />
                 </div>
 
-                <div className="lg:col-span-3 space-y-8">
+                <div className={STYLES.bentoRight}>
                     <JobReport data={recommendation} />
                     <StatsSection data={stats} />
                 </div>
