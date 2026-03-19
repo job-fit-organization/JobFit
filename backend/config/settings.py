@@ -62,7 +62,14 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CRENDENTIALS = True
 
 REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'authentication.exceptions.status_code_handler'
+    'EXCEPTION_HANDLER': 'authentication.exceptions.status_code_handler',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'JobFit API',
+    'DESCRIPTION': 'JobFit 서비스를 위한 API 문서입니다.',
+    'VERSION': '1.0.0',
 }
 
 ROOT_URLCONF = 'config.urls'
