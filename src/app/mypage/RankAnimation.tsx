@@ -8,6 +8,7 @@ interface RankAnimationProps {
     userName: string;
 }
 
+// 컨테이너 및 애니메이션 UI 스타일 설정
 const STYLES = {
     container: [
         "flex flex-col items-center justify-center p-6",
@@ -42,7 +43,9 @@ const STYLES = {
     motivationText: "text-[11px] font-black text-main-1 tracking-tight"
 };
 
+// 우상단 유저 랭크 성장 애니메이션 위젯
 const RankAnimation: React.FC<RankAnimationProps> = ({ level, userName }) => {
+    // 레벨 구간별 뱃지 메타데이터 (1~15 등급 체계)
     const getRankInfo = (lv: number) => {
         if (lv < 4) return { icon: <Star size={32} className="text-serve-1" />, label: '뉴비', nextLabel: '루키' };
         if (lv < 7) return { icon: <Shield size={32} className="text-serve-4" />, label: '루키', nextLabel: '주니어' };
@@ -55,13 +58,13 @@ const RankAnimation: React.FC<RankAnimationProps> = ({ level, userName }) => {
 
     return (
         <div className={STYLES.container}>
-            {/* Background Decorative Elements */}
+            {/* 배경 블러 이펙트 닷 */}
             <div className={STYLES.decoDotsLayer}>
                 <div className={STYLES.decoDot1} />
                 <div className={STYLES.decoDot2} />
             </div>
 
-            {/* Labels Area */}
+            {/* 현재 등급 -> 승급 목표 레이블 */}
             <div className={STYLES.labelArea}>
                 <div className="flex flex-col">
                     <span className={STYLES.labelTextDesc}>현재 랭크</span>
@@ -73,9 +76,9 @@ const RankAnimation: React.FC<RankAnimationProps> = ({ level, userName }) => {
                 </div>
             </div>
 
-            {/* Run Track */}
+            {/* 무한 달리기 트랙 애니메이션 블록 */}
             <div className={STYLES.track}>
-                {/* Looping Character */}
+                {/* 1번 메인 뷰 캐릭터 */}
                 <div className="absolute inset-0 flex items-center animate-loop-run">
                     <div className={STYLES.character}>
                         <div className="animate-bounce">{icon}</div>
@@ -83,7 +86,7 @@ const RankAnimation: React.FC<RankAnimationProps> = ({ level, userName }) => {
                     </div>
                 </div>
 
-                {/* Second Character for Seamless Loop */}
+                {/* 1번 공백을 채워주기 위해 지연 출발하는 복제 2번 캐릭터 */}
                 <div className="absolute inset-0 flex items-center animate-loop-run-delayed">
                     <div className={STYLES.character}>
                         <div className="animate-bounce">{icon}</div>
@@ -91,13 +94,13 @@ const RankAnimation: React.FC<RankAnimationProps> = ({ level, userName }) => {
                     </div>
                 </div>
 
-                {/* Finisher Line Effect */}
+                {/* Hover 동작 시 등장하는 결승점 라인 */}
                 <div className={STYLES.finisherWrapper}>
                     <div className={STYLES.finisherLine} />
                 </div>
             </div>
 
-            {/* Motivation Text */}
+            {/* 동기 부여 문구 영역 */}
             <div className={STYLES.motivationWrapper}>
                 <div className={STYLES.motivationDots}>
                     {[1, 2, 3].map((_, i) => (
@@ -123,6 +126,7 @@ const RankAnimation: React.FC<RankAnimationProps> = ({ level, userName }) => {
                 }
                 .animate-loop-run-delayed {
                     animation: loop-run 4s linear infinite;
+                    /* 끊김 방지를 위해 타이밍을 음수로 잡음 (-2s offset) */
                     animation-delay: -2s;
                 }
             `}</style>

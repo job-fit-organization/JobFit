@@ -22,6 +22,7 @@ const STYLES = {
     statIconWrapper: "h-10 w-10 bg-white/50 rounded-full flex items-center justify-center shadow-sm"
 };
 
+// 서비스 전체 통계 (가입자, 인기직무 등) 보드 컴포넌트
 export const StatsSection = ({ data }: { data: typeof INITIAL_OVERALL_STATISTICS }) => (
     <section className={STYLES.section}>
         <h3 className={STYLES.header}>
@@ -29,6 +30,7 @@ export const StatsSection = ({ data }: { data: typeof INITIAL_OVERALL_STATISTICS
             전체 통계 차트
         </h3>
 
+        {/* 누적 가입 유저 수 */}
         <div className={STYLES.totalCard}>
             <Users className={STYLES.totalIcon} size={100} />
             <p className={STYLES.totalLabel}>플랫폼 전체 참여</p>
@@ -36,6 +38,7 @@ export const StatsSection = ({ data }: { data: typeof INITIAL_OVERALL_STATISTICS
         </div>
 
         <div className={STYLES.statsGrid}>
+            {/* 평균 점수 */}
             <div className={STYLES.statCard1}>
                 <div>
                     <p className={STYLES.statLabel1}>평균 플랫폼 점수</p>
@@ -45,6 +48,8 @@ export const StatsSection = ({ data }: { data: typeof INITIAL_OVERALL_STATISTICS
                     <BarChart3 size={20} className="text-serve-3" />
                 </div>
             </div>
+            
+            {/* 최근 가장 많이 조회된/테스트된 카테고리 */}
             <div className={STYLES.statCard2}>
                 <div>
                     <p className={STYLES.statLabel2}>인기 직무</p>

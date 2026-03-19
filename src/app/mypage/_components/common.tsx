@@ -22,6 +22,7 @@ const SCORECARD_STYLES = {
     score: "text-xl font-extrabold text-gray-900 transition-colors duration-300"
 };
 
+// 페이지 공통 레이아웃 헤더
 export const Header = ({ title, subtitle }: { title: string; subtitle: string }) => (
     <header className={HEADER_STYLES.container}>
         <h1 className={HEADER_STYLES.title}>{title}</h1>
@@ -29,6 +30,7 @@ export const Header = ({ title, subtitle }: { title: string; subtitle: string })
     </header>
 );
 
+// 레벨 정보 기반 아이콘/라벨 뱃지 반환 (클래스 1~15 등급 체계 기준)
 export const LevelBadge = ({ level }: { level: number }) => {
     const getBadge = (lvl: number) => {
         if (lvl < 4) return { icon: <Star size={20} className="text-serve-1" />, label: '뉴비', bgColor: 'bg-serve-1/10', textColor: 'text-serve-1' };
@@ -45,6 +47,7 @@ export const LevelBadge = ({ level }: { level: number }) => {
     );
 };
 
+// 절대평가 점수에 따라 A~D급 뱃지 맵핑
 export const CategoryBadge = ({ score }: { score: number }) => {
     const getBadge = (s: number) => {
         if (s >= 90) return { label: 'S', colorClass: 'bg-main-1/10 text-main-1 border-main-1/20' };
@@ -61,6 +64,7 @@ export const CategoryBadge = ({ score }: { score: number }) => {
     );
 };
 
+// 상단 유저 경험치 게이지 바
 export const ExpBar = ({ exp }: { exp: number }) => (
     <div className={EXPBAR_STYLES.container}>
         <div className={EXPBAR_STYLES.textWrapper}>
@@ -76,14 +80,18 @@ export const ExpBar = ({ exp }: { exp: number }) => (
     </div>
 );
 
+// 컴포넌트별 보조 색상 테마 타입
 export type ThemeClasses = { text: string; bgLight: string; bgHover: string; borderHover: string };
 
+// 개별 과목 진행 수치/점수를 출력하는 소형 통계 카드 (유동적 테마 주입 됨)
 export const ScoreCard = ({ label, score, theme, unit = "점" }: { label: string; score: number; theme: ThemeClasses; unit?: string }) => {
     return (
         <div className={`${SCORECARD_STYLES.container} ${theme.borderHover}`}>
+            {/* 상단 모서리 라벨 구역 */}
             <div className={SCORECARD_STYLES.badgeWrapper}>
                 <CategoryBadge score={score} />
             </div>
+            {/* 호버 시 텍스트 컬러 반전 이벤트 적용 */}
             <p className={`${SCORECARD_STYLES.label} group-hover:${theme.text}`}>{label}</p>
             <p className={`${SCORECARD_STYLES.score} group-hover:${theme.text}`}>{score}{unit}</p>
         </div>

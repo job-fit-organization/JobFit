@@ -11,10 +11,13 @@ import { TestHistorySection } from './TestHistorySection';
 import { JobReport } from './JobReport';
 import { StatsSection } from './StatsSection';
 
+// 과목/도메인 별 뱃지 색상 테마 정의
 const THEME_PYTHON: ThemeClasses = { text: "text-serve-4", bgLight: "bg-serve-4/10", bgHover: "hover:bg-serve-4/10", borderHover: "hover:border-serve-4/30" };
 const THEME_MLOPS: ThemeClasses = { text: "text-serve-2", bgLight: "bg-serve-2/10", bgHover: "hover:bg-serve-2/10", borderHover: "hover:border-serve-2/30" };
 const THEME_LLM: ThemeClasses = { text: "text-serve-6", bgLight: "bg-serve-6/10", bgHover: "hover:bg-serve-6/10", borderHover: "hover:border-serve-6/30" };
 const THEME_DL: ThemeClasses = { text: "text-main-1", bgLight: "bg-main-1/10", bgHover: "hover:bg-main-1/10", borderHover: "hover:border-main-1/30" };
+
+// 히스토리 리스트 컨테이너 전용 테마
 const THEME_LEARNING: ThemeClasses = { text: "text-serve-3", bgLight: "bg-serve-3/10", bgHover: "hover:bg-serve-3/10", borderHover: "hover:border-serve-3/30" };
 const THEME_JOB: ThemeClasses = { text: "text-serve-5", bgLight: "bg-serve-5/10", bgHover: "hover:bg-serve-5/10", borderHover: "hover:border-serve-5/30" };
 
@@ -38,12 +41,15 @@ const STYLES = {
     scoresGrid: "grid grid-cols-2 md:grid-cols-4 gap-3 w-full",
     rankWrapper: "hidden md:block absolute top-6 right-8",
     
+    // 7:3 비율의 하단 데이터 대시보드 그리드 처리
     bentoGrid: "grid grid-cols-1 lg:grid-cols-10 gap-8",
     bentoLeft: "lg:col-span-7 space-y-8",
     bentoRight: "lg:col-span-3 space-y-8"
 };
 
+// 로그인 확인 유저 전용 메인 대시보드
 export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
+    // API 데이터 스탯, 페이지네이션 셋팅
     const [learningPage, setLearningPage] = useState(0);
     const [jobPage, setJobPage] = useState(0);
     const [profile, setProfile] = useState<UserProfile>(INITIAL_PROFILE);
@@ -55,12 +61,13 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
     const ITEMS_PER_PAGE = 5;
 
     useEffect(() => {
-        const userId = currentUser?.username || '1';
+        const userId = currentUser?.username || '1'; // 현재 세션 ID
 
+        // 대시보드 로드(Mount) 시 필요한 초기 데이터 일괄 fetch
         const fetchMyPageData = async () => {
             setIsLoading(true);
             try {
-                // 1. 유저 정보 API 호출
+                // 1. 유저 프로필 조회 (닉네임, Exp 점수 갱신용)
                 const userRes = await fetch(`http://localhost:8000/api/users/${userId}/`);
                 let fetchedProfile = { ...INITIAL_PROFILE };
 
@@ -80,7 +87,7 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                     };
                 }
 
-                // 2. 학습 이력 API 호출
+                // 2. 모의고사 이력 (type: learning) 조회
                 const learnRes = await fetch(`http://localhost:8000/api/users/${userId}/histories/learning/`);
                 let newHistory: TestResult[] = [];
 
@@ -96,7 +103,7 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                     newHistory = [...newHistory, ...parsedLearn];
                 }
 
-                // 3. 직무 테스트 이력 API 호출
+                // 3. 직무 테스트 이력 (type: job) 조회
                 const jobRes = await fetch(`http://localhost:8000/api/users/${userId}/histories/job/`);
                 if (jobRes.ok) {
                     const jobData = await jobRes.json();
@@ -113,14 +120,14 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                 setProfile(fetchedProfile);
                 setHistory(newHistory);
 
-                // 4. 직무 추천 리포트 호출
+                // 4. 직무 추천 분석 리포트 연동
                 const recRes = await fetch(`http://localhost:8000/api/users/${userId}/recommendation/`);
                 if (recRes.ok) {
                     const recData = await recRes.json();
                     setRecommendation(recData);
                 }
 
-                // 5. 전체 플랫폼 통계 호출
+                // 5. 전체 플랫폼 통계 데이터
                 const statsRes = await fetch(`http://localhost:8000/api/users/stats/`);
                 if (statsRes.ok) {
                     const statsData = await statsRes.json();
@@ -128,14 +135,15 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                 }
 
             } catch (error) {
-                console.warn("백엔드 API 서버에 연결할 수 없습니다. 기본 데모 상태를 유지합니다:", error);
+                // 테스트 시나리오 등 API 연동 실패 시 데모 기본값(Initial Data) 유지
+                console.warn("[API_ERROR] 백엔드 연결이 원활하지 않아 데모용 Mock Data로 렌더링을 시도합니다.", error);
             } finally {
-                setIsLoading(false);
+                setIsLoading(false); // API 패치 종료 후 스피너 해제
             }
         };
 
         fetchMyPageData();
-    }, []);
+    }, [currentUser]);
 
     if (isLoading) {
         return (
@@ -147,7 +155,7 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
 
     return (
         <div className={STYLES.layout}>
-            {/* Profile Section */}
+            {/* 상단 1단: 프로필 + Exp + 스킬상태 미니 보드 */}
             <section className={STYLES.profileSection}>
                 <div className={STYLES.avatarWrapper}>
                     <User size={48} />
@@ -190,7 +198,9 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                 </div>
             </section>
 
+            {/* 하단 분할 단락 (좌측 70% 리스트 뷰, 우측 30% 분석 리포트) */}
             <div className={STYLES.bentoGrid}>
+                {/* 좌측 패널 (테스트 히스토리 모음) */}
                 <div className={STYLES.bentoLeft}>
                     <TestHistorySection
                         title="학습 테스트 기록"
@@ -212,6 +222,7 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                     />
                 </div>
 
+                {/* 우측 패널 (직무 추천 + 플랫폼 전체 스탯 보드) */}
                 <div className={STYLES.bentoRight}>
                     <JobReport data={recommendation} />
                     <StatsSection data={stats} />

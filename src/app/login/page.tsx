@@ -34,6 +34,7 @@ const STYLES = {
 export default function LoginPage() {
     const router = useRouter();
 
+    // 소셜 로그인 도입 전 사용할 테스트 계정 자동 로그인 처리
     const handleTestLogin = () => {
         const dummyUser = {
             id: 1, 
@@ -42,11 +43,12 @@ export default function LoginPage() {
             email: "demo@jobfit.com"
         };
         
+        // localStorage에 임시 토큰 셋업
         localStorage.setItem('access_token', 'demo_test_token_12345');
         localStorage.setItem('refresh_token', 'demo_refresh_token_67890');
         localStorage.setItem('user', JSON.stringify(dummyUser));
         
-        alert("데모 테스트 계정으로 로그인되었습니다! 🚀");
+        alert("데모 계정으로 로그인되었습니다.");
         router.push('/mypage');
         router.refresh();
     };
@@ -54,12 +56,13 @@ export default function LoginPage() {
     return (
         <div className={STYLES.container}>
             <div className={STYLES.card}>
+                {/* 배경 블러 효과 */}
                 <div className={STYLES.bgBlur1}></div>
                 <div className={STYLES.bgBlur2}></div>
 
                 <Link href="/" className={STYLES.backLink}>
                     <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-                    홈으로 돌아가기
+                    홈으로 이동
                 </Link>
 
                 <div className={STYLES.headerContainer}>
@@ -67,7 +70,7 @@ export default function LoginPage() {
                         <Zap size={32} fill="currentColor" />
                     </div>
                     <h1 className={STYLES.title}>로그인</h1>
-                    <p className={STYLES.subtitle}>JobFit과 함께 학습을 시작해보세요</p>
+                    <p className={STYLES.subtitle}>JobFit과 함께 학습을 시작하세요</p>
                 </div>
 
                 <div className={STYLES.buttonsWrapper}>
@@ -76,6 +79,7 @@ export default function LoginPage() {
                         Google로 시작하기
                     </button>
 
+                    {/* 카카오 OAuth 인증 시작 링크 */}
                     <Link href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`}
                         className={`${STYLES.baseBtn} ${STYLES.kakaoBtn}`}>
                         <div className="w-5 h-5 bg-[#191919] rounded-full flex items-center justify-center">
@@ -104,13 +108,13 @@ export default function LoginPage() {
                     </div>
 
                     <button onClick={handleTestLogin} className={`${STYLES.baseBtn} ${STYLES.demoBtn}`}>
-                        ⚡ 개발용 데모 테스트 로그인
+                        ⚡ 데모 계정 로그인
                     </button>
                 </div>
 
                 <div className={STYLES.footerText}>
                     <p className={STYLES.footerLinks}>
-                        계속 진행하면 JobFit의 <span className={STYLES.linkText}>이용약관</span> 및 <br />
+                        계속 진행하면 <span className={STYLES.linkText}>이용약관</span> 및 <br />
                         <span className={STYLES.linkText}>개인정보처리방침</span>에 동의하게 됩니다.
                     </p>
                 </div>

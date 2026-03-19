@@ -30,8 +30,10 @@ const STYLES = {
     traitBadge: "flex-1 text-center p-2 rounded-xl bg-serve-4/10 text-serve-4 text-xs font-black"
 };
 
+// 추천받은 적합(Fit) 직무 결과 리포트 위젯
 export const JobReport = ({ data }: { data: typeof INITIAL_JOB_RECOMMENDATION }) => (
     <section className={STYLES.section}>
+        {/* 데코레이션 딤 처리 블러 */}
         <div className={STYLES.blur1}></div>
         <div className={STYLES.blur2}></div>
         
@@ -40,12 +42,14 @@ export const JobReport = ({ data }: { data: typeof INITIAL_JOB_RECOMMENDATION })
             직무 추천 리포트
         </h3>
 
+        {/* 적합도 배너 */}
         <div className={STYLES.matchCard}>
             <p className={STYLES.matchLabel}>나의 직매칭 유형</p>
             <p className={STYLES.matchType}>{data.type}</p>
             <p className={STYLES.matchRate}>{data.matchRate}% 적합</p>
         </div>
 
+        {/* 관련 직무 설명 세부 */}
         <div className={STYLES.descWrapper}>
             <h4 className={STYLES.descTitle}>
                 <Sparkles size={18} className="text-main-2" />
@@ -54,6 +58,7 @@ export const JobReport = ({ data }: { data: typeof INITIAL_JOB_RECOMMENDATION })
             <p className={STYLES.descText}>{data.description}</p>
         </div>
 
+        {/* 직무 기술 및 연관 키워드 태그 칩(Chips) 렌더링 */}
         <div className={STYLES.keywordWrapper}>
             <p className={STYLES.keywordHeader}>
                 <Target size={14} /> 추천 직무 키워드
@@ -65,6 +70,7 @@ export const JobReport = ({ data }: { data: typeof INITIAL_JOB_RECOMMENDATION })
             </div>
         </div>
 
+        {/* 유저 개인 성향/MBTI 관련 태그 나열 구역 */}
         <div className={STYLES.traitsWrapper}>
             <div className={STYLES.traitsHeader}>
                 <span className={STYLES.traitsTitle}>유형 성향</span>

@@ -24,6 +24,7 @@ export default function MyPage() {
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const router = useRouter();
 
+    // 초기 마운트 시 로그인(토큰) 여부 검사
     useEffect(() => {
         const token = localStorage.getItem('access_token');
         const userStr = localStorage.getItem('user');
@@ -34,7 +35,7 @@ export default function MyPage() {
                 setCurrentUser(userObj);
                 setIsLoggedIn(true);
             } catch (e) {
-                console.error("유저 정보 파싱 오류", e);
+                console.error("유저 파싱 오류:", e);
                 router.push('/login');
             }
         } else {
@@ -44,6 +45,7 @@ export default function MyPage() {
         setIsCheckingAuth(false);
     }, [router]);
 
+    // 로그아웃 (스토리지 클리어)
     const handleLogout = () => {
         if (window.confirm("로그아웃 하시겠습니까?")) {
             localStorage.removeItem('access_token');
@@ -55,11 +57,12 @@ export default function MyPage() {
         }
     };
 
+    // 회원 탈퇴 API 호출
     const handleWithdraw = async () => {
         const token = localStorage.getItem('access_token');
         if (!token) return;
 
-        if (!window.confirm("정말 회원 탈퇴를 진행하시겠습니까?\n(이 작업은 되돌릴 수 없으며, 모든 데이터가 삭제됩니다.)")) {
+        if (!window.confirm("정말 탈퇴하시겠습니까?\n복구가 불가능합니다.")) {
             return;
         }
 
@@ -72,7 +75,7 @@ export default function MyPage() {
             });
 
             if (res.ok) {
-                alert("회원 탈퇴가 안전하게 처리되었습니다. 이용해 주셔서 감사합니다.");
+                alert("회원 탈퇴 처리되었습니다.");
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('refresh_token');
                 localStorage.removeItem('user');
@@ -81,14 +84,15 @@ export default function MyPage() {
                 router.push('/');
             } else {
                 const errorData = await res.json();
-                alert(`탈퇴 실패: ${errorData.error || '접근 권한이 없거나 서버 오류입니다.'}`);
+                alert(`탈퇴 실패: ${errorData.error || '접근 불가'}`);
             }
         } catch (error) {
-            console.error("회원 탈퇴 중 오류 발생", error);
-            alert("탈퇴 요청 중 에러가 발생했습니다.");
+            console.error("탈퇴 요청 중 에러:", error);
+            alert("처리 중 에러가 발생했습니다.");
         }
     };
 
+    // 검증 대기 중 표시할 로딩 스피너
     if (isCheckingAuth) {
         return (
             <div className={STYLES.loadingView}>
@@ -97,16 +101,15 @@ export default function MyPage() {
         );
     }
 
-    if (!isLoggedIn) {
-        return null;
-    }
+    if (!isLoggedIn) return null;
 
     return (
         <div className={STYLES.layout}>
+            {/* 우측 상단 퀵 메뉴바 */}
             <div className={STYLES.floatingNav}>
                 <div className={STYLES.navCard}>
                     <button onClick={handleWithdraw} className={STYLES.withdrawBtn}>
-                        회원 탈퇴
+                        탈퇴
                     </button>
                     <button onClick={handleLogout} className={STYLES.logoutBtn}>
                         <LogOut size={16} /> 로그아웃
@@ -114,8 +117,9 @@ export default function MyPage() {
                 </div>
             </div>
 
+            {/* 메인 컨텐츠 영역 */}
             <div className={STYLES.contentWrapper}>
-                <Header title="마이페이지" subtitle="내 학습 정보와 테스트 결과를 확인하세요." />
+                <Header title="마이페이지" subtitle="내 정보와 테스트 결과를 확인하세요." />
                 <LoggedInView currentUser={currentUser} />
             </div>
         </div>
