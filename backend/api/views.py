@@ -5,6 +5,8 @@ from rest_framework.exceptions import AuthenticationFailed , APIException
 
 from user.models import User
 from user.serializer import UserSerializer
+from .models import Job
+from .serializer import JobSerializer
 from authentication.token import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
 
 
@@ -70,3 +72,13 @@ class Logoutview(APIView):
             'message': 'success'
         }
         return response
+
+class JobListView(APIView): # APIView
+    def get(self, request):
+        # 쿼리셋
+        jobs = Job.objects.all()
+
+        # 시리얼라이저를 생성하고 쿼리셋을 전달
+        serializer = JobSerializer(jobs, many=True)
+
+        return Response(serializer.data)
