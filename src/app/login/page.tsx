@@ -2,9 +2,30 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ChevronLeft, Github, Chrome, MessageCircle, Mail } from 'lucide-react';
 
 export default function LoginPage() {
+    const router = useRouter();
+
+    const handleTestLogin = () => {
+        // mypage API(userId '1')에 맞춘 더미 사용자 데이터
+        const dummyUser = {
+            id: 1, 
+            username: "1", 
+            nickname: "데모 유저",
+            email: "demo@jobfit.com"
+        };
+        
+        localStorage.setItem('access_token', 'demo_test_token_12345');
+        localStorage.setItem('refresh_token', 'demo_refresh_token_67890');
+        localStorage.setItem('user', JSON.stringify(dummyUser));
+        
+        alert("데모 테스트 계정으로 로그인되었습니다! 🚀");
+        router.push('/mypage');
+        router.refresh(); // 필요 시 상태 갱신을 위해 추가
+    };
+
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
             <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-10 relative overflow-hidden">
@@ -13,11 +34,11 @@ export default function LoginPage() {
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-purple-50 rounded-full -ml-16 -mb-16 blur-3xl opacity-50"></div>
 
                 <Link
-                    href="/mypage"
+                    href="/"
                     className="inline-flex items-center text-sm font-bold text-gray-500 hover:text-indigo-600 transition-colors mb-8 group"
                 >
                     <ChevronLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-                    돌아가기
+                    홈으로 달아기
                 </Link>
 
                 <div className="text-center mb-10">
@@ -50,6 +71,22 @@ export default function LoginPage() {
                     <button className="w-full flex items-center justify-center gap-3 bg-[#24292F] py-3.5 rounded-xl font-bold text-white hover:bg-[#1c2126] transition-all shadow-sm active:scale-[0.98]">
                         <Github size={20} />
                         GitHub으로 시작하기
+                    </button>
+
+                    <div className="relative py-4">
+                        <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                            <div className="w-full border-t border-gray-200" />
+                        </div>
+                        <div className="relative flex justify-center">
+                            <span className="bg-white px-3 text-xs font-semibold text-gray-400 uppercase tracking-widest">or</span>
+                        </div>
+                    </div>
+
+                    <button 
+                        onClick={handleTestLogin}
+                        className="w-full flex items-center justify-center gap-3 bg-indigo-50 border border-indigo-100 py-3.5 rounded-xl font-bold text-indigo-600 hover:bg-indigo-100 hover:border-indigo-200 transition-all shadow-sm active:scale-[0.98]"
+                    >
+                        ⚡ 개발용 데모 테스트 로그인
                     </button>
                 </div>
 
