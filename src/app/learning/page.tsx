@@ -5,7 +5,7 @@ import {
     Award, Trophy, CheckCircle2, Zap, ZapOff, X
 } from 'lucide-react';
 import { ICON_MAP, LUCIDE_ICONS } from '@/app/learning/data/icon'
-import { QUIZZES, QuizData, categoryList, Category, fetchSubcategories } from '@/app/learning/data/data'
+import { QUIZZES, QuizData, Category, categoryList, fetchSubcategories } from '@/app/learning/data/data'
 import { HelpCircle } from 'lucide-react'; // 기본 아이콘용
 
 const token = typeof window !== 'undefined' ? localStorage.getItem('access') : null;
@@ -16,7 +16,6 @@ console.log("현재 토큰 상태:", token);
 console.log("현재 리프레시 토큰 상태:", refresh);
 console.log("현재 이메일 상태:", email);
 
-// --- Shared Components ---
 const ProgressBar = ({
     progress,
     label,
@@ -33,16 +32,16 @@ const ProgressBar = ({
     return (
         <div className={isLarge ? "" : "mt-8"}>
             <div className={`flex justify-between ${isLarge ? 'items-end mb-4' : 'text-[10px] font-bold uppercase tracking-widest mb-2'}`}>
-                <span className={isLarge ? 'text-slate-400 text-xs font-black uppercase tracking-widest' : (isActive ? 'text-indigo-200' : 'text-slate-500')}>
+                <span className={isLarge ? 'text-gray-400 text-xs font-black uppercase tracking-widest' : (isActive ? 'text-white/80' : 'text-gray-500')}>
                     {label}
                 </span>
-                <span className={isLarge ? 'text-4xl font-black text-white italic' : (isActive ? 'text-white' : 'text-slate-300')}>
+                <span className={isLarge ? 'text-4xl font-black text-black italic' : (isActive ? 'text-white' : 'text-gray-400')}>
                     {Math.round(progress)}%
                 </span>
             </div>
-            <div className={`w-full overflow-hidden border ${isLarge ? 'h-3 bg-white/5 rounded-full border-white/5' : `h-1.5 rounded-full ${isActive ? 'bg-black/20 border-transparent' : 'bg-white/5 border-transparent'}`}`}>
+            <div className={`w-full overflow-hidden ${isLarge ? 'h-3 bg-gray-100 rounded-full' : `h-1.5 rounded-full ${isActive ? 'bg-black/10' : 'bg-gray-100'}`}`}>
                 <div
-                    className={`h-full transition-all duration-1000 ease-out ${isLarge ? 'bg-gradient-to-r from-indigo-600 via-purple-500 to-indigo-400' : (isActive ? 'bg-white' : 'bg-indigo-500/50')}`}
+                    className={`h-full transition-all duration-1000 ease-out ${isLarge ? 'bg-gradient-primary' : (isActive ? 'bg-white' : 'bg-[#f47725]')}`}
                     style={{ width: `${progress}%` }}
                 />
             </div>
@@ -66,18 +65,46 @@ export default function PythonMasteryExplorer() {
     const [globalProgress, setGlobalProgress] = useState(0);
     const [dynamicQuizzes, setDynamicQuizzes] = useState<QuizData>({});
 
-    useEffect(() => {
-        categoryList().then(data => {
-            // 각 카테고리에 progress 필드가 없다면 임의로 추가하거나, 
-            // 서버에서 준 데이터(예: cat.proficiency)를 연결합니다.
-            const mappedData = data.map((cat: any) => ({
-                ...cat,
-                currentProgress: cat.proficiency || 0 // 서버 데이터 명칭에 맞춰주세요!
-            }));
-            setCategories(mappedData);
-        });
-    }, []);
 
+    //  -- db연결 데이터 -- 
+    // useEffect(() => {
+    //     categoryList().then(data => {
+    //         // 각 카테고리에 progress 필드가 없다면 임의로 추가하거나, 
+    //         // 서버에서 준 데이터(예: cat.proficiency)를 연결합니다.
+    //         const mappedData = data.map((cat: any) => ({
+    //             ...cat,
+    //             currentProgress: cat.proficiency || 0 // 서버 데이터 명칭에 맞춰주세요!
+    //         }));
+    //         setCategories(mappedData);
+    //     });
+    // }, []);
+
+    // useEffect(() => {
+    //     // 카테고리 목록 불러오기
+    //     categoryList().then(res => {
+    //         setCategories(res);
+    //         if (res.length > 0 && currentStageId === null) {
+    //             setCurrentStageId(res[0].id);
+    //         }
+    //     });
+
+    //     if (currentStageId) {
+    //         console.log("email", email);
+    //         // 서브카테고리 목록 불러오기
+    //         fetchSubcategories(currentStageId, email).then(res => {
+    //             console.log('subcategories', res);
+    //             setSubcategories(res)
+    //         });
+
+    //         //서브카테고리별 문제 목록 불러오기
+    //         // fetchQuestions(currentStageId).then(res => setDynamicQuizzes(res || {}));
+    //     }
+    // }, [currentStageId]);
+
+    // console.log('dynamicQuizzes', dynamicQuizzes);
+
+
+    //  test 데이터 
     useEffect(() => {
         // 카테고리 목록 불러오기
         categoryList().then(res => {
@@ -86,22 +113,16 @@ export default function PythonMasteryExplorer() {
                 setCurrentStageId(res[0].id);
             }
         });
-
-        if (currentStageId) {
-            console.log("email", email);
-            // 서브카테고리 목록 불러오기
-            fetchSubcategories(currentStageId, email).then(res => {
-                console.log('subcategories', res);
-                setSubcategories(res)
-            });
-
-            //서브카테고리별 문제 목록 불러오기
-            // fetchQuestions(currentStageId).then(res => setDynamicQuizzes(res || {}));
-        }
     }, [currentStageId]);
 
-    console.log('dynamicQuizzes', dynamicQuizzes);
-
+    useEffect(() => {
+        if (currentStageId) {
+            // 서브카테고리 목록 불러오기
+            fetchSubcategories(currentStageId, email).then(res => {
+                setSubcategories(res);
+            });
+        }
+    }, [currentStageId, email]);
 
     useEffect(() => {
         setIsMounted(true);
@@ -216,39 +237,38 @@ export default function PythonMasteryExplorer() {
     const currentCategory = categories.find(c => c.id === currentStageId);
 
     return (
-        <div className="min-h-screen bg-[#050508] text-slate-200 font-sans selection:bg-indigo-500/30">
+        <div className="min-h-screen bg-[#f8f9fa] text-[#1a1a1a] font-sans selection:bg-[#ea002c]/10">
             {/* Background Effects */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 blur-[120px] rounded-full" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-purple-600/10 blur-[120px] rounded-full" />
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 contrast-150" />
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#ea002c]/5 blur-[120px] rounded-full" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#f47725]/5 blur-[120px] rounded-full" />
             </div>
 
             <div className="relative max-w-7xl mx-auto px-6 py-12">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 animate-slide-up">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 animate-up">
                     <div>
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-indigo-400 text-xs font-bold tracking-widest uppercase">
+                            <div className="px-3 py-1 bg-[#f47725]/10 rounded-full text-[#f47725] text-xs font-bold tracking-widest uppercase">
                                 Learning Path
                             </div>
-                            <div className="w-1 h-1 bg-slate-700 rounded-full" />
-                            <div className="text-slate-500 text-xs font-bold uppercase tracking-widest">
+                            <div className="w-1 h-1 bg-gray-300 rounded-full" />
+                            <div className="text-gray-500 text-xs font-bold uppercase tracking-widest">
                                 {currentCategory?.name || "Loading..."}
                             </div>
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-none italic">
-                            KNOWLEDGE<br />EXPEDITION
+                        <h1 className="text-5xl md:text-7xl font-black text-black mb-6 tracking-tight leading-none">
+                            KNOWLEDGE<br /><span className="text-gradient">EXPEDITION</span>
                         </h1>
-                        <p className="max-w-xl text-slate-400 text-lg font-medium leading-relaxed uppercase tracking-tighter opacity-80">
+                        <p className="max-w-xl text-gray-500 text-lg font-medium leading-relaxed uppercase tracking-tighter opacity-80">
                             당신의 기술적 한계를 뛰어넘는 여정.<br />각 단계를 정복하고 진정한 마스터가 되십시오.
                         </p>
                     </div>
 
                     <div className="flex flex-col items-end gap-6">
-                        <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-6 min-w-[320px] shadow-2xl relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                                <Trophy size={80} />
+                        <div className="white-card rounded-[2.5rem] p-8 min-w-[320px] relative overflow-hidden group border-none shadow-xl">
+                            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                <Trophy size={80} className="text-[#f47725]" />
                             </div>
                             <div className="relative">
                                 <ProgressBar
@@ -257,8 +277,8 @@ export default function PythonMasteryExplorer() {
                                     size="large"
                                 />
                                 <div className="flex items-center justify-between mt-4">
-                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">LV. {Math.floor(globalProgress / 20) + 1} EXPERT</span>
-                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{solvedCount} / {subcategories.length || 0} NODES</span>
+                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">LV. {Math.floor(globalProgress / 20) + 1} EXPERT</span>
+                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{solvedCount} / {subcategories.length || 0} NODES</span>
                                 </div>
                             </div>
                         </div>
@@ -266,45 +286,43 @@ export default function PythonMasteryExplorer() {
                 </div>
 
                 {/* Stage Selection */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20 md:px-0 px-4">
                     {categories.map((cat, idx) => {
                         const isUnlocked = isStageUnlocked(cat.id);
-                        const progress = categoryProgress[cat.id] || 0;
                         const isActive = currentStageId === cat.id;
 
                         return (
                             <button
                                 key={cat.id}
                                 onClick={() => isUnlocked && setCurrentStageId(cat.id)}
-                                className={`relative group p-8 rounded-[2rem] border-2 transition-all duration-500 text-left overflow-hidden h-40 ${isActive
-                                    ? 'bg-indigo-600 border-indigo-400 shadow-[0_0_50px_-12px_rgba(79,70,229,0.5)]'
+                                className={`relative group p-8 rounded-[2rem] transition-all duration-500 text-left overflow-hidden h-40 ${isActive
+                                    ? 'bg-gradient-primary shadow-[0_12px_30px_rgba(234,0,44,0.2)]'
                                     : isUnlocked
-                                        ? 'bg-white/5 border-white/10 hover:border-indigo-500/50 hover:bg-white/[0.08]'
-                                        : 'bg-black/40 border-white/5 opacity-50 cursor-not-allowed'
+                                        ? 'white-card'
+                                        : 'bg-gray-100 opacity-50 cursor-not-allowed border-none'
                                     }`}
                             >
                                 <div className="flex justify-between items-start mb-4">
                                     <div>
-                                        <div className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 ${isActive ? 'text-indigo-200' : 'text-slate-500'}`}>
+                                        <div className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 ${isActive ? 'text-white/70' : 'text-gray-400'}`}>
                                             {idx + 1}차 전직
                                         </div>
-                                        <h3 className={`text-2xl font-black tracking-tight ${isActive ? 'text-white' : 'text-slate-300'}`}>{cat.name}</h3>
+                                        <h3 className={`text-2xl font-black tracking-tight ${isActive ? 'text-white' : 'text-black'}`}>{cat.name}</h3>
                                     </div>
-                                    <div className={`p-3 rounded-2xl transition-all duration-500 ${isActive ? 'bg-white/20' : 'bg-white/5 group-hover:scale-110'}`}>
-                                        {renderIcon(ICON_MAP[cat.name as keyof typeof ICON_MAP] || "Zap", `w-6 h-6 ${isActive ? 'text-white' : 'text-slate-400'}`)}
+                                    <div className={`p-3 rounded-2xl transition-all duration-500 ${isActive ? 'bg-white/20' : 'bg-gray-50 group-hover:scale-110'}`}>
+                                        {renderIcon(ICON_MAP[cat.name as keyof typeof ICON_MAP] || "Zap", `w-6 h-6 ${isActive ? 'text-white' : 'text-[#f47725]'}`)}
                                     </div>
                                 </div>
 
                                 <ProgressBar
-                                    // 상태에 저장된 값이 있으면 쓰고, 없으면 기본값 사용
                                     progress={categoryProgress[cat.id] || cat.currentProgress || 0}
                                     label="Proficiency"
                                     isActive={isActive}
                                 />
 
                                 {!isUnlocked && (
-                                    <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <ZapOff className="text-white/40 w-8 h-8" />
+                                    <div className="absolute inset-0 bg-gray-50/60 backdrop-blur-[1px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <ZapOff className="text-gray-400 w-8 h-8" />
                                     </div>
                                 )}
                             </button>
@@ -313,14 +331,14 @@ export default function PythonMasteryExplorer() {
                 </div>
 
                 {/* Canvas Area */}
-                <div className="relative min-h-[600px] bg-white/[0.02] border border-white/5 rounded-[3rem] p-12 overflow-hidden shadow-inner backdrop-blur-3xl animate-fade-in group/canvas">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(79,70,229,0.05),transparent_70%)]" />
+                <div className="relative min-h-[600px] bg-white border border-gray-100 rounded-[3rem] p-12 overflow-hidden shadow-xl animate-fade-in group/canvas">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(244,119,37,0.03),transparent_70%)]" />
 
                     {/* Stage Details Header */}
                     <div className="relative flex flex-col items-center mb-20 text-center">
-                        <div className="w-px h-16 bg-gradient-to-b from-transparent to-indigo-500/50 mb-6" />
-                        <h2 className="text-3xl font-black text-white mb-2">{currentCategory?.name || "Loading..."} Core Mastery</h2>
-                        <span className="text-indigo-400 text-xs font-bold tracking-widest uppercase">Select a node to begin the trial</span>
+                        <div className="w-px h-16 bg-gradient-to-b from-transparent to-[#f47725]/30 mb-6" />
+                        <h2 className="text-3xl font-black text-black mb-2 uppercase italic">{currentCategory?.name || "Loading..."} <span className="text-gradient">Core Mastery</span></h2>
+                        <span className="text-gray-400 text-xs font-bold tracking-widest uppercase">Select a node to begin the trial</span>
                     </div>
 
                     <div className="relative flex justify-center">
@@ -343,7 +361,7 @@ export default function PythonMasteryExplorer() {
                                             <line
                                                 key={`line-${node.id}`}
                                                 x1={x2} y1={y2} x2={x1} y2={y1}
-                                                stroke={isReqSolved ? "#6366f1" : "rgba(255,255,255,0.05)"}
+                                                stroke={isReqSolved ? "#f47725" : "#f1f5f9"}
                                                 strokeWidth="2"
                                                 strokeDasharray={isReqSolved ? "0" : "8,8"}
                                                 className="transition-all duration-1000"
@@ -369,16 +387,17 @@ export default function PythonMasteryExplorer() {
                                         <button
                                             disabled={!canUnlock}
                                             onClick={() => setModalNode(node.id.toString())}
-                                            className={`group w-44 p-4 rounded-2xl border-2 flex flex-col items-center gap-3 transition-all ${isSolved ? 'bg-indigo-600 border-indigo-400 shadow-glow' :
-                                                canUnlock ? 'bg-white/5 border-white/10 hover:border-indigo-500' : 'bg-black/40 border-white/5 opacity-40 grayscale'
+                                            className={`group w-44 p-5 rounded-3xl transition-all ${isSolved
+                                                ? 'bg-gradient-primary text-white shadow-lg' :
+                                                canUnlock ? 'white-card hover:border-[#f47725]' : 'bg-gray-50 opacity-40 grayscale pointer-events-none'
                                                 }`}
                                         >
-                                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${isSolved ? 'bg-white/20' : 'bg-black/50'}`}>
-                                                {isSolved ? <CheckCircle2 className="text-white w-5 h-5" /> : <Zap className={`${canUnlock ? 'text-indigo-400' : 'text-slate-600'} w-5 h-5`} />}
+                                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-all ${isSolved ? 'bg-white/20' : 'bg-gray-100 group-hover:bg-[#f47725]/10'}`}>
+                                                {isSolved ? <CheckCircle2 className="text-white w-6 h-6" /> : <Zap className={`${canUnlock ? 'text-[#f47725]' : 'text-gray-400'} w-6 h-6`} />}
                                             </div>
                                             <div className="text-center">
-                                                <div className={`text-[8px] font-bold uppercase mb-1 ${isSolved ? 'text-indigo-200' : 'text-slate-500'}`}>NODE {node.id}</div>
-                                                <div className="text-xs font-black text-white leading-tight">{node.name}</div>
+                                                <div className={`text-[8px] font-bold uppercase mb-1 tracking-widest ${isSolved ? 'text-white/70' : 'text-gray-400'}`}>NODE {node.id}</div>
+                                                <div className={`text-sm font-black italic uppercase ${isSolved ? 'text-white' : 'text-black'}`}>{node.name}</div>
                                             </div>
                                         </button>
                                     </div>
@@ -391,40 +410,40 @@ export default function PythonMasteryExplorer() {
 
             {/* Quiz Modal */}
             {modalNode && QUIZZES[modalNode] && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 text-white">
-                    <div className="bg-[#1a1a22] border border-white/10 w-full max-w-lg rounded-[2rem] p-8 shadow-2xl relative animate-scale-in">
-                        <button onClick={closeQuiz} className="absolute top-6 right-6 text-slate-500 hover:text-white">
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                    <div className="bg-white w-full max-w-lg rounded-[2.5rem] p-10 shadow-2xl relative animate-up">
+                        <button onClick={closeQuiz} className="absolute top-8 right-8 text-gray-400 hover:text-black transition-colors">
                             <X className="w-6 h-6" />
                         </button>
 
                         {!showingResults ? (
                             <>
-                                <div className="mb-6 text-center">
-                                    <div className="text-indigo-400 text-[10px] font-bold tracking-[0.3em] uppercase mb-2">
+                                <div className="mb-8 text-center">
+                                    <div className="text-[#f47725] text-[10px] font-black tracking-[0.3em] uppercase mb-3">
                                         Knowledge Trial ({currentQuestionIdx + 1} / {QUIZZES[modalNode].questions.length})
                                     </div>
-                                    <h3 className="text-2xl font-black italic">{subcategories.find(n => n.id.toString() === modalNode)?.name}</h3>
-                                    <div className="w-full h-1 bg-white/5 rounded-full mt-4 overflow-hidden">
+                                    <h3 className="text-3xl font-black text-black italic uppercase">{subcategories.find(n => n.id.toString() === modalNode)?.name}</h3>
+                                    <div className="w-full h-2 bg-gray-100 rounded-full mt-6 overflow-hidden">
                                         <div
-                                            className="h-full bg-indigo-500 transition-all duration-500"
+                                            className="h-full bg-gradient-primary transition-all duration-500"
                                             style={{ width: `${((currentQuestionIdx + 1) / QUIZZES[modalNode].questions.length) * 100}%` }}
                                         />
                                     </div>
                                 </div>
 
-                                <p className="text-lg text-slate-300 mb-8 text-center font-medium leading-relaxed">
+                                <p className="text-xl text-black mb-10 text-center font-bold leading-relaxed">
                                     {QUIZZES[modalNode].questions[currentQuestionIdx]?.q}
                                 </p>
 
-                                <div className="grid gap-3">
+                                <div className="grid gap-4">
                                     {QUIZZES[modalNode].questions[currentQuestionIdx]?.a.map((opt, idx) => (
                                         <button
                                             key={idx}
                                             onClick={() => handleQuizAnswer(idx)}
-                                            className="w-full p-4 text-left rounded-2xl bg-white/5 border border-white/5 hover:bg-indigo-600/20 hover:border-indigo-500 transition-all text-slate-300 font-bold group"
+                                            className="w-full p-5 text-left rounded-2xl bg-[#f8f9fa] border-2 border-transparent hover:border-[#f47725] hover:bg-white transition-all text-gray-700 font-bold group"
                                         >
                                             <div className="flex items-center gap-4">
-                                                <div className="w-6 h-6 rounded-full bg-black/50 flex items-center justify-center text-[10px] border border-white/10 text-slate-500 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
+                                                <div className="w-8 h-8 rounded-xl bg-gray-200 flex items-center justify-center text-xs text-gray-500 group-hover:bg-[#f47725] group-hover:text-white transition-all">
                                                     {idx + 1}
                                                 </div>
                                                 {opt}
@@ -434,37 +453,37 @@ export default function PythonMasteryExplorer() {
                                 </div>
                             </>
                         ) : (
-                            <div className="text-center py-4 animate-fade-in">
-                                <div className="mb-8">
-                                    <div className="w-24 h-24 bg-indigo-600/20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-glow">
-                                        <Trophy className={`w-12 h-12 ${calculateScore() / QUIZZES[modalNode].questions.length >= 0.8 ? 'text-yellow-500' : 'text-slate-500'}`} />
+                            <div className="text-center py-4 animate-up">
+                                <div className="mb-10">
+                                    <div className="w-24 h-24 bg-[#f47725]/10 rounded-full flex items-center justify-center mx-auto mb-8">
+                                        <Trophy className={`w-12 h-12 ${calculateScore() / QUIZZES[modalNode].questions.length >= 0.8 ? 'text-[#f47725]' : 'text-gray-300'}`} />
                                     </div>
-                                    <h3 className="text-3xl font-black mb-2 italic">TRIAL COMPLETE</h3>
-                                    <p className="text-slate-400 font-bold">
-                                        당신의 통찰력: {calculateScore()} / {QUIZZES[modalNode].questions.length}
+                                    <h3 className="text-4xl font-black mb-3 text-black italic uppercase">TRIAL COMPLETE</h3>
+                                    <p className="text-gray-400 font-black tracking-widest text-sm">
+                                        SCORE: {calculateScore()} / {QUIZZES[modalNode].questions.length}
                                     </p>
                                 </div>
 
                                 {calculateScore() / QUIZZES[modalNode].questions.length >= 0.8 ? (
                                     <div>
-                                        <div className="bg-emerald-500/10 border border-emerald-500/20 p-5 rounded-2xl mb-8 text-emerald-400 font-bold text-sm">
-                                            축하합니다! 80% 이상의 정답률로<br />지식 계통도를 활성화했습니다.
+                                        <div className="bg-[#f47725]/5 border border-[#f47725]/10 p-6 rounded-3xl mb-10 text-[#f47725] font-bold text-sm leading-relaxed">
+                                            축하합니다! 전문가 수준의 이해도를 증명하셨습니다.<br />지식 마스터리를 획득할 준비가 되었습니다.
                                         </div>
                                         <button
                                             onClick={handleClaimMastery}
-                                            className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 rounded-2xl font-black text-lg shadow-glow transition-all active:scale-95"
+                                            className="w-full py-5 btn-primary rounded-2xl font-black text-xl shadow-xl active:scale-95"
                                         >
-                                            마스터리 획득
+                                            마스터리 획득하기
                                         </button>
                                     </div>
                                 ) : (
                                     <div>
-                                        <div className="bg-rose-500/10 border border-rose-500/20 p-5 rounded-2xl mb-8 text-rose-400 font-bold text-sm">
-                                            아쉽습니다. 80% 이상의 정답률이 필요합니다.<br />다시 시도해 보시겠습니까?
+                                        <div className="bg-gray-50 p-6 rounded-3xl mb-10 text-gray-500 font-bold text-sm leading-relaxed">
+                                            정답률이 부족합니다 (80% 이상 권장).<br />개념을 다시 복습하고 도전해 보세요.
                                         </div>
                                         <button
                                             onClick={closeQuiz}
-                                            className="w-full py-4 bg-white/5 hover:bg-white/10 rounded-2xl font-black text-lg transition-all"
+                                            className="w-full py-5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl font-black text-xl transition-all"
                                         >
                                             다시 도전하기
                                         </button>

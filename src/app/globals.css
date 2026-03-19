@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050508;
   --foreground: #f8fafc;
   --card-bg: #0f0f13;
   --card-border: rgba(255, 255, 255, 0.08);
@@ -65,5 +64,63 @@ body {
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+/* JobFit Design System */
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(90deg, #ea002c, #f47725);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .bg-gradient-primary {
+    background: linear-gradient(135deg, #ea002c, #f47725);
+  }
+
+  .white-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .white-card:hover {
+    border-color: #f47725;
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(244, 119, 37, 0.1);
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #ea002c, #f47725);
+    color: white;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 8px 25px rgba(234, 0, 44, 0.3);
+    transform: scale(1.02);
+  }
+
+  .animate-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+
+  .no-italic {
+    font-style: normal !important;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
