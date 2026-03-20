@@ -6,10 +6,8 @@ services:
     container_name: jobfit_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: jobfit
-      MYSQL_USER: myuser
-      MYSQL_PASSWORD: mypassword
     ports:
       - "3306:3306"
     volumes:
@@ -41,8 +39,13 @@ services:
       - ./backend:/app
     environment:
       - DB_NAME=jobfit
+<<<<<<< HEAD
       - DB_USER=myuser
       - DB_PASSWORD=mypassword
+=======
+      - DB_USER=root
+      - DB_PASSWORD=password
+>>>>>>> origin/dev
       - DB_HOST=db
       - DB_PORT=3306
     ports:
