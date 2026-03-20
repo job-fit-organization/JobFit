@@ -83,3 +83,4 @@ python manage.py runserver
 
 > 터미널에 `Starting development server at http://127.0.0.1:8000/` 문구가 출력되면 정상입니다!
 > 클라이언트(Next.js)는 `http://localhost:3000` 에서 실행하고, 백엔드는 `8000` 포트에서 API 요청을 대기합니다.
+> `http://localhost:8000/api/docs/`에서 API 명세서를 조회할 수 있습니다.
