@@ -73,6 +73,12 @@ class QuestionChoice(models.Model):
     question_text = models.TextField()
     choice_text = models.TextField()
     is_correct = models.BooleanField(null=True, blank=True)
+    recommended_job = models.ForeignKey(
+        Job,
+        on_delete=models.SET_NULL,
+        related_name='recommended_question_choices',
+        null=True, blank=True
+    )
 
     class Meta:
         ordering = ['question_group_id', 'id']
@@ -103,7 +109,7 @@ class Attempt(models.Model):
     def __str__(self):
         return f'{self.user.username} - {self.attempt_type} - {self.id}'
 
-class Response(models.Model):
+class UserResponse(models.Model):
     attempt = models.ForeignKey(
         Attempt,
         on_delete=models.CASCADE,
