@@ -1,16 +1,39 @@
 from collections import OrderedDict, defaultdict
 
-from rest_framework import status
+from rest_framework import status, serializers
 from rest_framework.authentication import get_authorization_header
 from rest_framework.views import APIView 
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import AuthenticationFailed , APIException
 
+from drf_spectacular.utils import (
+    extend_schema,
+    OpenApiExample,
+    OpenApiParameter,
+    inline_serializer,
+)
+
 from user.models import User
 from user.serializer import UserSerializer
 from .models import Job, Roadmap, Skill, Learning, QuestionChoice, Attempt, UserResponse
-from .serializer import JobSerializer, RoadmapSerializer, SkillSerializer, LearningSerializer, QuestionGroupSerializer, QuizSubmitSerializer, JobTestSubmitSerializer, RecommendedJobSerializer
+from .serializer import (
+    JobSerializer, 
+    RoadmapSerializer, 
+    SkillSerializer,
+    RoadmapResponseSerializer,
+    LearningSerializer,
+    QuestionGroupSerializer, 
+    QuizSubmitSerializer, 
+    JobTestSubmitSerializer, 
+    RecommendedJobSerializer,
+    SkillLearningResponseSerializer,
+    QuizSubmitResponseSerializer,
+    QuizQuestionListResponseSerializer,
+    JobTestQuestionListResponseSerializer,
+    JobTestSubmitResponseSerializer
+
+)
 from authentication.token import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
 
 from django.shortcuts import get_object_or_404
@@ -67,6 +90,38 @@ class Logoutview(APIView):
 
 # GET /api/jobs/
 class JobListView(APIView): # APIView
+    @extend_schema(
+        summary='직무 목록 조회',
+        description='사용자가 선택할 수 있는 전체 직무 목록을 조회합니다.',
+        tags=['Job'],
+        responses={200: JobSerializer(many=True)},
+        examples=[
+            OpenApiExample(
+                '직무 목록 응답 예시',
+                value=[
+                    {
+                        'id': 1,
+                        'code': 'AIS',
+                        'name': 'AI 서비스 개발자',
+                        'desc': 'AI 서비스를 개발하는 직무'
+                    },
+                    {
+                        'id': 2,
+                        'code': 'MLO',
+                        'name': 'MLOps 엔지니어',
+                        'desc': 'ML 시스템 운영 및 배포하는 직무'
+                    },
+                    {
+                        'id': 3,
+                        'code': 'DaS',
+                        'name': '데이터 사이언티스트',
+                        'desc': '데이터를 분석하여 새로운 인사이트를 도출하는 직무'
+                    },
+                ],
+                response_only=True,
+            )
+        ]
+    )
     def get(self, request):
         # 쿼리셋
         jobs = Job.objects.all()
@@ -78,6 +133,60 @@ class JobListView(APIView): # APIView
 
 # GET /api/jobs/{job_id}/roadmap/
 class RoadmapView(APIView):
+    @extend_schema(
+        summary='직무별 로드맵 조회',
+        description='선택한 직무에 필요한 기술 목록과 선수 기술 관계를 함께 조회합니다.',
+        tags=['Roadmap'],
+        parameters=[
+            OpenApiParameter(
+                name='job_id',
+                type=int,
+                location=OpenApiParameter.PATH,
+                description='조회할 직무 ID'
+            )
+        ],
+        responses={
+            200: RoadmapResponseSerializer,
+            404: inline_serializer(
+                name='JobNotFoundResponse',
+                fields={
+                    'detail': serializers.CharField()
+                }
+            )
+        },
+        examples=[
+            OpenApiExample(
+                '직무별 로드맵 응답 예시',
+                value={
+                    'job': {
+                        'id': 1,
+                        'code': 'ai_application_engineer',
+                        'name': 'AI 서비스 개발자',
+                        'desc': 'AI 서비스를 개발하는 직무'
+                    },
+                    'roadmap': [
+                        {
+                            'skill_id': 1,
+                            'skill_code': 'python',
+                            'skill_name': 'Python',
+                            'skill_desc': '파이썬 기초',
+                            'prerequisite_skill_id': None,
+                            'prerequisite_skill_name': None
+                        },
+                        {
+                            'skill_id': 2,
+                            'skill_code': 'ml',
+                            'skill_name': 'Machine Learning',
+                            'skill_desc': '머신러닝 기초',
+                            'prerequisite_skill_id': 1,
+                            'prerequisite_skill_name': 'Python'
+                        }
+                    ]
+                },
+                response_only=True,
+            )
+        ]
+    )
     def get(self, request, job_id):
         job = get_object_or_404(Job, id=job_id)
         # Roadmap 테이블에서 job=job인 데이터를 조회 -> Roadmap 테이블의 skill, prerequisite_skill 열 데이터를 가져옴
@@ -94,6 +203,56 @@ class RoadmapView(APIView):
 
 # GET /api/skills/{skill_id}/learnings/
 class SkillLearningView(APIView):
+    @extend_schema(
+        summary='기술별 학습 목록 조회',
+        description='특정 기술에 포함된 학습 목록을 조회합니다.',
+        tags=['Learning'],
+        parameters=[
+            OpenApiParameter(
+                name='skill_id',
+                type=int,
+                location=OpenApiParameter.PATH,
+                description='조회할 기술 ID'
+            )
+        ],
+        responses={
+            200: SkillLearningResponseSerializer,
+            404: inline_serializer(
+                name='SkillNotFoundResponse',
+                fields={
+                    'detail': serializers.CharField()
+                }
+            )
+        },
+        examples=[
+            OpenApiExample(
+                '기술별 학습 목록 응답 예시',
+                value={
+                    'skill': {
+                        'id': 1,
+                        'code': 'python',
+                        'name': 'Python',
+                        'desc': '파이썬 기초'
+                    },
+                    'learnings': [
+                        {
+                            'id': 1,
+                            'code': 'python_basic',
+                            'name': '파이썬 기초 문법',
+                            'desc': 'for, if, while'
+                        },
+                        {
+                            'id': 2,
+                            'code': 'python_oop',
+                            'name': '파이썬 객체지향',
+                            'desc': 'class & instance'
+                        }
+                    ]
+                },
+                response_only=True,
+            )
+        ]
+    )
     def get(self, request, skill_id):
         skill = get_object_or_404(Skill, id=skill_id)
         learnings = Learning.objects.filter(skill=skill)
@@ -109,6 +268,64 @@ class SkillLearningView(APIView):
 
 # GET /api/learnings/{learning_id}/questions/
 class QuizQuestionListView(APIView):
+    @extend_schema(
+        summary='학습별 퀴즈 문제 조회',
+        description='특정 학습 단계에 속한 퀴즈 문제를 question_group_id 기준으로 묶어서 조회합니다.',
+        tags=['Quiz'],
+        parameters=[
+            OpenApiParameter(
+                name='learning_id',
+                type=int,
+                location=OpenApiParameter.PATH,
+                description='조회할 학습 ID'
+            )
+        ],
+        responses={
+            200: QuizQuestionListResponseSerializer,
+            404: inline_serializer(
+                name='LearningNotFoundResponse',
+                fields={
+                    'detail': serializers.CharField()
+                }
+            )
+        },
+        examples=[
+            OpenApiExample(
+                '학습별 퀴즈 조회 응답 예시',
+                value={
+                    'learning': {
+                        'id': 1,
+                        'code': 'python_basic',
+                        'name': '파이썬 기초 문법',
+                        'desc': ''
+                    },
+                    'questions': [
+                        {
+                            'question_group_id': 100,
+                            'question_text': '파이썬의 자료형이 아닌 것은?',
+                            'choices': [
+                                {'id': 1, 'choice_text': 'list'},
+                                {'id': 2, 'choice_text': 'tuple'},
+                                {'id': 3, 'choice_text': 'array'},
+                                {'id': 4, 'choice_text': 'int'}
+                            ]
+                        },
+                        {
+                            'question_group_id': 101,
+                            'question_text': '파이썬에서 함수를 정의하는 키워드는?',
+                            'choices': [
+                                {'id': 5, 'choice_text': 'import'},
+                                {'id': 6, 'choice_text': 'def'},
+                                {'id': 7, 'choice_text': 'class'},
+                                {'id': 8, 'choice_text': 'map'}
+                            ]
+                        }
+                    ]
+                },
+                response_only=True,
+            )
+        ]
+    )
     def get(self, request, learning_id):
         learning = get_object_or_404(Learning, id=learning_id)
         question_choices = QuestionChoice.objects.filter(
@@ -145,6 +362,70 @@ class QuizSubmitView(APIView):
     # # 사용자 로그인 여부 확인
     # permission_classes = [IsAuthenticated]
     
+    @extend_schema(
+        summary='퀴즈 제출',
+        description='학습 퀴즈의 답안을 제출하고, 채점 결과와 응시 결과를 저장합니다.',
+        tags=['Quiz'],
+        request=QuizSubmitSerializer,
+        responses={
+            201: QuizSubmitResponseSerializer,
+            400: inline_serializer(
+                name='QuizSubmitBadRequestResponse',
+                fields={
+                    'detail': serializers.CharField()
+                }
+            )
+        },
+        examples=[
+            OpenApiExample(
+                '퀴즈 제출 요청 예시',
+                value={
+                    'learning_id': 1,
+                    'answers': [
+                        {
+                            'question_group_id': 100,
+                            'selected_question_choice_id': 3
+                        },
+                        {
+                            'question_group_id': 101,
+                            'selected_question_choice_id': 6
+                        }
+                    ]
+                },
+                request_only=True,
+            ),
+            OpenApiExample(
+                '퀴즈 제출 성공 응답 예시',
+                value={
+                    'attempt_id': 1,
+                    'learning_id': 1,
+                    'score': 2,
+                    'total': 2,
+                    'results': [
+                        {
+                            'question_group_id': 100,
+                            'selected_question_choice_id': 3,
+                            'is_correct': True
+                        },
+                        {
+                            'question_group_id': 101,
+                            'selected_question_choice_id': 6,
+                            'is_correct': True
+                        }
+                    ]
+                },
+                response_only=True,
+            ),
+            OpenApiExample(
+                '퀴즈 제출 실패 응답 예시',
+                value={
+                    'detail': '100번 문제에 대한 선택지가 올바르지 않습니다.'
+                },
+                response_only=True,
+                status_codes=['400'],
+            )
+        ]
+    )
     def post(self, request):
         serializer = QuizSubmitSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -213,6 +494,46 @@ class QuizSubmitView(APIView):
 
 # GET /api/job-test/questions/
 class JobTestQuestionView(APIView):
+    @extend_schema(
+        summary='직무 추천 테스트 문제 조회',
+        description='직무 추천 테스트에 사용되는 문항을 question_group_id 기준으로 묶어서 조회합니다.',
+        tags=['Job Test'],
+        responses={
+            200: JobTestQuestionListResponseSerializer
+        },
+        examples=[
+            OpenApiExample(
+                '직무 추천 테스트 문제 조회 성공 예시',
+                value={
+                    'questions': [
+                        {
+                            'question_group_id': 201,
+                            'question_text': '어떤 업무가 더 흥미롭나요?',
+                            'choices': [
+                                {
+                                    'id': 31,
+                                    'choice_text': '사용자 행동 데이터를 분석하고 싶다'
+                                },
+                                {
+                                    'id': 32,
+                                    'choice_text': '모델을 운영 환경에 배포하고 싶다'
+                                },
+                                {
+                                    'id': 33,
+                                    'choice_text': 'AI 서비스를 직접 구현하고 싶다'
+                                },
+                                {
+                                    'id': 34,
+                                    'choice_text': '잘 모르겠다'
+                                }
+                            ]
+                        }
+                    ]
+                },
+                response_only=True
+            )
+        ]
+    )
     def get(self, request):
         question_choices = QuestionChoice.objects.filter(
             question_type='Test'
@@ -241,11 +562,80 @@ class JobTestQuestionView(APIView):
             'questions': question_serializer.data
         })
 
-
 # POST /api/job-test/submit/
 class JobTestSubmitView(APIView):
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='직무 추천 테스트 제출',
+        description='직무 추천 테스트 답안을 제출하고, 응답을 저장한 뒤 추천 직무를 반환합니다.',
+        tags=['Job Test'],
+        request=JobTestSubmitSerializer,
+        responses={
+            201: JobTestSubmitResponseSerializer,
+            400: inline_serializer(
+                name='JobTestSubmitBadRequestResponse',
+                fields={
+                    'detail': serializers.CharField()
+                }
+            ),
+            401: inline_serializer(
+                name='JobTestSubmitUnauthorizedResponse',
+                fields={
+                    'detail': serializers.CharField()
+                }
+            )
+        },
+        examples=[
+            OpenApiExample(
+                '직무 추천 테스트 제출 요청 예시',
+                value={
+                    'answers': [
+                        {
+                            'question_group_id': 201,
+                            'selected_question_choice_id': 31
+                        },
+                        {
+                            'question_group_id': 202,
+                            'selected_question_choice_id': 35
+                        }
+                    ]
+                },
+                request_only=True
+            ),
+            OpenApiExample(
+                '직무 추천 테스트 제출 성공 예시',
+                value={
+                    'attempt_id': 7,
+                    'recommended_job': {
+                        'id': 2,
+                        'code': 'data_scientist',
+                        'name': 'Data Scientist'
+                    },
+                    'results': [
+                        {
+                            'question_group_id': 201,
+                            'selected_question_choice_id': 31
+                        },
+                        {
+                            'question_group_id': 202,
+                            'selected_question_choice_id': 35
+                        }
+                    ]
+                },
+                response_only=True,
+                status_codes=['201']
+            ),
+            OpenApiExample(
+                '직무 추천 테스트 제출 실패 예시',
+                value={
+                    'detail': '201번 문제에 대한 선택지가 올바르지 않습니다.'
+                },
+                response_only=True,
+                status_codes=['400']
+            )
+        ]
+    )
     def post(self, request):
         serializer = JobTestSubmitSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
