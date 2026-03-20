@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 """
 ASGI config for config project.
 
@@ -9,7 +7,6 @@ For more information on this file, see
 https://docs.djangoproject.com/en/6.0/howto/deployment/asgi/
 """
 
->>>>>>> origin/dev
 import os
 
 from django.core.asgi import get_asgi_application

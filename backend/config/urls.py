@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-from django.contrib import admin
-from django.urls import path, include
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/accounts/', include('accounts.urls')),
-    path('api/users/', include('accounts.user_urls')),
-=======
 """
 URL configuration for config project.
 
@@ -34,5 +25,4 @@ urlpatterns = [
 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
->>>>>>> origin/dev
 ]

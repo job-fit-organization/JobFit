@@ -11,26 +11,19 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+# from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-<<<<<<< HEAD
-SECRET_KEY = 'django-insecure-%m^=d749zo)37q*%ddlox^sq!thr8eca-t^2_*ch^lj9in5v1*'
-=======
 SECRET_KEY = 'django-insecure-!c&^g^22^_drykorkwe!%r_7u2&+fc0jp)3n@(!2*r+#)j!-kr'
->>>>>>> origin/dev
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -42,13 +35,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-<<<<<<< HEAD
-    'rest_framework_simplejwt',
-    'corsheaders',
-    'accounts',
-]
-
-=======
     'drf_spectacular',
     'corsheaders',
     'api',
@@ -58,7 +44,6 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = "user.User"
 
->>>>>>> origin/dev
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -70,8 +55,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-<<<<<<< HEAD
-=======
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CRENDENTIALS = True
 
@@ -86,7 +69,6 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
 }
 
->>>>>>> origin/dev
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -106,26 +88,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
-<<<<<<< HEAD
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-=======
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'jobfit', # DB 이름
-        'USER': 'root',              # 유저
-        'PASSWORD': 'password',      # 비밀번호
-        'HOST': '127.0.0.1',         # 호스트 주소
-        'PORT': '3306'               # 포트 번호
->>>>>>> origin/dev
+        'NAME': os.environ.get('DB_NAME', 'jobfit'), 
+        'USER': os.environ.get('DB_USER', 'root'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'password'),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+        'PORT': os.environ.get('DB_PORT', '3306')
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -145,60 +120,24 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-<<<<<<< HEAD
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-=======
 LANGUAGE_CODE = 'ko-kr'
 
 TIME_ZONE = 'Asia/Seoul'
->>>>>>> origin/dev
 
 USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-<<<<<<< HEAD
-STATIC_URL = 'static/'
-
-# CORS Configuration
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
-CORS_ALLOW_CREDENTIALS = True
-
-# REST Framework Configuration
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
-}
-
-# Simple JWT Configuration
-from datetime import timedelta
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'AUTH_HEADER_TYPES': ('Bearer',),
-}
-
-# Kakao Login Configuration
-import os
-from dotenv import load_dotenv
-
-load_dotenv(BASE_DIR.parent / '.env') # Load from JobFit/.env
-
-KAKAO_REST_API_KEY = os.environ.get('KAKAO_REST_API_KEY', '').strip()
-KAKAO_REDIRECT_URI = os.environ.get('KAKAO_REDIRECT_URI', 'http://localhost:3000/mypage/login/callback').strip()
-=======
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
->>>>>>> origin/dev
+
+# Kakao Login Configuration
+# load_dotenv(BASE_DIR.parent / '.env') # Load from JobFit/.env
+
+KAKAO_REST_API_KEY = os.environ.get('KAKAO_REST_API_KEY', '').strip()
+KAKAO_REDIRECT_URI = os.environ.get('KAKAO_REDIRECT_URI', 'http://localhost:3000/mypage/login/callback').strip()
