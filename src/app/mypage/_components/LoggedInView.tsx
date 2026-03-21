@@ -67,15 +67,19 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
         const fetchMyPageData = async () => {
             setIsLoading(true);
             try {
+                const token = localStorage.getItem('access_token');
+                const headers: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
+
                 // 1. 유저 프로필 조회 (닉네임, Exp 점수 갱신용)
-                const userRes = await fetch(`http://localhost:8000/api/users/${userId}/`);
+                const userRes = await fetch(`http://localhost:8000/api/users/${userId}/`, { headers });
                 let fetchedProfile = { ...INITIAL_PROFILE };
 
                 if (userRes.ok) {
                     const userData = await userRes.json();
                     fetchedProfile = {
                         ...fetchedProfile,
-                        name: currentUser?.nickname || fetchedProfile.name,
+                        name: userData.name || currentUser?.nickname || fetchedProfile.name,
+                        email: userData.email || currentUser?.email || fetchedProfile.email,
                         level: userData.level || fetchedProfile.level,
                         exp: userData.exp || fetchedProfile.exp,
                         averageScore: {
@@ -88,30 +92,30 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                 }
 
                 // 2. 모의고사 이력 (type: learning) 조회
-                const learnRes = await fetch(`http://localhost:8000/api/users/${userId}/histories/learning/`);
+                const learnRes = await fetch(`http://localhost:8000/user/mypage/quiz-history/`, { headers });
                 let newHistory: TestResult[] = [];
 
                 if (learnRes.ok) {
                     const learnData = await learnRes.json();
-                    const parsedLearn = learnData.map((item: any, idx: number) => ({
-                        id: `l_${idx}`,
-                        date: item.completion_time.split('T')[0],
-                        category: item.skill,
-                        score: item.score,
+                    const parsedLearn = learnData.map((item: any) => ({
+                        id: `l_${item.attempt_id}`,
+                        date: item.created_at.split('T')[0],
+                        category: item.learning_name,
+                        score: item.total > 0 ? Math.round((item.score / item.total) * 100) : 0,
                         type: 'learning'
                     }));
                     newHistory = [...newHistory, ...parsedLearn];
                 }
 
                 // 3. 직무 테스트 이력 (type: job) 조회
-                const jobRes = await fetch(`http://localhost:8000/api/users/${userId}/histories/job/`);
+                const jobRes = await fetch(`http://localhost:8000/user/mypage/job-test-history/`, { headers });
                 if (jobRes.ok) {
                     const jobData = await jobRes.json();
-                    const parsedJob = jobData.map((item: any, idx: number) => ({
-                        id: `j_${idx}`,
-                        date: item.completion_time.split('T')[0],
-                        category: item.test_result,
-                        score: item.score,
+                    const parsedJob = jobData.map((item: any) => ({
+                        id: `j_${item.attempt_id}`,
+                        date: item.created_at.split('T')[0],
+                        category: item.recommended_job_name,
+                        score: 100, // 직무 테스트는 점수가 없으므로 기본값 100 설정
                         type: 'job'
                     }));
                     newHistory = [...newHistory, ...parsedJob];
@@ -121,14 +125,14 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                 setHistory(newHistory);
 
                 // 4. 직무 추천 분석 리포트 연동
-                const recRes = await fetch(`http://localhost:8000/api/users/${userId}/recommendation/`);
+                const recRes = await fetch(`http://localhost:8000/api/users/${userId}/recommendation/`, { headers });
                 if (recRes.ok) {
                     const recData = await recRes.json();
                     setRecommendation(recData);
                 }
 
                 // 5. 전체 플랫폼 통계 데이터
-                const statsRes = await fetch(`http://localhost:8000/api/users/stats/`);
+                const statsRes = await fetch(`http://localhost:8000/api/users/stats/`, { headers });
                 if (statsRes.ok) {
                     const statsData = await statsRes.json();
                     setStats(statsData);

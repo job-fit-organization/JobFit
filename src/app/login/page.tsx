@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft, Github, Chrome, Zap } from 'lucide-react';
+import { ChevronLeft, Github, Chrome, Zap, Loader2 } from 'lucide-react';
 
 const STYLES = {
     container: "min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4",
@@ -24,7 +24,8 @@ const STYLES = {
     dividerWrapper: "relative py-4",
     dividerLine: "w-full border-t border-gray-200",
     dividerText: "bg-white px-3 text-xs font-semibold text-gray-400 uppercase tracking-widest",
-    demoBtn: "bg-serve-3/10 border border-serve-3/20 text-serve-3 hover:bg-serve-3/20 hover:border-serve-3/30",
+    demoBtn: "bg-serve-3/10 border border-serve-3/20 text-serve-3 hover:bg-serve-3/20 hover:border-serve-3/30 disabled:opacity-50",
+    loadingOverlay: "absolute inset-0 z-50 bg-white/60 backdrop-blur-sm flex items-center justify-center rounded-3xl animate-in fade-in duration-300",
     footerText: "mt-10 text-center relative z-10",
     footerLinks: "text-xs text-gray-400 leading-relaxed",
     linkText: "underline cursor-pointer hover:text-main-2",
@@ -33,24 +34,70 @@ const STYLES = {
 
 export default function LoginPage() {
     const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
 
     // 소셜 로그인 도입 전 사용할 테스트 계정 자동 로그인 처리
-    const handleTestLogin = () => {
-        const dummyUser = {
-            id: 1, 
-            username: "1", 
-            nickname: "데모 유저",
-            email: "demo@jobfit.com"
-        };
-        
-        // localStorage에 임시 토큰 셋업
-        localStorage.setItem('access_token', 'demo_test_token_12345');
-        localStorage.setItem('refresh_token', 'demo_refresh_token_67890');
-        localStorage.setItem('user', JSON.stringify(dummyUser));
-        
-        alert("데모 계정으로 로그인되었습니다.");
-        router.push('/mypage');
-        router.refresh();
+    const handleTestLogin = async () => {
+        setIsLoading(true);
+        try {
+            let success = false;
+            let currentN = Math.floor(Math.random() * 999) + 1; // 1~999 사이 랜덤 시작
+            let attempts = 0;
+
+            // 최대 20번 시도 (사용 가능한 슬롯을 찾을 때까지)
+            while (!success && attempts < 20) {
+                const email = `demo${currentN}@jobfit.com`;
+                const password = `password123`;
+                const name = `데모 유저 ${currentN}`;
+
+                // 1. 가입 시도
+                const regRes = await fetch('http://localhost:8000/api/register/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                // 가입 성공(201) 혹은 이미 있을 경우 가입 실패(400)할 수도 있음
+                // 하지만 우리는 "새로 만드는 것"이 목적이므로 가입 성공 시만 진행
+                if (regRes.ok) {
+                    // 가입 성공 -> 로그인 시도
+                    const loginRes = await fetch('http://localhost:8000/api/login/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username: email, password })
+                    });
+
+                    if (loginRes.ok) {
+                        const data = await loginRes.json();
+                        const userData = {
+                            id: data.user_id || currentN, 
+                            username: email,
+                            nickname: name,
+                            email: email
+                        };
+                        localStorage.setItem('access_token', data.token);
+                        localStorage.setItem('user', JSON.stringify(userData));
+                        success = true;
+                    }
+                } else {
+                    // 가입 실패 시 다음 번호 시도
+                    currentN = (currentN % 999) + 1;
+                    attempts++;
+                }
+            }
+
+            if (success) {
+                alert("성공적으로 데모 계정이 생성되었습니다.");
+                router.push('/mypage');
+            } else {
+                alert("데모 계정 생성에 실패했습니다 (모든 슬롯이 차있거나 서버 오류).");
+            }
+        } catch (e) {
+            console.error("Login Error:", e);
+            alert("서버 연결에 실패했습니다.");
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -107,10 +154,24 @@ export default function LoginPage() {
                         </div>
                     </div>
 
-                    <button onClick={handleTestLogin} className={`${STYLES.baseBtn} ${STYLES.demoBtn}`}>
-                        ⚡ 데모 계정 로그인
+                    <button 
+                        onClick={handleTestLogin} 
+                        className={`${STYLES.baseBtn} ${STYLES.demoBtn}`}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? <Loader2 className="animate-spin" size={20} /> : <Zap size={18} fill="currentColor" />}
+                        {isLoading ? "생성 중..." : "⚡ 데모 계정 로그인"}
                     </button>
                 </div>
+
+                {isLoading && (
+                    <div className={STYLES.loadingOverlay}>
+                        <div className="flex flex-col items-center gap-4">
+                            <Loader2 className="w-10 h-10 text-main-1 animate-spin" />
+                            <p className="text-sm font-bold text-gray-500">데모 유저를 구성하고 있습니다...</p>
+                        </div>
+                    </div>
+                )}
 
                 <div className={STYLES.footerText}>
                     <p className={STYLES.footerLinks}>

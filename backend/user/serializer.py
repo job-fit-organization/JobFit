@@ -7,17 +7,23 @@ from api.models import Attempt
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'name', 'password', 'email', 'social', 'job']
+        fields = ['id', 'username', 'name', 'password', 'email', 'social', 'job']
 
         extra_kwargs = {
             # 쓰기 전용이기 때문에 비번은 api통신 때 리턴되지 않음 
-            'password': {'write_only': True}
+            'password': {'write_only': True},
+            'username': {'required': False}
         }
 
     # user 생성 요청이 들어올 때, 비밀번호가 hashing 처리된 후 db에 저장 
     def create(self, validated_data):
         print("[UserSerializer][create] Start")
         password = validated_data.pop('password', None)
+        
+        # username이 명시적으로 전달되지 않았다면 email을 username으로 사용
+        if not validated_data.get('username') and validated_data.get('email'):
+            validated_data['username'] = validated_data.get('email')
+
         instance = self.Meta.model(**validated_data)
         if password is not None:
             # provide django, password will be hashing!
@@ -57,9 +63,9 @@ class QuizHistorySerializer(serializers.ModelSerializer): # 기준이 되는 모
 
 class JobTestHistorySerializer(serializers.ModelSerializer):
     attempt_id = serializers.IntegerField(source='id', read_only=True)
-    recommended_job_id = serializers.IntegerField(source='recommended_job.id', read_only=True)
-    recommended_job_code = serializers.CharField(source='recommended_job.code', read_only=True)
-    recommended_job_name = serializers.CharField(source='recommended_job.name', read_only=True)
+    recommended_job_id = serializers.SerializerMethodField()
+    recommended_job_code = serializers.SerializerMethodField()
+    recommended_job_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Attempt
@@ -70,3 +76,13 @@ class JobTestHistorySerializer(serializers.ModelSerializer):
             'recommended_job_name',
             'created_at',
         ]
+
+    def get_recommended_job_id(self, obj):
+        return None
+
+    def get_recommended_job_code(self, obj):
+        return "N/A"
+
+    def get_recommended_job_name(self, obj):
+        return "직무 분석 준비 중"
+

@@ -61,6 +61,10 @@ CORS_ALLOW_CRENDENTIALS = True
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'authentication.exceptions.status_code_handler',
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'authentication.authenticators.CustomJWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
