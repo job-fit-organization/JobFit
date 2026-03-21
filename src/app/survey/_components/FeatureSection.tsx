@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/components/Button';
 
 interface FeatureSectionProps {
   selectedFeatures: string[];
@@ -6,7 +6,6 @@ interface FeatureSectionProps {
   styles: any;
 }
 
-// 유용했던 기능 복수 선택 영역입니다.
 const STYLE = {
   featureBtn: "px-4 py-3 rounded-xl text-left text-sm font-medium transition-all border",
   selected: "bg-blue-50 border-blue-500 text-blue-700 shadow-sm",
@@ -14,7 +13,7 @@ const STYLE = {
 };
 
 const FeatureSection = ({ selectedFeatures, onToggle, styles }: FeatureSectionProps) => {
-  // 나중에 서버에서 가져올 수도 있겠지만, 일단은 하드코딩해뒀어요.
+  // 일단은 하드코딩
   const features = [
     '직무 적합도 테스트',
     '직무별 상세 로드맵',
@@ -28,14 +27,14 @@ const FeatureSection = ({ selectedFeatures, onToggle, styles }: FeatureSectionPr
       <label className={styles.label}>
         2. 가장 유용했던 기능은 무엇인가요? (복수 선택 가능)
       </label>
-      
+
       <div className={styles.featureGrid}>
         {features.map((feature) => (
           <button
             key={feature}
             type="button"
             onClick={() => onToggle(feature)}
-            className={clsx(
+            className={cn(
               STYLE.featureBtn,
               selectedFeatures.includes(feature) ? STYLE.selected : STYLE.unselected
             )}

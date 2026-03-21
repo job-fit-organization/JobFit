@@ -128,3 +128,18 @@ class UserResponse(models.Model):
 
     def __str__(self):
         return f'Attempt {self.attempt_id} - Q{self.question_group_id}'
+
+class Survey(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='surveys'
+    )
+    rating = models.PositiveSmallIntegerField()
+    features = models.JSONField()
+    feedback = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Survey {self.id} - Rating: {self.rating}'

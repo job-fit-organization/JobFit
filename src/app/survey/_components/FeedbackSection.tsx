@@ -4,7 +4,7 @@ interface FeedbackSectionProps {
   styles: any;
 }
 
-// 자유 의견 작성란이에요.
+// 자유 의견 작성란
 const FeedbackSection = ({ value, onChange, styles }: FeedbackSectionProps) => {
   return (
     <div className={styles.section}>

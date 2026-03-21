@@ -1,6 +1,5 @@
 import { MessageSquare } from 'lucide-react';
 
-// 디자인 통일성을 위해 스타일을 따로 모아뒀어요.
 const STYLE = {
   container: "text-center mb-10",
   title: "text-3xl font-bold text-slate-900 flex items-center justify-center gap-3",

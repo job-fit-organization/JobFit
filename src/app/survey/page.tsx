@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import clsx from 'clsx';
 import { Send } from 'lucide-react';
-import Button from '@/components/Button';
+import Button, { cn } from '@/components/Button';
 
 // 설문조사 각 영역을 담당하는 작은 컴포넌트들이에요.
 import SurveyHeader from './_components/SurveyHeader';
@@ -48,7 +47,6 @@ export default function SurveyPage() {
         e.preventDefault();
 
         try {
-            // 나중에 백엔드 API 연결할 때 url이랑 body 확인해서 맞춰야함.
             const response = await fetch('http://localhost:8000/api/survey/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

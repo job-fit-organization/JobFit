@@ -1,7 +1,7 @@
 import Button from '@/components/Button';
 import { CheckCircle2 } from 'lucide-react';
 
-// 제출 완료 후 보여줄 화면 스타일입니다.
+// 제출 완료 후 보여줄 화면 스타일
 const STYLE = {
   overlay: "min-h-screen bg-slate-50 flex items-center justify-center p-4",
   card: "bg-white max-w-md w-full p-8 rounded-2xl shadow-xl text-center space-y-6",
@@ -19,7 +19,7 @@ const SuccessView = ({ onHomeClick }: { onHomeClick: () => void }) => {
         <div className={STYLE.iconWrapper}>
           <CheckCircle2 className={STYLE.icon} />
         </div>
-        
+
         <h2 className={STYLE.title}>소중한 의견 감사합니다!</h2>
         <p className={STYLE.description}>
           보내주신 피드백을 바탕으로<br />

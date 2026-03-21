@@ -10,7 +10,8 @@ from .views import (
     QuizQuestionListView,
     QuizSubmitView,
     JobTestQuestionView,
-    JobTestSubmitView
+    JobTestSubmitView,
+    SurveyView
 )
 
 urlpatterns = [
@@ -26,4 +27,5 @@ urlpatterns = [
     path('quiz/submit/', QuizSubmitView.as_view(), name='quiz_submit'),
     path('job-test/questions/', JobTestQuestionView.as_view(), name='job-test_question_list'),
     path('job-test/submit/', JobTestSubmitView.as_view(), name='job-test_submit'),
+    path('survey/', SurveyView.as_view(), name='survey'),
 ]

@@ -9,8 +9,12 @@ from rest_framework.exceptions import AuthenticationFailed , APIException
 
 from user.models import User
 from user.serializer import UserSerializer
-from .models import Job, Roadmap, Skill, Learning, QuestionChoice, Attempt, UserResponse
-from .serializer import JobSerializer, RoadmapSerializer, SkillSerializer, LearningSerializer, QuestionGroupSerializer, QuizSubmitSerializer, JobTestSubmitSerializer, RecommendedJobSerializer
+from .models import Job, Roadmap, Skill, Learning, QuestionChoice, Attempt, UserResponse, Survey
+from .serializer import (
+    JobSerializer, RoadmapSerializer, SkillSerializer, LearningSerializer, 
+    QuestionGroupSerializer, QuizSubmitSerializer, JobTestSubmitSerializer, 
+    RecommendedJobSerializer, SurveySerializer
+)
 from authentication.token import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
 
 from django.shortcuts import get_object_or_404
@@ -312,3 +316,14 @@ class JobTestSubmitView(APIView):
                 },
                 status=status.HTTP_201_CREATED
             )
+
+class SurveyView(APIView):
+    def post(self, request):
+        serializer = SurveySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # 로그인 되어 있으면 유저 정보 연결
+        user = request.user if request.user.is_authenticated else None
+        serializer.save(user=user)
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

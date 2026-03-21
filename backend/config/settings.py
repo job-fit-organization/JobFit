@@ -92,17 +92,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
+import os
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'jobfit', # DB 이름
-        'USER': 'root',              # 유저
-        'PASSWORD': 'password',      # 비밀번호
-        'HOST': '127.0.0.1',         # 호스트 주소
-        'PORT': '3306'               # 포트 번호
+        'NAME': os.getenv('DB_NAME', 'jobfit'),
+        'USER': os.getenv('DB_USER', 'root'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'password'),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT', '3306'),
     }
 }
 
