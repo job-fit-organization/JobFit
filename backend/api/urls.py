@@ -10,7 +10,8 @@ from .views import (
     QuizQuestionListView,
     QuizSubmitView,
     JobTestQuestionView,
-    JobTestSubmitView
+    JobTestSubmitView,
+    SeedDemoData
 )
 from accounts.views import UserProfileView, UserRecommendationView, PlatformStatsView
 
@@ -19,6 +20,7 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),
     path('refresh/', RefreshView.as_view(), name='refresh'),
     path('logout/', Logoutview.as_view(), name='logout'),
+    path('seed-demo-data/', SeedDemoData.as_view(), name='seed_demo_data'),
     
     path('jobs/', JobListView.as_view(), name='job_list'),
     path('jobs/<int:job_id>/roadmap/', RoadmapView.as_view(), name='job_roadmap'),

@@ -88,6 +88,58 @@ class Logoutview(APIView):
         }
         return response
 
+class SeedDemoData(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    @extend_schema(
+        summary='데모 데이터 시딩',
+        description='데모 유저를 위해 가짜 학습 및 테스트 기록을 생성합니다.',
+        tags=['Demo'],
+        responses={201: inline_serializer(name='SeedResponse', fields={'message': serializers.CharField()})}
+    )
+    def post(self, request):
+        user = request.user
+        
+        # 1. 필수 기초 데이터 (Skill, Job)
+        python_skill, _ = Skill.objects.get_or_create(code='python', defaults={'name': 'Python Programming'})
+        
+        job_ai, _ = Job.objects.get_or_create(code='ai-app-eng', defaults={'name': 'AI app 엔지니어'})
+        job_ds, _ = Job.objects.get_or_create(code='data-scientist', defaults={'name': 'Data Scientist'})
+        job_mlops, _ = Job.objects.get_or_create(code='mlops-eng', defaults={'name': 'MLOps 엔지니어'})
+        
+        # 이미 데이터가 있으면 기존 것 삭제 후 재생성 (갱신을 위해)
+        Attempt.objects.filter(user=user).delete()
+
+        # 2. 학습 퀴즈 이력 생성 (파이썬 기초 시리즈)
+        import random
+        topics = ["문법 기초", "데이터 타입", "함수와 모듈"]
+        for topic in topics:
+            # 통과 기록용 Learning
+            l_base, _ = Learning.objects.get_or_create(
+                code=f'py-{topic}', 
+                skill=python_skill, 
+                defaults={'name': f'파이썬 기초 - {topic}'}
+            )
+            
+            # 통과 기록 (100점)
+            Attempt.objects.create(user=user, attempt_type='quiz', learning=l_base, score=10)
+            
+            # 미통과 기록 (랜덤 낮은 점수)
+            Attempt.objects.create(user=user, attempt_type='quiz', learning=l_base, score=random.randint(1, 5))
+        
+        # 3. 직무 테스트 이력 생성 (AI, DS, MLOps)
+        jobs = [job_ai, job_ds, job_mlops]
+        for job in jobs:
+            score = random.randint(70, 80)
+            Attempt.objects.create(
+                user=user, 
+                attempt_type='job_test', 
+                recommended_job=job,
+                score=score
+            )
+        
+        return Response({"message": "Demo data seeded successfully"}, status=status.HTTP_201_CREATED)
+
 # GET /api/jobs/
 class JobListView(APIView): # APIView
     @extend_schema(

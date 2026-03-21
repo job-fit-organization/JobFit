@@ -17,8 +17,9 @@ const STYLES = {
     listItem: "group flex items-center justify-between p-4 rounded-xl border border-gray-50 bg-gray-50/30 transition-all hover:translate-x-1 cursor-default",
     itemTitle: "font-bold text-gray-900 transition-colors",
     itemDate: "text-[11px] font-medium text-gray-400 mt-0.5",
-    scoreBadgePass: "px-3 py-1 rounded-full text-xs font-black shadow-sm bg-white border border-gray-100 text-main-1",
-    scoreBadgeFail: "px-3 py-1 rounded-full text-xs font-black shadow-sm bg-white border border-gray-100 text-gray-500"
+    //색상 컬러 블루 & 색상때문에 잘안보이긴함. 수정필요
+    scoreBadgePass: "px-3 py-1 rounded-full text-[13px] font-black shadow-sm bg-white border border-gray-100 text-serve-4",
+    scoreBadgeFail: "px-3 py-1 rounded-full text-[13px] font-black shadow-sm bg-white border border-gray-100 text-gray-500"
 };
 
 // 클라이언트 사이드 페이징을 지원하는 활동 이력 히스토리 뷰 위젯
@@ -29,7 +30,7 @@ export const TestHistorySection = ({ title, icon: Icon, results, page, setPage, 
                 <Icon className={theme.text} size={24} />
                 {title}
             </h3>
-            
+
             {/* 결과 데이터가 있을 때 좌우 페이저 활성화 */}
             {results.length > 0 && (
                 <div className={STYLES.pagination}>
@@ -69,9 +70,9 @@ export const TestHistorySection = ({ title, icon: Icon, results, page, setPage, 
                             <p className={`${STYLES.itemTitle} group-hover:${theme.text}`}>{result.category}</p>
                             <p className={STYLES.itemDate}>{result.date}</p>
                         </div>
-                        {/* 80점을 합격/우수 배지 분기 처리 기준으로 세팅 */}
-                        <span className={result.score >= 80 ? STYLES.scoreBadgePass : STYLES.scoreBadgeFail}>
-                            {result.score}점
+                        {/* 학습테스트는 점수가 아닌 통과 미통과로 표시. 적성검사는 점수로 표시 ★★★ */}
+                        <span className={(result.type === 'learning' ? result.score >= 60 : result.score >= 100) ? STYLES.scoreBadgePass : STYLES.scoreBadgeFail}>
+                            {result.type === 'learning' ? (result.score >= 60 ? '통과' : '미통과') : `${result.score}점`}
                         </span>
                     </div>
                 ))}

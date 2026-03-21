@@ -17,27 +17,27 @@ const STYLES = {
         "w-full max-w-[400px] h-40",
         "relative overflow-hidden group shadow-inner"
     ].join(" "),
-    
+
     decoDotsLayer: "absolute top-2 left-2 flex gap-1 opacity-20",
     decoDot1: "w-1 h-1 bg-main-1 rounded-full animate-pulse",
     decoDot2: "w-1 h-1 bg-main-2 rounded-full animate-pulse delay-75",
-    
+
     labelArea: "absolute top-4 left-6 right-6 flex justify-between items-center",
     labelTextDesc: "text-[10px] font-black text-gray-400 uppercase tracking-widest",
     labelCurrent: "text-sm font-black text-main-1",
     labelTarget: "text-sm font-black text-main-2",
-    
+
     track: [
         "relative w-full h-16 mt-8 flex items-center overflow-hidden",
         "bg-gray-100/50 rounded-xl border border-gray-200/50"
     ].join(" "),
-    
+
     character: "flex flex-col items-center ml-4",
     characterShadow: "w-6 h-1 bg-black/5 rounded-full blur-[2px] mt-1",
-    
+
     finisherWrapper: "absolute right-4 h-full flex flex-col justify-center opacity-20 invisible group-hover:visible transition-all",
     finisherLine: "w-1 h-10 bg-gradient-to-b from-transparent via-main-1 to-transparent rounded-full",
-    
+
     motivationWrapper: "mt-4 flex items-center gap-2",
     motivationDots: "flex -space-x-1",
     motivationText: "text-[11px] font-black text-main-1 tracking-tight"
@@ -58,7 +58,7 @@ const RankAnimation: React.FC<RankAnimationProps> = ({ level, userName }) => {
 
     return (
         <div className={STYLES.container}>
-            {/* 배경 블러 이펙트 닷 */}
+            {/* 배경 블러 이펙트 */}
             <div className={STYLES.decoDotsLayer}>
                 <div className={STYLES.decoDot1} />
                 <div className={STYLES.decoDot2} />
@@ -100,14 +100,14 @@ const RankAnimation: React.FC<RankAnimationProps> = ({ level, userName }) => {
                 </div>
             </div>
 
-            {/* 동기 부여 문구 영역 */}
+            {/* 문구 영역 */}
             <div className={STYLES.motivationWrapper}>
                 <div className={STYLES.motivationDots}>
                     {[1, 2, 3].map((_, i) => (
-                        <div 
-                            key={i} 
-                            className="w-1.5 h-1.5 rounded-full bg-main-1/50 animate-pulse" 
-                            style={{ animationDelay: `${i * 0.2}s` }} 
+                        <div
+                            key={i}
+                            className="w-1.5 h-1.5 rounded-full bg-main-1/50 animate-pulse"
+                            style={{ animationDelay: `${i * 0.2}s` }}
                         />
                     ))}
                 </div>
@@ -126,7 +126,6 @@ const RankAnimation: React.FC<RankAnimationProps> = ({ level, userName }) => {
                 }
                 .animate-loop-run-delayed {
                     animation: loop-run 4s linear infinite;
-                    /* 끊김 방지를 위해 타이밍을 음수로 잡음 (-2s offset) */
                     animation-delay: -2s;
                 }
             `}</style>

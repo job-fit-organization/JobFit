@@ -11,13 +11,13 @@ import { TestHistorySection } from './TestHistorySection';
 import { JobReport } from './JobReport';
 import { StatsSection } from './StatsSection';
 
-// 과목/도메인 별 뱃지 색상 테마 정의
+// 별 뱃지 색상 테마 정의
 const THEME_PYTHON: ThemeClasses = { text: "text-serve-4", bgLight: "bg-serve-4/10", bgHover: "hover:bg-serve-4/10", borderHover: "hover:border-serve-4/30" };
 const THEME_MLOPS: ThemeClasses = { text: "text-serve-2", bgLight: "bg-serve-2/10", bgHover: "hover:bg-serve-2/10", borderHover: "hover:border-serve-2/30" };
 const THEME_LLM: ThemeClasses = { text: "text-serve-6", bgLight: "bg-serve-6/10", bgHover: "hover:bg-serve-6/10", borderHover: "hover:border-serve-6/30" };
 const THEME_DL: ThemeClasses = { text: "text-main-1", bgLight: "bg-main-1/10", bgHover: "hover:bg-main-1/10", borderHover: "hover:border-main-1/30" };
 
-// 히스토리 리스트 컨테이너 전용 테마
+// 히스토리 테마
 const THEME_LEARNING: ThemeClasses = { text: "text-serve-3", bgLight: "bg-serve-3/10", bgHover: "hover:bg-serve-3/10", borderHover: "hover:border-serve-3/30" };
 const THEME_JOB: ThemeClasses = { text: "text-serve-5", bgLight: "bg-serve-5/10", bgHover: "hover:bg-serve-5/10", borderHover: "hover:border-serve-5/30" };
 
@@ -25,31 +25,31 @@ const STYLES = {
     layout: "space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700",
     loadingView: "flex justify-center items-center py-32",
     spinner: "animate-spin rounded-full h-12 w-12 border-b-2 border-main-1",
-    
+
     profileSection: "bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center md:items-start relative overflow-hidden",
     avatarWrapper: "h-24 w-24 rounded-full bg-gradient-to-br from-main-1 to-main-2 flex items-center justify-center text-white shadow-inner flex-shrink-0",
-    
+
     infoWrapper: "flex-1 space-y-4 text-center md:text-left w-full z-10",
     nameRow: "text-2xl font-bold text-gray-900 flex items-center justify-center md:justify-start flex-wrap gap-2",
     email: "text-gray-500 text-sm mt-1",
-    
+
     statsRow: "flex flex-col gap-4 pt-2",
     statsHeaderRow: "flex justify-center md:justify-start gap-6",
     statsHeaderItem: "flex items-center gap-2 text-gray-700",
     statsHighlight: "font-bold",
-    
+
     scoresGrid: "grid grid-cols-2 md:grid-cols-4 gap-3 w-full",
     rankWrapper: "hidden md:block absolute top-6 right-8",
-    
+
     // 7:3 비율의 하단 데이터 대시보드 그리드 처리
     bentoGrid: "grid grid-cols-1 lg:grid-cols-10 gap-8",
     bentoLeft: "lg:col-span-7 space-y-8",
     bentoRight: "lg:col-span-3 space-y-8"
 };
 
-// 로그인 확인 유저 전용 메인 대시보드
+// 로그인 유저 대시보드
 export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
-    // API 데이터 스탯, 페이지네이션 셋팅
+    // API 데이터, 페이지 세팅
     const [learningPage, setLearningPage] = useState(0);
     const [jobPage, setJobPage] = useState(0);
     const [profile, setProfile] = useState<UserProfile>(INITIAL_PROFILE);
@@ -63,7 +63,7 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
     useEffect(() => {
         const userId = currentUser?.username || '1'; // 현재 세션 ID
 
-        // 대시보드 로드(Mount) 시 필요한 초기 데이터 일괄 fetch
+        // 대시보드 로드 시 필요한 초기 데이터 일괄 호출
         const fetchMyPageData = async () => {
             setIsLoading(true);
             try {
@@ -91,7 +91,7 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                     };
                 }
 
-                // 2. 모의고사 이력 (type: learning) 조회
+                // 2. 테스트 이력 조회
                 const learnRes = await fetch(`http://localhost:8000/user/mypage/quiz-history/`, { headers });
                 let newHistory: TestResult[] = [];
 
@@ -107,7 +107,7 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                     newHistory = [...newHistory, ...parsedLearn];
                 }
 
-                // 3. 직무 테스트 이력 (type: job) 조회
+                // 3. 직무 테스트 이력 조회
                 const jobRes = await fetch(`http://localhost:8000/user/mypage/job-test-history/`, { headers });
                 if (jobRes.ok) {
                     const jobData = await jobRes.json();
@@ -115,7 +115,7 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                         id: `j_${item.attempt_id}`,
                         date: item.created_at.split('T')[0],
                         category: item.recommended_job_name,
-                        score: 100, // 직무 테스트는 점수가 없으므로 기본값 100 설정
+                        score: item.score || 0, // 점수 필드 연동
                         type: 'job'
                     }));
                     newHistory = [...newHistory, ...parsedJob];
@@ -139,10 +139,10 @@ export const LoggedInView = ({ currentUser }: { currentUser: any }) => {
                 }
 
             } catch (error) {
-                // 테스트 시나리오 등 API 연동 실패 시 데모 기본값(Initial Data) 유지
+                // API 연동 실패 시 데모 기본값 유지
                 console.warn("[API_ERROR] 백엔드 연결이 원활하지 않아 데모용 Mock Data로 렌더링을 시도합니다.", error);
             } finally {
-                setIsLoading(false); // API 패치 종료 후 스피너 해제
+                setIsLoading(false); // API 연동 종료
             }
         };
 

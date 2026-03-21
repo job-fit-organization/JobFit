@@ -24,7 +24,7 @@ export default function MyPage() {
     const [isCheckingAuth, setIsCheckingAuth] = useState(true);
     const router = useRouter();
 
-    // 초기 마운트 시 로그인(토큰) 여부 검사
+    // 로그인(토큰) 여부 검사
     useEffect(() => {
         const token = localStorage.getItem('access_token');
         const userStr = localStorage.getItem('user');
@@ -41,11 +41,10 @@ export default function MyPage() {
         } else {
             router.push('/login');
         }
-        
         setIsCheckingAuth(false);
     }, [router]);
 
-    // 로그아웃 (스토리지 클리어)
+    // 로그아웃
     const handleLogout = () => {
         if (window.confirm("로그아웃 하시겠습니까?")) {
             localStorage.removeItem('access_token');
@@ -92,7 +91,7 @@ export default function MyPage() {
         }
     };
 
-    // 검증 대기 중 표시할 로딩 스피너
+    // 검증 대기 중 로딩
     if (isCheckingAuth) {
         return (
             <div className={STYLES.loadingView}>
@@ -105,7 +104,7 @@ export default function MyPage() {
 
     return (
         <div className={STYLES.layout}>
-            {/* 우측 상단 퀵 메뉴바 */}
+            {/* 상단 퀵 메뉴바 -> 추후 메인 헤더로 변경 예정*/}
             <div className={STYLES.floatingNav}>
                 <div className={STYLES.navCard}>
                     <button onClick={handleWithdraw} className={STYLES.withdrawBtn}>

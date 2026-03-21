@@ -70,13 +70,23 @@ export default function LoginPage() {
                     if (loginRes.ok) {
                         const data = await loginRes.json();
                         const userData = {
-                            id: data.user_id || currentN, 
+                            id: data.user_id || currentN,
                             username: email,
                             nickname: name,
                             email: email
                         };
                         localStorage.setItem('access_token', data.token);
                         localStorage.setItem('user', JSON.stringify(userData));
+
+                        // 2. 가짜 데이터 시딩 (마이페이지 풍성하게 보이게 하기)
+                        await fetch('http://localhost:8000/api/seed-demo-data/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${data.token}`
+                            }
+                        });
+
                         success = true;
                     }
                 } else {
@@ -114,6 +124,7 @@ export default function LoginPage() {
 
                 <div className={STYLES.headerContainer}>
                     <div className={STYLES.iconWrapper}>
+                        {/* 로고 이미지 수정 필요.*/}
                         <Zap size={32} fill="currentColor" />
                     </div>
                     <h1 className={STYLES.title}>로그인</h1>
@@ -122,11 +133,13 @@ export default function LoginPage() {
 
                 <div className={STYLES.buttonsWrapper}>
                     <button className={`${STYLES.baseBtn} ${STYLES.googleBtn}`}>
+                        {/* 구글 이미지 수정 필요. 기능 미구현*/}
                         <Chrome size={20} className="text-serve-4" />
                         Google로 시작하기
                     </button>
 
                     {/* 카카오 OAuth 인증 시작 링크 */}
+                    {/* 구현이후 장고 연결후 오류생김 수정 필요. */}
                     <Link href={`https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY}&redirect_uri=${process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI}`}
                         className={`${STYLES.baseBtn} ${STYLES.kakaoBtn}`}>
                         <div className="w-5 h-5 bg-[#191919] rounded-full flex items-center justify-center">
@@ -136,11 +149,13 @@ export default function LoginPage() {
                     </Link>
 
                     <button className={`${STYLES.baseBtn} ${STYLES.naverBtn}`}>
+                        {/*기능 미구현*/}
                         <span className="text-lg font-black mr-1">N</span>
                         네이버로 시작하기
                     </button>
 
                     <button className={`${STYLES.baseBtn} ${STYLES.githubBtn}`}>
+                        {/*기능 미구현*/}
                         <Github size={20} />
                         GitHub으로 시작하기
                     </button>
@@ -154,8 +169,8 @@ export default function LoginPage() {
                         </div>
                     </div>
 
-                    <button 
-                        onClick={handleTestLogin} 
+                    <button
+                        onClick={handleTestLogin}
                         className={`${STYLES.baseBtn} ${STYLES.demoBtn}`}
                         disabled={isLoading}
                     >
@@ -172,7 +187,7 @@ export default function LoginPage() {
                         </div>
                     </div>
                 )}
-
+                {/*이용약관 부분 추가 필요 ★★★*/}
                 <div className={STYLES.footerText}>
                     <p className={STYLES.footerLinks}>
                         계속 진행하면 <span className={STYLES.linkText}>이용약관</span> 및 <br />

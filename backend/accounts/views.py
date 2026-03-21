@@ -212,13 +212,24 @@ class UserRecommendationView(APIView):
 
             if last_attempt and last_attempt.recommended_job:
                 job_name = last_attempt.recommended_job.name
-                if '백엔드' in job_name or 'BackEnd' in job_name:
-                    recommendation["type"] = "AI BackEnd"
-                    recommendation["title"] = "철저한 계획가형 백엔드 엔지니어"
-                    recommendation["matchRate"] = 98
-                # ... 기존 로직 생략 (유사하게 구현됨)
-                # 프론트엔드 작업 요청에 집중하기 위해 핵심 분기 위주로 처리
-                recommendation["description"] = f"진단 결과 {job_name} 분야에 높은 적합도를 보였습니다."
+                recommendation["matchRate"] = last_attempt.score or 0
+                recommendation["description"] = f"최근 진행하신 직무 역량 테스트 결과, {job_name} 분야에서 뛰어난 잠재력을 보여주셨습니다."
+                
+                if 'AI app' in job_name:
+                    recommendation["type"] = "AI App Engineer"
+                    recommendation["title"] = "창의적인 AI 애플리케이션 빌더"
+                    recommendation["traits"] = ["창의성", "문제해결", "AI융합"]
+                elif 'Data Scientist' in job_name:
+                    recommendation["type"] = "Data Scientist"
+                    recommendation["title"] = "데이터의 가치를 찾는 분석 전문가"
+                    recommendation["traits"] = ["논리력", "수리감각", "통찰력"]
+                elif 'MLOps' in job_name:
+                    recommendation["type"] = "MLOps Engineer"
+                    recommendation["title"] = "안정적인 AI 인프라 최적화 전문가"
+                    recommendation["traits"] = ["효율성", "시스템이해", "자동화"]
+                else:
+                    recommendation["type"] = job_name
+                    recommendation["title"] = f"준비된 {job_name} 전문가"
 
             return Response(recommendation, status=status.HTTP_200_OK)
         except Exception as e:

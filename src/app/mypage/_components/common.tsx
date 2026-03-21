@@ -18,8 +18,8 @@ const EXPBAR_STYLES = {
 const SCORECARD_STYLES = {
     container: "bg-white border border-gray-200 rounded-xl p-4 text-center shadow-sm transition-all hover:shadow-md relative overflow-hidden group cursor-default block",
     badgeWrapper: "absolute top-0 right-0",
-    label: "text-xs font-bold mb-1 mt-2 text-gray-500 transition-colors duration-300",
-    score: "text-xl font-extrabold text-gray-900 transition-colors duration-300"
+    label: "text-[15px] font-bold mb-1 mt-2 text-gray-500 transition-colors duration-300",
+    score: "text-[20px] font-extrabold text-gray-900 transition-colors duration-300"
 };
 
 // 페이지 공통 레이아웃 헤더
@@ -50,10 +50,11 @@ export const LevelBadge = ({ level }: { level: number }) => {
 // 절대평가 점수에 따라 A~D급 뱃지 맵핑
 export const CategoryBadge = ({ score }: { score: number }) => {
     const getBadge = (s: number) => {
-        if (s >= 90) return { label: 'S', colorClass: 'bg-main-1/10 text-main-1 border-main-1/20' };
-        if (s >= 80) return { label: 'A', colorClass: 'bg-serve-4/10 text-serve-4 border-serve-4/20' };
-        if (s >= 70) return { label: 'B', colorClass: 'bg-serve-3/10 text-serve-3 border-serve-3/20' };
-        if (s >= 60) return { label: 'C', colorClass: 'bg-serve-1/10 text-serve-1 border-serve-1/20' };
+        // 문제수에 맞춰서 s 값 변경 필요 ★★★
+        if (s >= 5) return { label: 'S', colorClass: 'bg-main-1/10 text-main-1 border-main-1/20' };
+        if (s >= 4) return { label: 'A', colorClass: 'bg-serve-4/10 text-serve-4 border-serve-4/20' };
+        if (s >= 3) return { label: 'B', colorClass: 'bg-serve-3/10 text-serve-3 border-serve-3/20' };
+        if (s >= 2) return { label: 'C', colorClass: 'bg-serve-1/10 text-serve-1 border-serve-1/20' };
         return { label: 'D', colorClass: 'bg-gray-100 text-gray-700 border-gray-200' };
     };
     const badge = getBadge(score);
@@ -65,6 +66,7 @@ export const CategoryBadge = ({ score }: { score: number }) => {
 };
 
 // 상단 유저 경험치 게이지 바
+// 아직 경험치 부분이 어떻게 추가될지에대한 논의가 필요함 ★★★
 export const ExpBar = ({ exp }: { exp: number }) => (
     <div className={EXPBAR_STYLES.container}>
         <div className={EXPBAR_STYLES.textWrapper}>
@@ -83,8 +85,8 @@ export const ExpBar = ({ exp }: { exp: number }) => (
 // 컴포넌트별 보조 색상 테마 타입
 export type ThemeClasses = { text: string; bgLight: string; bgHover: string; borderHover: string };
 
-// 개별 과목 진행 수치/점수를 출력하는 소형 통계 카드 (유동적 테마 주입 됨)
-export const ScoreCard = ({ label, score, theme, unit = "점" }: { label: string; score: number; theme: ThemeClasses; unit?: string }) => {
+// 개별 과목 진행 수치/점수를 출력하는 소형 통계 카드
+export const ScoreCard = ({ label, score, theme, unit = "회" }: { label: string; score: number; theme: ThemeClasses; unit?: string }) => {
     return (
         <div className={`${SCORECARD_STYLES.container} ${theme.borderHover}`}>
             {/* 상단 모서리 라벨 구역 */}

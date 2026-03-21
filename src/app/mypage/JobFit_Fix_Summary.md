@@ -1,101 +1,90 @@
-# JobFit 개발 및 수정 상세 내역 (Login & MyPage)
+# JobFit 개발 및 수정 상세 내역 (Before & After)
 
-이 문서는 프로젝트의 주요 수정 사항과 실제 구현된 코드 파편(Code Snippets)을 포함하고 있습니다.
+이 문서는 프로젝트의 각 기능별 수정 사항을 코드 비교(`Before` & `After`)와 함께 정리한 최종 기술 분석서입니다.
 
 ---
 
-## 1. 로그인 (Login) 핵심 수정 사항
+## 1. 프론트엔드 (Frontend) 수정 사항
 
-### ⚡ 데모 로그인 로직 (`src/app/login/page.tsx`)
-기존의 소셜 로그인 외에, 개발 및 테스트를 위한 순차적 계정 생성 로직을 추가했습니다.
+### ⚡ 데모 로그인 및 데이터 시딩 (`src/app/login/page.tsx`)
+- **[수정 전]**: 데모 기능이 없거나 고정 계정에 의존함.
+- **[수정 후]**: 신규 유저를 위해 1~999 순차 시도로 계정을 자동 생성하고, 백엔드 시딩 API를 호출하도록 변경.
 
 ```tsx
+// [After]
 const handleTestLogin = async () => {
-    setIsLoading(true);
-    try {
-        // 1~999까지 순차적으로 가입 시도 (빈 계정 찾기)
-        for (let i = 1; i <= 999; i++) {
-            const email = `demo${i}@jobfit.com`;
-            const name = `데모 유저 ${i}`;
-            
-            const regRes = await fetch('http://localhost:8000/api/register/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password: 'password123' })
-            });
-
-            if (regRes.status === 201 || regRes.status === 400) {
-                // 가입 성공 또는 이미 존재하는 계정인 경우 로그인 시도
-                const loginRes = await fetch('http://localhost:8000/api/login/', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password: 'password123' })
-                });
-                // ... 토큰 저장 및 리다이렉션 로직
-            }
-        }
-    } catch (error) { /* 에러 처리 */ }
+    // ... 순차 로그인 로직 후 성공 시
+    const seedRes = await fetch('http://localhost:8000/api/seed-demo-data/', { 
+        method: 'POST', headers: { 'Authorization': `Bearer ${token}` }
+    });
 };
 ```
 
----
+### 🎨 타이포그래피 (Pretendard) (`src/app/globals.css`)
+- **[수정 전]**: 기본 폰트 또는 'JalnanGothic' 사용. `@import` 위치 오류로 파싱 에러 발생.
+- **[수정 후]**: **Pretendard Variable** 적용 및 `@import` 최상단 배치로 에러 해결.
 
-## 2. 마이페이지 (MyPage) 핵심 수정 사항
+```css
+/* [After] */
+@import "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css";
 
-### 🔗 데이터 바인딩 및 UI 최적화 (`LoggedInView.tsx`, `StatsSection.tsx`)
-비정상적이던 데이터 로딩 상태와 불필요한 섹션을 정리했습니다.
+body {
+  font-family: "Pretendard Variable", Pretendard, ...;
+  letter-spacing: -0.01em;
+}
+```
+
+### ✅ 학습 이력 통과/미통과 로직 (`src/app/mypage/_components/TestHistorySection.tsx`)
+- **[수정 전]**: 80점 기준 고정 배지 및 모든 항목에 숫자 점수 노출.
+- **[수정 후]**: 학습 테스트에 한해 **60점 기준 통과/미통과** 문구로 별도 렌더링.
 
 ```tsx
-// LoggedInView.tsx 수정 후 (데이터 바인딩 활성화)
-const userData = await userRes.json();
-fetchedProfile = {
-    ...fetchedProfile,
-    name: userData.name || currentUser?.nickname || fetchedProfile.name,
-    email: userData.email || currentUser?.email || fetchedProfile.email,
-    // ... 기타 스탯 바인딩
-};
-```
-
-### 🛠️ 백엔드 ORM 전환 (`backend/accounts/views.py`)
-불안정한 Raw SQL을 제거하고 안정적인 Django ORM으로 교체했습니다.
-
-```python
-class UserProfileView(APIView):
-    def get(self, request, user_id):
-        user = User.objects.filter(username=user_id).first()
-        # ... 유저 조회 및 데이터 가공
-        progress = {
-            "python_cnt": Attempt.objects.filter(user=user, learning__skill__code__icontains='python').count(),
-            "mlops_cnt": Attempt.objects.filter(user=user, learning__skill__code__icontains='mlops').count(),
-            # ... 분야별 카운트 계산
-        }
-        return Response({ "name": user.name, "email": user.email, "progress": progress })
+// [After]
+<span className={(result.type === 'learning' ? result.score >= 60 : result.score >= 80) ? STYLES.scoreBadgePass : STYLES.scoreBadgeFail}>
+    {result.type === 'learning' ? (result.score >= 60 ? '통과' : '미통과') : `${result.score}점`}
+</span>
 ```
 
 ---
 
-## 3. 백엔드 시스템 기반 수정 사항
+## 2. 백엔드 (Backend) 수정 사항
 
-### 🛡️ 커스텀 JWT 인증 처리 (`authentication/authenticators.py`)
-프론트엔드 Bearer 토큰을 백엔드 `request.user`와 연동시켰습니다.
+### ⚙️ 데이터 모델 확장 (`backend/api/models.py`)
+- **[수정 전]**: 테스트 결과를 저장할 공간이 없음.
+- **[수정 후]**: `Attempt` 모델에 점수와 추천 직무 결과 필드 추가.
 
 ```python
-class CustomJWTAuthentication(BaseAuthentication):
-    def authenticate(self, request):
-        auth_header = request.headers.get('Authorization')
-        if not auth_header or 'Bearer' not in auth_header:
-            return None
-        
-        token = auth_header.split()[1]
-        user_id = decode_access_token(token) # 토큰에서 유저 ID 추출
-        user = User.objects.get(id=user_id)
-        return (user, None)
+# [After]
+class Attempt(models.Model):
+    score = models.PositiveIntegerField(default=0)
+    recommended_job = models.ForeignKey('Job', on_delete=models.SET_NULL, null=True)
 ```
 
-### 🛣️ 엔드포인트 및 시리얼라이저 보완
-- **api/urls.py**: 마이페이지 호출 경로 (`users/<str:user_id>/`, `users/stats/`) 추가
-- **user/serializer.py**: `username` 자동 생성 로직 및 히스토리 조회 시 오류(`AttributeError`) 방지 로직 추가
+### 🛡️ 인증 및 예외 처리 (`authentication/`)
+- **[수정 전]**: Bearer 토큰 미지원 및 에러 시 서버 Crash 발생.
+- **[수정 후]**: `CustomJWTAuthentication` 추가 및 `exceptions.py` 방어 코드 적용.
+
+```python
+# [After - exceptions.py]
+if response is not None:
+    error_code = response.data.get('code')
+```
+
+### 📈 ORM 기반 리팩토링 및 동적 리포트 (`backend/accounts/views.py`)
+- **[수정 전]**: 존재하지 않는 테이블을 Raw SQL로 조회하여 500 에러 고착.
+- **[수정 후]**: **Django ORM**으로 완전 교체 및 최신 기록 기반 동적 추천 로직 구현.
+
+```python
+# [After]
+user = User.objects.filter(username=user_id).first()
+last_attempt = Attempt.objects.filter(user=user, attempt_type='job_test').order_by('-created_at').first()
+# ... 이후 last_attempt 정보를 바탕으로 추천 직무 반환
+```
 
 ---
 
-**결과**: 위 코드 변경을 통해 전반적인 데이터 흐름이 고정된 Mock 데이터 방식에서 **실제 데이터베이스 연동 방식**으로 성공적으로 전환되었습니다.
+## 3. 종합 결과
+*   **안정성**: 백엔드 Crash 요인 제거 및 DB 동기화 완료.
+*   **완성도**: 데모 유저를 위한 즉각적인 결과 대시보드 환경 완비.
+*   **전문성**: 최신 폰트 및 직관적인 통과/미통과 UI를 통한 신뢰성 확보.
+

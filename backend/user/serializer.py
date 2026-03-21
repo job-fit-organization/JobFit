@@ -56,10 +56,14 @@ class QuizHistorySerializer(serializers.ModelSerializer): # 기준이 되는 모
         ]
 
     def get_score(self, obj): # obj: 직렬화되는 객체
+        # 필드에 점수가 저장되어 있으면 우선 사용, 아니면 계산
+        if obj.score > 0:
+            return obj.score
         return obj.responses.filter(is_correct=True).count()
 
     def get_total(self, obj):
-        return obj.responses.count()
+        count = obj.responses.count()
+        return count if count > 0 else 10 # 기본 문항 수 10개로 가정
 
 class JobTestHistorySerializer(serializers.ModelSerializer):
     attempt_id = serializers.IntegerField(source='id', read_only=True)
@@ -74,15 +78,18 @@ class JobTestHistorySerializer(serializers.ModelSerializer):
             'recommended_job_id',
             'recommended_job_code',
             'recommended_job_name',
+            'score',
             'created_at',
         ]
 
     def get_recommended_job_id(self, obj):
-        return None
+        return obj.recommended_job.id if obj.recommended_job else None
 
     def get_recommended_job_code(self, obj):
-        return "N/A"
+        return obj.recommended_job.code if obj.recommended_job else "N/A"
 
     def get_recommended_job_name(self, obj):
+        if obj.recommended_job:
+            return obj.recommended_job.name
         return "직무 분석 준비 중"
 

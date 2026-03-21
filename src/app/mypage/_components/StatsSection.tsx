@@ -22,7 +22,7 @@ const STYLES = {
     statIconWrapper: "h-10 w-10 bg-white/50 rounded-full flex items-center justify-center shadow-sm"
 };
 
-// 서비스 전체 통계 (가입자, 인기직무 등) 보드 컴포넌트
+// 서비스 전체 통계 보드
 export const StatsSection = ({ data }: { data: typeof INITIAL_OVERALL_STATISTICS }) => (
     <section className={STYLES.section}>
         <h3 className={STYLES.header}>

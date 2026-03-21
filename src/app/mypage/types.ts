@@ -4,7 +4,7 @@ export interface UserProfile {
     exp: number;
     email: string;
     attendanceDays: number;
-    
+
     // 분야별 학습 진행도 (완료 횟수 등)
     averageScore: {
         python: number;
