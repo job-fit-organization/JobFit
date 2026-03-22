@@ -138,9 +138,9 @@ function calcPct(jobScores: JobScores) {
 }
 
 const JL: Record<JobId, { color: string; rgb: string; label: string }> = {
-  "ai-app":   { color: "#E8380D", rgb: "232,56,13",  label: "AI App Engineer" },
-  "mlops":    { color: "#10B981", rgb: "16,185,129",  label: "MLOps Engineer" },
-  "data-sci": { color: "#8B5CF6", rgb: "139,92,246",  label: "Data Scientist" },
+  "ai-app": { color: "#E8380D", rgb: "232,56,13", label: "AI App Engineer" },
+  "mlops": { color: "#10B981", rgb: "16,185,129", label: "MLOps Engineer" },
+  "data-sci": { color: "#8B5CF6", rgb: "139,92,246", label: "Data Scientist" },
 };
 
 function TestResultPageInner() {
@@ -231,19 +231,27 @@ function ResultView({ pct, sorted, topJob, mode }: {
   const [showShare, setShowShare] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showCapture, setShowCapture] = useState(false);
-  const isLoggedIn = typeof document !== "undefined" && !!getCookie("user_id");
-  const isExpert = mode === "expert";
+  const [isMounted, setIsMounted] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    if (isLoggedIn) return;
+    setIsMounted(true);
+    const loggedIn = !!getCookie("user_id");
+    setIsLoggedIn(loggedIn);
+
+    if (loggedIn) return;
     const t = setTimeout(() => setShowLogin(true), 5000);
     return () => clearTimeout(t);
-  }, [isLoggedIn]);
+  }, []);
+
+  if (!isMounted) return null;
+
+  const isExpert = mode === "expert";
 
   return (
     <div className="wrap">
-      {showShare   && <ShareSheet   job={topJob} mode={mode} pct={pct} onClose={() => setShowShare(false)} />}
-      {showLogin   && <LoginSheet   job={topJob} pct={pct} onClose={() => setShowLogin(false)} />}
+      {showShare && <ShareSheet job={topJob} mode={mode} pct={pct} onClose={() => setShowShare(false)} />}
+      {showLogin && <LoginSheet job={topJob} pct={pct} onClose={() => setShowLogin(false)} />}
       {showCapture && (
         <>
           <style>{`header, nav { z-index: 1 !important; }`}</style>
@@ -533,9 +541,9 @@ function ShareSheet({ job, mode, pct, onClose }: { job: Job; mode: Mode; pct: Re
   const [copied, setCopied] = useState(false);
   const shareUrl = typeof window !== "undefined"
     ? (() => {
-        const p = pct;
-        return `${window.location.origin}/test/result?job=${encodeURIComponent(job.id)}&mode=${mode}&ai=${p["ai-app"]}&ml=${p["mlops"]}&ds=${p["data-sci"]}`;
-      })()
+      const p = pct;
+      return `${window.location.origin}/test/result?job=${encodeURIComponent(job.id)}&mode=${mode}&ai=${p["ai-app"]}&ml=${p["mlops"]}&ds=${p["data-sci"]}`;
+    })()
     : "";
   const shareText = `나의 AI 직무 유형은"${job.typeTitle}" ${job.emoji}\n"${job.hook}"\n\nJOBFIT에서 나도 확인해봐!`;
   const hasNativeShare = typeof navigator !== "undefined" && !!navigator.share;
@@ -602,8 +610,8 @@ function ShareSheet({ job, mode, pct, onClose }: { job: Job; mode: Mode; pct: Re
               display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
               boxShadow: copied ? "0 4px 18px rgba(16,185,129,0.3)" : "none",
             }}
-            onMouseEnter={e => { if (!copied) { e.currentTarget.style.borderColor = "#bbb"; e.currentTarget.style.transform = "translateY(-1.5px)"; }}}
-            onMouseLeave={e => { if (!copied) { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "none"; }}}
+            onMouseEnter={e => { if (!copied) { e.currentTarget.style.borderColor = "#bbb"; e.currentTarget.style.transform = "translateY(-1.5px)"; } }}
+            onMouseLeave={e => { if (!copied) { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "none"; } }}
           >
             {copied ? "✅ 복사 완료!" : "🔗 링크 복사"}
           </button>
