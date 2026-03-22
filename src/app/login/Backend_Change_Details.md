@@ -26,7 +26,7 @@ class CustomJWTAuthentication(BaseAuthentication):
 
 ```python
 # [Before]
-error_code = response.data.get('code') # response가 None일 경우 Crash!
+error_code = response.data.get('code') # response가 None일 경우 Crash
 
 # [After]
 if response is not None:

@@ -4,50 +4,7 @@
 
 ---
 
-## 1. 프론트엔드 (Frontend) 수정 사항
-
-### ⚡ 데모 로그인 및 데이터 시딩 (`src/app/login/page.tsx`)
-- **[수정 전]**: 데모 기능이 없거나 고정 계정에 의존함.
-- **[수정 후]**: 신규 유저를 위해 1~999 순차 시도로 계정을 자동 생성하고, 백엔드 시딩 API를 호출하도록 변경.
-
-```tsx
-// [After]
-const handleTestLogin = async () => {
-    // ... 순차 로그인 로직 후 성공 시
-    const seedRes = await fetch('http://localhost:8000/api/seed-demo-data/', { 
-        method: 'POST', headers: { 'Authorization': `Bearer ${token}` }
-    });
-};
-```
-
-### 🎨 타이포그래피 (Pretendard) (`src/app/globals.css`)
-- **[수정 전]**: 기본 폰트 또는 'JalnanGothic' 사용. `@import` 위치 오류로 파싱 에러 발생.
-- **[수정 후]**: **Pretendard Variable** 적용 및 `@import` 최상단 배치로 에러 해결.
-
-```css
-/* [After] */
-@import "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css";
-
-body {
-  font-family: "Pretendard Variable", Pretendard, ...;
-  letter-spacing: -0.01em;
-}
-```
-
-### ✅ 학습 이력 통과/미통과 로직 (`src/app/mypage/_components/TestHistorySection.tsx`)
-- **[수정 전]**: 80점 기준 고정 배지 및 모든 항목에 숫자 점수 노출.
-- **[수정 후]**: 학습 테스트에 한해 **60점 기준 통과/미통과** 문구로 별도 렌더링.
-
-```tsx
-// [After]
-<span className={(result.type === 'learning' ? result.score >= 60 : result.score >= 80) ? STYLES.scoreBadgePass : STYLES.scoreBadgeFail}>
-    {result.type === 'learning' ? (result.score >= 60 ? '통과' : '미통과') : `${result.score}점`}
-</span>
-```
-
----
-
-## 2. 백엔드 (Backend) 수정 사항
+## 백엔드 (Backend) 수정 사항
 
 ### ⚙️ 데이터 모델 확장 (`backend/api/models.py`)
 - **[수정 전]**: 테스트 결과를 저장할 공간이 없음.
