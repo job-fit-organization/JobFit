@@ -1,13 +1,24 @@
+@import "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css";
 @import "tailwindcss";
 
 :root {
-  --foreground: #f8fafc;
+  --background: #ffffff;
+  --foreground: #171717;
+  --main-1: #EA002C;
+  --main-2: #F47725;
+  --serve-1: #FBBC05;
+  --serve-2: #B3CF0A;
+  --serve-3: #009A93;
+  --serve-4: #0072C6;
+  --serve-5: #0E306D;
+  --serve-6: #68127A;
   --card-bg: #0f0f13;
   --card-border: rgba(255, 255, 255, 0.08);
   --primary: #8183ff;
   --primary-hover: #6366f1;
   --indigo-glow: rgba(129, 131, 255, 0.2);
   --muted: #64748b;
+
 }
 
 @theme inline {
@@ -20,12 +31,22 @@
   --color-muted: var(--muted);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-main-1: var(--main-1);
+  --color-main-2: var(--main-2);
+  --color-serve-1: var(--serve-1);
+  --color-serve-2: var(--serve-2);
+  --color-serve-3: var(--serve-3);
+  --color-serve-4: var(--serve-4);
+  --color-serve-5: var(--serve-5);
+  --color-serve-6: var(--serve-6);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  letter-spacing: -0.01em;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -91,6 +112,11 @@ body {
     border-color: #f47725;
     transform: translateY(-8px);
     box-shadow: 0 12px 30px rgba(244, 119, 37, 0.1);
+  }
+
+  .white-card.no-hover:hover {
+    transform: none;
+    box-shadow: none;
   }
 
   .btn-primary {
