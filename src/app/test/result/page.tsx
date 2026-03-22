@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   JOBS, loadResult,
   type JobId, type Mode, type JobScores,
@@ -12,16 +12,14 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  button { font-family: inherit; cursor: pointer; border: none; background: none; }
-  a { text-decoration: none; color: inherit; }
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-thumb { background: #e5e5e5; border-radius: 4px; }
+  .result-page *, .result-page *::before, .result-page *::after { box-sizing: border-box; }
+  .result-page button { font-family: inherit; cursor: pointer; }
+  .result-page a { text-decoration: none; color: inherit; }
 
   :root {
     --primary: #E8380D;
     --primary-dark: #C42E09;
-    --bg: #F6F6F6;
+    --bg: linear-gradient(160deg, #fff 0%, #fff5f3 50%, #ffe8e2 100%);
     --bg-card: #FFFFFF;
     --border: #EBEBEB;
     --text-1: #111111;
@@ -42,19 +40,10 @@ const CSS = `
   .fu2 { animation-delay:0.16s; }
   .fu3 { animation-delay:0.24s; }
 
-  /* NAV */
-  .nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(255,255,255,0.94); backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 clamp(24px,5vw,72px); height: 62px;
-  }
-  .nav-logo { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 19px; letter-spacing: -0.6px; }
-  .nav-logo-icon { width: 34px; height: 34px; border-radius: 9px; background: var(--primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(232,56,13,0.35); }
+
 
   /* WRAP */
-  .wrap { padding: 82px clamp(24px,5vw,72px) 80px; }
+  .wrap { padding: 100px clamp(24px,5vw,72px) 80px; position: relative; z-index: 1; }
 
   /* TOP BAR */
   .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 36px; flex-wrap: wrap; gap: 12px; }
@@ -62,14 +51,14 @@ const CSS = `
   .top-bar-right { display: flex; gap: 8px; }
   .btn-outline { padding: 9px 18px; border-radius: 10px; font-size: 13px; font-weight: 600; border: 1.5px solid var(--border); color: var(--text-2); transition: all 0.15s; display: flex; align-items: center; gap: 6px; background: var(--bg-card); }
   .btn-outline:hover { border-color: #bbb; color: var(--text-1); }
-  .btn-red { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 3px 12px rgba(232,56,13,0.25); }
-  .btn-red:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: #fff; }
+  .btn-red { background: linear-gradient(135deg, #ea002c, #f47725); color: #fff; border-color: transparent; box-shadow: 0 4px 18px rgba(234,0,44,0.25); }
+  .btn-red:hover { filter: brightness(1.1); transform: translateY(-1.5px); box-shadow: 0 8px 25px rgba(234,0,44,0.35); color: #fff; border-color: transparent; }
 
-  /* MAIN LAYOUT: 왼쪽 점수패널 + 오른쪽 직무카드 */
-  .result-layout { display: grid; grid-template-columns: 320px 1fr; gap: 24px; align-items: start; }
+  /* MAIN LAYOUT: 왼쪽 직무카드 + 오른쪽 점수패널 */
+  .result-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
 
   /* 점수 패널 */
-  .score-panel { position: sticky; top: 82px; background: var(--bg-card); border: 1.5px solid var(--border); border-radius: 24px; padding: 28px; box-shadow: 0 2px 16px rgba(0,0,0,0.05); }
+  .score-panel { position: sticky; top: 82px; background: rgba(255,255,255,0.8); backdrop-filter: blur(12px); border: 1.5px solid rgba(255,255,255,0.6); border-radius: 24px; padding: 28px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
   .score-panel-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 1.8px; color: var(--text-3); text-transform: uppercase; margin-bottom: 22px; }
   .score-item { margin-bottom: 18px; }
   .score-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
@@ -80,11 +69,11 @@ const CSS = `
   .score-bar-bg { height: 6px; background: #F0F0F0; border-radius: 99px; overflow: hidden; }
   .score-bar { height: 100%; border-radius: 99px; animation: barGrow 1.2s cubic-bezier(0.16,1,0.3,1) both; }
   .divider { height: 1px; background: var(--border); margin: 22px 0; }
-  .learn-btn { width: 100%; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: 700; color: #fff; background: var(--primary); border: none; cursor: pointer; box-shadow: 0 3px 14px rgba(232,56,13,0.28); transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 7px; }
-  .learn-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+  .learn-btn { width: 100%; padding: 14px; border-radius: 14px; font-size: 14px; font-weight: 700; color: #fff; background: linear-gradient(135deg, #ea002c, #f47725); border: none; cursor: pointer; box-shadow: 0 4px 18px rgba(234,0,44,0.25); transition: all 0.18s; display: flex; align-items: center; justify-content: center; gap: 7px; }
+  .learn-btn:hover { filter: brightness(1.1); transform: translateY(-1.5px); box-shadow: 0 8px 25px rgba(234,0,44,0.35); }
 
   /* 직무 카드 */
-  .job-card { background: var(--bg-card); border-radius: 24px; overflow: hidden; box-shadow: 0 2px 16px rgba(0,0,0,0.06); animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
+  .job-card { background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border-radius: 24px; overflow: hidden; box-shadow: 0 2px 20px rgba(0,0,0,0.07); animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.1s both; }
   .job-card-hero { padding: 48px clamp(28px,4vw,56px); position: relative; overflow: hidden; }
   .job-card-hero-bg { position: absolute; inset: 0; opacity: 0.04; pointer-events: none; }
   .job-card-hero-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 32px; gap: 20px; flex-wrap: wrap; }
@@ -102,7 +91,7 @@ const CSS = `
   .job-tag { font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 99px; }
 
   /* 카드 바디 */
-  .job-card-body { padding: 36px clamp(28px,4vw,56px); border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .job-card-body { padding: 36px clamp(28px,4vw,56px); border-top: 1px solid rgba(0,0,0,0.06); display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
   .body-section-title { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: var(--text-3); text-transform: uppercase; margin-bottom: 16px; }
   .hook-text { font-size: 15px; color: var(--text-2); line-height: 1.85; }
   .traits-list { display: flex; flex-direction: column; gap: 10px; }
@@ -110,8 +99,8 @@ const CSS = `
   .trait-check { font-weight: 800; flex-shrink: 0; margin-top: 2px; }
 
   /* MODAL */
-  .modal-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s ease both; }
-  .modal-inner { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; max-width: 400px; }
+  .modal-overlay { position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.2s ease both; }
+  .modal-inner { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
 
   /* SHEET */
   .sheet-overlay { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: flex; align-items: flex-end; justify-content: center; animation: fadeIn 0.2s ease both; }
@@ -154,13 +143,36 @@ const JL: Record<JobId, { color: string; rgb: string; label: string }> = {
   "data-sci": { color: "#8B5CF6", rgb: "139,92,246",  label: "Data Scientist" },
 };
 
-export default function TestResultPage() {
+function TestResultPageInner() {
   const router = useRouter();
   const [data, setData] = useState<{ jobScores: JobScores; mode: Mode } | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
+  const searchParams = useSearchParams();
+
   useEffect(() => {
+    // 쿼리스트링으로 공유된 결과 확인
+    const sharedJob = searchParams.get("job") as JobId | null;
+    const sharedMode = searchParams.get("mode") as Mode | null;
+
+    if (sharedJob && sharedMode && JOBS[sharedJob]) {
+      // 공유 링크로 접근한 경우 - 쿼리스트링에서 실제 점수 복원
+      const ai = parseInt(searchParams.get("ai") || "0");
+      const ml = parseInt(searchParams.get("ml") || "0");
+      const ds = parseInt(searchParams.get("ds") || "0");
+      const total = ai + ml + ds || 1;
+      // 퍼센트 → 원점수 역산 (퍼센트 그대로 jobScores에 넣으면 calcPct가 다시 계산)
+      const restoredScores: JobScores = {
+        "ai-app": ai,
+        "mlops": ml,
+        "data-sci": ds,
+      };
+      setData({ jobScores: restoredScores, mode: sharedMode });
+      return;
+    }
+
+    // 일반 접근 - localStorage에서 읽기
     let tries = 0;
     const load = () => {
       const result = loadResult();
@@ -178,7 +190,7 @@ export default function TestResultPage() {
         .catch((e: Error) => setSaveError(e.message));
     };
     load();
-  }, [router]);
+  }, [router, searchParams]);
 
   if (!data) return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -192,7 +204,7 @@ export default function TestResultPage() {
   const topJob = JOBS[sorted[0][0]];
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--text-1)", fontFamily: "var(--font)" }}>
+    <div className="result-page" style={{ minHeight: "100vh", background: "linear-gradient(160deg, #fff 0%, #fff5f3 50%, #ffe8e2 100%)", color: "var(--text-1)", fontFamily: "var(--font)", position: "relative" }}>
       <style>{CSS}</style>
 
       {saveSuccess && <div className="toast">✅ 결과가 저장됐어요!</div>}
@@ -203,17 +215,8 @@ export default function TestResultPage() {
         </div>
       )}
 
-      <nav className="nav">
-        <div className="nav-logo">
-          <div className="nav-logo-icon">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M3 9L7.5 13.5L15 5" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          JOBFIT
-        </div>
-      </nav>
-
+      <div style={{ position: "fixed", top: -160, right: -160, width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(232,56,13,0.08) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
+      <div style={{ position: "fixed", bottom: -100, left: -100, width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(255,90,53,0.06) 0%, transparent 65%)", pointerEvents: "none", zIndex: 0 }} />
       <ResultView pct={pct} sorted={sorted} topJob={topJob} mode={data.mode} />
     </div>
   );
@@ -239,9 +242,14 @@ function ResultView({ pct, sorted, topJob, mode }: {
 
   return (
     <div className="wrap">
-      {showShare   && <ShareSheet   job={topJob} onClose={() => setShowShare(false)} />}
+      {showShare   && <ShareSheet   job={topJob} mode={mode} pct={pct} onClose={() => setShowShare(false)} />}
       {showLogin   && <LoginSheet   job={topJob} pct={pct} onClose={() => setShowLogin(false)} />}
-      {showCapture && <CaptureModal job={topJob} pct={pct} sorted={sorted} mode={mode} onClose={() => setShowCapture(false)} />}
+      {showCapture && (
+        <>
+          <style>{`header, nav { z-index: 1 !important; }`}</style>
+          <CaptureModal job={topJob} pct={pct} sorted={sorted} mode={mode} onClose={() => setShowCapture(false)} />
+        </>
+      )}
 
       {/* TOP BAR */}
       <div className="top-bar fu">
@@ -263,41 +271,6 @@ function ResultView({ pct, sorted, topJob, mode }: {
 
       {/* LAYOUT */}
       <div className="result-layout">
-
-        {/* 점수 패널 */}
-        <div className="score-panel fu fu1">
-          <p className="score-panel-eyebrow">직무 적합도</p>
-          {sorted.map(([id, p]) => {
-            const j = JL[id];
-            const isTop = id === topJob.id;
-            return (
-              <div key={id} className="score-item">
-                <div className="score-item-top">
-                  <span className={`score-label${isTop ? " is-top" : ""}`}>
-                    <span className="score-dot" style={{ background: j.color }} />
-                    {j.label}
-                  </span>
-                  <span className="score-pct" style={{ color: j.color }}>{p}%</span>
-                </div>
-                <div className="score-bar-bg">
-                  <div className="score-bar" style={{ width: `${p}%`, background: j.color, opacity: isTop ? 1 : 0.3 }} />
-                </div>
-              </div>
-            );
-          })}
-
-          <div className="divider" />
-
-          {isLoggedIn ? (
-            <a href={topJob.nextSteps[0].url} target="_blank" rel="noopener noreferrer" className="learn-btn">
-              📚 지금 바로 학습하기 →
-            </a>
-          ) : (
-            <button className="learn-btn" onClick={() => setShowLogin(true)}>
-              📚 지금 바로 학습하기 →
-            </button>
-          )}
-        </div>
 
         {/* 직무 카드 */}
         <div className="job-card fu fu2">
@@ -352,6 +325,41 @@ function ResultView({ pct, sorted, topJob, mode }: {
             </div>
           </div>
         </div>
+
+        {/* 점수 패널 */}
+        <div className="score-panel fu fu1">
+          <p className="score-panel-eyebrow">직무 적합도</p>
+          {sorted.map(([id, p]) => {
+            const j = JL[id];
+            const isTop = id === topJob.id;
+            return (
+              <div key={id} className="score-item">
+                <div className="score-item-top">
+                  <span className={`score-label${isTop ? " is-top" : ""}`}>
+                    <span className="score-dot" style={{ background: j.color }} />
+                    {j.label}
+                  </span>
+                  <span className="score-pct" style={{ color: j.color }}>{p}%</span>
+                </div>
+                <div className="score-bar-bg">
+                  <div className="score-bar" style={{ width: `${p}%`, background: j.color, opacity: isTop ? 1 : 0.3 }} />
+                </div>
+              </div>
+            );
+          })}
+
+          <div className="divider" />
+
+          {isLoggedIn ? (
+            <a href={topJob.nextSteps[0].url} target="_blank" rel="noopener noreferrer" className="learn-btn">
+              📚 지금 바로 학습하기 →
+            </a>
+          ) : (
+            <button className="learn-btn" onClick={() => setShowLogin(true)}>
+              📚 지금 바로 학습하기 →
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -366,7 +374,7 @@ function CaptureCard({ job, pct, sorted, mode }: {
 }) {
   return (
     <div style={{
-      width: 380, background: "#0F172A", borderRadius: 28,
+      width: 400, background: "#0F172A", borderRadius: 28,
       overflow: "hidden", fontFamily: "'Plus Jakarta Sans', Arial, sans-serif",
       position: "relative",
     }}>
@@ -390,7 +398,7 @@ function CaptureCard({ job, pct, sorted, mode }: {
           </div>
           <div>
             <div style={{ fontSize: 11, fontWeight: 700, color: job.color, letterSpacing: 0.8, marginBottom: 5 }}>🥇 1순위 추천 직무</div>
-            <div style={{ fontSize: 22, fontWeight: 900, color: "#fff", letterSpacing: -0.8, lineHeight: 1.2 }}>{job.typeTitle}</div>
+            <div style={{ fontSize: 20, fontWeight: 900, color: "#fff", letterSpacing: -0.8, lineHeight: 1.2, wordBreak: "keep-all" }}>{job.typeTitle}</div>
             <div style={{ fontSize: 12, color: "rgba(255,255,255,0.35)", marginTop: 3 }}>{job.title}</div>
           </div>
         </div>
@@ -423,7 +431,7 @@ function CaptureCard({ job, pct, sorted, mode }: {
           const isTop = id === job.id;
           return (
             <div key={id} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-              <span style={{ fontSize: 11, color: isTop ? j.color : "rgba(255,255,255,0.2)", fontWeight: isTop ? 700 : 400, width: 120, flexShrink: 0 }}>{j.label}</span>
+              <span style={{ fontSize: 11, color: isTop ? j.color : "rgba(255,255,255,0.2)", fontWeight: isTop ? 700 : 400, width: 110, flexShrink: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{j.label}</span>
               <div style={{ flex: 1, height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 99, overflow: "hidden" }}>
                 <div style={{ height: "100%", width: `${p}%`, background: isTop ? j.color : `rgba(${j.rgb},0.25)`, borderRadius: 99 }} />
               </div>
@@ -476,13 +484,13 @@ function CaptureModal({ job, pct, sorted, mode, onClose }: {
         <button
           onClick={saveImage}
           disabled={saving}
-          style={{ width: "100%", padding: "15px", borderRadius: 14, background: saved ? "#10B981" : job.color, color: "#fff", fontWeight: 700, fontSize: 15, border: "none", cursor: saving ? "wait" : "pointer", boxShadow: `0 4px 20px rgba(${job.rgb},0.4)` }}
+          style={{ width: "100%", padding: "15px", borderRadius: 14, background: saved ? "#10B981" : "#E8380D", color: "#fff", fontWeight: 700, fontSize: 15, border: "none", cursor: saving ? "wait" : "pointer", boxShadow: saved ? "0 4px 20px rgba(16,185,129,0.4)" : "0 4px 20px rgba(232,56,13,0.4)" }}
         >
           {saving ? "⏳ 저장 중..." : saved ? "✅ 저장 완료!" : "📥 이미지로 저장"}
         </button>
         <button
           onClick={onClose}
-          style={{ width: "100%", padding: "12px", borderRadius: 12, background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.6)", fontWeight: 500, fontSize: 13, border: "1px solid rgba(255,255,255,0.12)", cursor: "pointer" }}
+          style={{ width: "100%", padding: "13px", borderRadius: 12, background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.7)", fontWeight: 600, fontSize: 14, border: "1px solid rgba(255,255,255,0.15)", cursor: "pointer", transition: "all 0.15s" }}
         >
           닫기
         </button>
@@ -509,7 +517,7 @@ function LoginSheet({ job, pct, onClose }: { job: Job; pct: Record<JobId, number
         </div>
         <p style={{ fontSize: 19, fontWeight: 800, color: "var(--text-1)", marginBottom: 8, letterSpacing: -0.3, lineHeight: 1.35 }}>이 결과를<br />저장하고 싶으신가요?</p>
         <p style={{ fontSize: 14, color: "var(--text-3)", marginBottom: 28, lineHeight: 1.7 }}>로그인하면 내 결과가 저장되고<br />맞춤 학습 로드맵을 바로 받을 수 있어요</p>
-        <button onClick={() => router.push("/login")} style={{ width: "100%", padding: "15px", borderRadius: 14, fontSize: 15, fontWeight: 700, border: "none", cursor: "pointer", background: job.color, color: "#fff", marginBottom: 10, boxShadow: `0 4px 14px rgba(${job.rgb},0.3)` }}>
+        <button onClick={() => router.push("/login")} style={{ width: "100%", padding: "15px", borderRadius: 14, fontSize: 15, fontWeight: 700, border: "none", cursor: "pointer", background: "linear-gradient(135deg, #ea002c, #f47725)", color: "#fff", marginBottom: 10, boxShadow: "0 4px 18px rgba(234,0,44,0.25)" }}>
           🔐 로그인 / 회원가입
         </button>
         <button onClick={onClose} style={{ width: "100%", padding: "12px", borderRadius: 12, fontSize: 14, fontWeight: 500, color: "var(--text-3)", background: "none", border: "1px solid var(--border)", cursor: "pointer" }}>
@@ -521,47 +529,105 @@ function LoginSheet({ job, pct, onClose }: { job: Job; pct: Record<JobId, number
 }
 
 // ── 공유 시트 ──────────────────────────────
-function ShareSheet({ job, onClose }: { job: Job; onClose: () => void; }) {
+function ShareSheet({ job, mode, pct, onClose }: { job: Job; mode: Mode; pct: Record<JobId, number>; onClose: () => void; }) {
   const [copied, setCopied] = useState(false);
-  const shareUrl = typeof window !== "undefined" ? `${window.location.origin}/` : "";
-  const shareText = `나의 AI 직무 유형은 "${job.typeTitle}" ${job.emoji}\n"${job.hook}"\n\nJOBFIT에서 나도 확인해봐!`;
-
-  const shareTwitter = () => { window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`${shareText}\n${shareUrl}`)}`, "_blank"); onClose(); };
-  const copyLink = () => { navigator.clipboard?.writeText(shareUrl).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }); };
-  const shareNative = () => { navigator.share?.({ title: `나의 AI 직무: ${job.typeTitle}`, text: shareText, url: shareUrl }); onClose(); };
+  const shareUrl = typeof window !== "undefined"
+    ? (() => {
+        const p = pct;
+        return `${window.location.origin}/test/result?job=${encodeURIComponent(job.id)}&mode=${mode}&ai=${p["ai-app"]}&ml=${p["mlops"]}&ds=${p["data-sci"]}`;
+      })()
+    : "";
+  const shareText = `나의 AI 직무 유형은"${job.typeTitle}" ${job.emoji}\n"${job.hook}"\n\nJOBFIT에서 나도 확인해봐!`;
   const hasNativeShare = typeof navigator !== "undefined" && !!navigator.share;
 
-  const items = [
-    ...(hasNativeShare ? [{ icon: "📤", label: "공유하기", action: shareNative, bg: "#334155", color: "#fff" }] : []),
-    { icon: "𝕏", label: "트위터(X)", action: shareTwitter, bg: "#000", color: "#fff" },
-    { icon: copied ? "✅" : "🔗", label: copied ? "복사 완료!" : "링크 복사", action: copyLink, bg: `rgba(${job.rgb},0.1)`, color: job.color },
-  ];
+  const handleNativeShare = () => {
+    navigator.share?.({ title: `나의 AI 직무: ${job.typeTitle}`, text: shareText, url: shareUrl });
+    onClose();
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard?.writeText(shareUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    });
+  };
 
   return (
     <div className="sheet-overlay" onClick={onClose}>
-      <div className="sheet" onClick={e => e.stopPropagation()}>
+      <div className="sheet" onClick={e => e.stopPropagation()} style={{ padding: "24px 24px 48px" }}>
         <div className="sheet-handle" />
-        <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px", borderRadius: 16, background: `rgba(${job.rgb},0.06)`, border: `1.5px solid rgba(${job.rgb},0.18)`, marginBottom: 24 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 14, background: `rgba(${job.rgb},0.12)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24 }}>{job.emoji}</div>
-          <div>
+
+        {/* 직무 칩 */}
+        <div style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px", borderRadius: 16, background: `rgba(${job.rgb},0.06)`, border: `1.5px solid rgba(${job.rgb},0.18)`, marginBottom: 28 }}>
+          <div style={{ width: 48, height: 48, borderRadius: 14, background: `rgba(${job.rgb},0.12)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0 }}>{job.emoji}</div>
+          <div style={{ flex: 1 }}>
             <div style={{ fontSize: 15, fontWeight: 700, color: job.color }}>{job.typeTitle}</div>
-            <div style={{ fontSize: 12, color: "var(--text-3)", marginTop: 2 }}>{job.title} · JOBFIT</div>
+            <div style={{ fontSize: 12, color: "var(--text-3)", marginTop: 2 }}>{job.title}</div>
           </div>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${items.length}, 1fr)`, gap: 10, marginBottom: 16 }}>
-          {items.map(item => (
-            <button key={item.label} onClick={item.action} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, padding: "16px 8px 14px", borderRadius: 16, background: "#F8F8F8", border: "1px solid var(--border)", cursor: "pointer" }}>
-              <div style={{ width: 46, height: 46, borderRadius: 14, background: item.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: item.icon === "𝕏" ? 18 : 22, fontWeight: 900, color: item.color }}>
-                {item.icon}
-              </div>
-              <span style={{ fontSize: 11, fontWeight: 600, color: item.color, textAlign: "center" }}>{item.label}</span>
-            </button>
-          ))}
+
+        <p style={{ fontSize: 16, fontWeight: 700, color: "var(--text-1)", marginBottom: 8, letterSpacing: -0.3 }}>결과를 공유해보세요</p>
+        <p style={{ fontSize: 13, color: "var(--text-3)", marginBottom: 24, lineHeight: 1.6 }}>
+          카카오톡, 인스타그램 등 원하는 앱으로 공유할 수 있어요
+        </p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 12 }}>
+          {/* 공유하기 - 항상 표시 */}
+          <button
+            onClick={handleNativeShare}
+            style={{
+              width: "100%", padding: "17px", borderRadius: 14,
+              fontSize: 15, fontWeight: 700, border: "none", cursor: "pointer",
+              background: "linear-gradient(135deg, #ea002c, #f47725)",
+              color: "#fff", boxShadow: "0 4px 18px rgba(234,0,44,0.25)",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+              transition: "all 0.18s",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.filter = "brightness(1.1)"; e.currentTarget.style.transform = "translateY(-1.5px)"; }}
+            onMouseLeave={e => { e.currentTarget.style.filter = "none"; e.currentTarget.style.transform = "none"; }}
+          >
+            📤 공유하기
+          </button>
+
+          {/* 링크 복사 - 항상 표시 */}
+          <button
+            onClick={handleCopy}
+            style={{
+              width: "100%", padding: "17px", borderRadius: 14,
+              fontSize: 15, fontWeight: 700, cursor: "pointer", transition: "all 0.18s",
+              background: copied ? "#10B981" : "rgba(255,255,255,0.8)",
+              color: copied ? "#fff" : "var(--text-1)",
+              border: copied ? "none" : "1.5px solid var(--border)",
+              backdropFilter: "blur(8px)",
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+              boxShadow: copied ? "0 4px 18px rgba(16,185,129,0.3)" : "none",
+            }}
+            onMouseEnter={e => { if (!copied) { e.currentTarget.style.borderColor = "#bbb"; e.currentTarget.style.transform = "translateY(-1.5px)"; }}}
+            onMouseLeave={e => { if (!copied) { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "none"; }}}
+          >
+            {copied ? "✅ 복사 완료!" : "🔗 링크 복사"}
+          </button>
         </div>
-        <button onClick={onClose} style={{ width: "100%", padding: "13px", borderRadius: 12, background: "none", border: "1px solid var(--border)", color: "var(--text-3)", fontWeight: 500, fontSize: 14, cursor: "pointer" }}>
+
+        <button
+          onClick={onClose}
+          style={{ width: "100%", padding: "13px", borderRadius: 12, background: "none", border: "1px solid var(--border)", color: "var(--text-3)", fontWeight: 500, fontSize: 14, cursor: "pointer" }}
+        >
           닫기
         </button>
       </div>
     </div>
+  );
+}
+
+export default function TestResultPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <span style={{ fontSize: 13, color: "#999" }}>결과 불러오는 중...</span>
+      </div>
+    }>
+      <TestResultPageInner />
+    </Suspense>
   );
 }
