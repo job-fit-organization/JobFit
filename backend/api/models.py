@@ -105,6 +105,13 @@ class Attempt(models.Model):
         related_name='attempts'
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    score = models.PositiveIntegerField(default=0)
+    recommended_job = models.ForeignKey(
+        'Job',
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='resulting_attempts'
+    )
 
     def __str__(self):
         return f'{self.user.username} - {self.attempt_type} - {self.id}'

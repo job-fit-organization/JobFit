@@ -15,7 +15,7 @@ from .serializer import QuizHistorySerializer, JobTestHistorySerializer
 # Create your views here.
 # GET /users/mypage/quiz-history/
 class QuizHistoryView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     @extend_schema(
         summary='내 퀴즈 응시 이력 조회',
@@ -68,7 +68,7 @@ class QuizHistoryView(APIView):
 
 # GET /user/mypage/job-test-history
 class JobTestHistoryView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     
     @extend_schema(
         summary='내 직무 추천 테스트 이력 조회',
@@ -110,7 +110,7 @@ class JobTestHistoryView(APIView):
         attempts = Attempt.objects.filter(
             user=request.user,
             attempt_type='job_test'
-        ).select_related('recommended_job').order_by('-created_at')
+        ).order_by('-created_at')
 
         serializer = JobTestHistorySerializer(attempts, many=True)
         return Response(serializer.data)
