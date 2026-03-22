@@ -42,6 +42,15 @@ class RoadmapSerializer(serializers.ModelSerializer):
             'prerequisite_skill_name',
         ]
 
+class RoadmapResponseSerializer(serializers.Serializer):
+    job = JobSerializer()
+    roadmap = RoadmapSerializer(many=True)
+
+
+class SkillLearningResponseSerializer(serializers.Serializer):
+    skill = SkillSerializer()
+    learnings = LearningSerializer(many=True)
+
 # ----------------
 # Common
 # ----------------
@@ -98,9 +107,16 @@ class QuizSubmitResponseSerializer(serializers.Serializer):
     total = serializers.IntegerField()
     results = QuizSubmitResultSerializer(many=True)
 
+class QuizQuestionListResponseSerializer(serializers.Serializer):
+    learning = LearningSerializer()
+    questions = QuestionGroupSerializer(many=True)
+
 # ----------------
 # Common
 # ----------------
+class JobTestQuestionListResponseSerializer(serializers.Serializer):
+    questions = QuestionGroupSerializer(many=True)
+
 class JobTestSubmitSerializer(BaseAnswerSubmitSerializer):
     pass
 

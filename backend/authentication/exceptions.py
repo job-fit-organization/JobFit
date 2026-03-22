@@ -4,9 +4,9 @@ def status_code_handler(exc, context):
     response = exception_handler(exc, context)
 
     if response is not None:
-        if 400 <= response.status_code < 500:
-            response.status_code = 400 
+        if response.status_code >= 400 and response.status_code < 500:
+            response.status_code = 444
         elif response.status_code >= 500:
-            response.status_code = 500
+            response.status_code = 555
     
     return response

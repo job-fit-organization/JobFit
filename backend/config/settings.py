@@ -11,13 +11,11 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+# from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-!c&^g^22^_drykorkwe!%r_7u2&+fc0jp)3n@(!2*r+#)j!-kr'
@@ -26,7 +24,6 @@ SECRET_KEY = 'django-insecure-!c&^g^22^_drykorkwe!%r_7u2&+fc0jp)3n@(!2*r+#)j!-kr
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -64,6 +61,10 @@ CORS_ALLOW_CRENDENTIALS = True
 REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'authentication.exceptions.status_code_handler',
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'authentication.authenticators.CustomJWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
@@ -91,20 +92,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
-import os
+# Database
+# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'jobfit'),
-        'USER': os.getenv('DB_USER', 'root'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'password'),
-        'HOST': os.getenv('DB_HOST', 'db'),
-        'PORT': os.getenv('DB_PORT', '3306'),
+        'NAME': os.environ.get('DB_NAME', 'jobfit'), 
+        'USER': os.environ.get('DB_USER', 'root'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'password'),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+        'PORT': os.environ.get('DB_PORT', '3306')
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -124,7 +124,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
@@ -136,8 +135,13 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Kakao Login Configuration
+# load_dotenv(BASE_DIR.parent / '.env') # Load from JobFit/.env
+
+KAKAO_REST_API_KEY = os.environ.get('KAKAO_REST_API_KEY', '').strip()
+KAKAO_REDIRECT_URI = os.environ.get('KAKAO_REDIRECT_URI', 'http://localhost:3000/mypage/login/callback').strip()
