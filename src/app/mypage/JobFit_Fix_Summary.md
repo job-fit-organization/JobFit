@@ -17,16 +17,6 @@ class Attempt(models.Model):
     recommended_job = models.ForeignKey('Job', on_delete=models.SET_NULL, null=True)
 ```
 
-### 🛡️ 인증 및 예외 처리 (`authentication/`)
-- **[수정 전]**: Bearer 토큰 미지원 및 에러 시 서버 Crash 발생.
-- **[수정 후]**: `CustomJWTAuthentication` 추가 및 `exceptions.py` 방어 코드 적용.
-
-```python
-# [After - exceptions.py]
-if response is not None:
-    error_code = response.data.get('code')
-```
-
 ### 📈 ORM 기반 리팩토링 및 동적 리포트 (`backend/accounts/views.py`)
 - **[수정 전]**: 존재하지 않는 테이블을 Raw SQL로 조회하여 500 에러 고착.
 - **[수정 후]**: **Django ORM**으로 완전 교체 및 최신 기록 기반 동적 추천 로직 구현.

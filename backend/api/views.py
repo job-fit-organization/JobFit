@@ -754,3 +754,14 @@ class JobTestSubmitView(APIView):
                 },
                 status=status.HTTP_201_CREATED
             )
+
+class SurveyView(APIView):
+    def post(self, request):
+        serializer = SurveySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # 로그인 되어 있으면 유저 정보 연결
+        user = request.user if request.user.is_authenticated else None
+        serializer.save(user=user)
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Job, Roadmap, Skill, Learning
+from .models import Job, Roadmap, Skill, Learning, Survey
 
 class JobSerializer(serializers.ModelSerializer): # ModelSerializer: 모델을 바로 직렬화, 모델 row 하나를 그대로 반환할 때 유용
     class Meta:
@@ -136,3 +136,9 @@ class JobTestSubmitResponseSerializer(serializers.Serializer):
     attempt_id = serializers.IntegerField()
     recommended_job = RecommendedJobSerializer()
     results = JobTestSubmitResultSerializer(many=True)
+
+class SurveySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Survey
+        fields = ['id', 'user', 'rating', 'features', 'feedback', 'created_at']
+        read_only_fields = ['id', 'user', 'created_at']
