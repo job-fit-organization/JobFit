@@ -36,7 +36,7 @@ export default function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem('access');
+        const token = localStorage.getItem('user');
         if (token) {
             setIsLoggedIn(true);
         }
