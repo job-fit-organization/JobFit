@@ -5,15 +5,14 @@ import {
     Award, Trophy, CheckCircle2, Zap, ZapOff, X
 } from 'lucide-react';
 import { ICON_MAP, LUCIDE_ICONS } from '@/app/learning/data/icon'
-import { QUIZZES, QuizData, Category, SubCategory, categoryList, fetchSubcategories } from '@/app/learning/data/data'
+import { QUIZZES, QuizData, Category, SubCategory, categoryList, fetchSubcategories, postQuizResult, saveQuizResultToDb } from '@/app/learning/data/data'
 import { HelpCircle } from 'lucide-react'; // 기본 아이콘용
 
-const token = typeof window !== 'undefined' ? localStorage.getItem('access') : null;
-const refresh = typeof window !== 'undefined' ? localStorage.getItem('refresh') : null;
-const email = typeof window !== 'undefined' ? localStorage.getItem('email') : null;
+const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+const userStr = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+const email = userStr ? JSON.parse(userStr)?.email : null;
 
 console.log("현재 토큰 상태:", token);
-console.log("현재 리프레시 토큰 상태:", refresh);
 console.log("현재 이메일 상태:", email);
 
 const ProgressBar = ({
@@ -69,48 +68,10 @@ export default function PythonMasteryExplorer() {
     const [totalNodesCount, setTotalNodesCount] = useState(0);
 
 
-    //  -- db연결 데이터 -- 
-    // useEffect(() => {
-    //     categoryList().then(data => {
-    //         // 각 카테고리에 progress 필드가 없다면 임의로 추가하거나, 
-    //         // 서버에서 준 데이터(예: cat.proficiency)를 연결합니다.
-    //         const mappedData = data.map((cat: any) => ({
-    //             ...cat,
-    //             currentProgress: cat.proficiency || 0 // 서버 데이터 명칭에 맞춰주세요!
-    //         }));
-    //         setCategories(mappedData);
-    //     });
-    // }, []);
-
-    // useEffect(() => {
-    //     // 카테고리 목록 불러오기
-    //     categoryList().then(res => {
-    //         setCategories(res);
-    //         if (res.length > 0 && currentStageId === null) {
-    //             setCurrentStageId(res[0].id);
-    //         }
-    //     });
-
-    //     if (currentStageId) {
-    //         console.log("email", email);
-    //         // 서브카테고리 목록 불러오기
-    //         fetchSubcategories(currentStageId, email).then(res => {
-    //             console.log('subcategories', res);
-    //             setSubcategories(res)
-    //         });
-
-    //         //서브카테고리별 문제 목록 불러오기
-    //         // fetchQuestions(currentStageId).then(res => setDynamicQuizzes(res || {}));
-    //     }
-    // }, [currentStageId]);
-
-    // console.log('dynamicQuizzes', dynamicQuizzes);
-
-
     //  test 데이터 
     useEffect(() => {
         // 카테고리 목록 불러오기
-        categoryList().then(res => {
+        categoryList().then((res: any) => {
             setCategories(res);
             if (res.length > 0 && currentStageId === null) {
                 setCurrentStageId(res[0].id);
@@ -121,7 +82,7 @@ export default function PythonMasteryExplorer() {
     useEffect(() => {
         if (currentStageId) {
             // 서브카테고리 목록 불러오기
-            fetchSubcategories(currentStageId, email).then(res => {
+            fetchSubcategories(currentStageId, email).then((res: any) => {
                 setSubcategories(res);
             });
         }
@@ -232,47 +193,51 @@ export default function PythonMasteryExplorer() {
         return (categoryProgress[prevCategory.id] || 0) >= 80;
     };
 
-    // 노드 위치 매핑 (데이터베이스 순서에 따라 배치)
-    const getNodePosition = (index: number) => {
-        const positions = [
-            { x: 0.5, y: 0 }, { x: 1.5, y: 0 },
-            { x: 0.5, y: 1 }, { x: 1.5, y: 1 },
-            { x: 0.5, y: 2 }, { x: 1.5, y: 2 },
-        ];
-        return positions[index % positions.length];
-    };
-
     const solvedCount = Array.isArray(solved) ? solved.length : 0;
 
-    const handleQuizAnswer = (idx: number) => {
+    const handleQuizAnswer = (choiceId: number) => {
         if (!modalNode) return;
         const quiz = QUIZZES[modalNode];
         if (!quiz) return;
 
-        const newAnswers = [...userAnswers, idx];
+        const newAnswers = [...userAnswers, choiceId];
         setUserAnswers(newAnswers);
 
         if (currentQuestionIdx < quiz.questions.length - 1) {
             setCurrentQuestionIdx(prev => prev + 1);
         } else {
             setShowingResults(true);
+            // 모든 문제를 풀었을 때 (5문제 다 풀었을 때) 즉시 DB에 저장
+            saveQuizResultToDb(parseInt(modalNode), newAnswers).catch(err => {
+                console.error("Failed to automatically save quiz result:", err);
+            });
         }
     };
 
-    const handleClaimMastery = () => {
+    const handleClaimMastery = async () => {
         if (!modalNode) return;
-        if (!solved.includes(modalNode)) {
-            const newSolved = [...solved, modalNode];
-            setSolved(newSolved);
+        const quiz = QUIZZES[modalNode];
+        if (!quiz) return;
+        
+        try {
+            const score = calculateScore();
+            
+            if (!solved.includes(modalNode)) {
+                const newSolved = [...solved, modalNode];
+                setSolved(newSolved);
 
-            // 현재 카테고리의 점수를 즉시 갱신하여 고정함
-            if (currentStageId) {
-                updateProgressForCategory(currentStageId, newSolved, subcategories);
+                // 현재 카테고리의 점수를 즉시 갱신하여 고정함
+                if (currentStageId) {
+                    updateProgressForCategory(currentStageId, newSolved, subcategories);
+                }
             }
-
-            setFeedback({ msg: '지식을 습득했습니다!', type: 'success' });
+            
+            setFeedback({ msg: '지식을 습득하고 기록을 저장했습니다!', type: 'success' });
+            setTimeout(closeQuiz, 1500); // 1.5초 후 닫기
+        } catch (error) {
+            console.error("Mastery claim failed:", error);
+            setFeedback({ msg: '기록 저장에 실패했습니다. 다시 시도해주세요.', type: 'error' });
         }
-        closeQuiz();
     };
 
     const closeQuiz = () => {
