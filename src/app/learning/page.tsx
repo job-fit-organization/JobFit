@@ -5,7 +5,7 @@ import {
     Award, Trophy, CheckCircle2, Zap, ZapOff, X
 } from 'lucide-react';
 import { ICON_MAP, LUCIDE_ICONS } from '@/app/learning/data/icon'
-import { QUIZZES, QuizData, Category, categoryList, fetchSubcategories } from '@/app/learning/data/data'
+import { QUIZZES, QuizData, Category, SubCategory, categoryList, fetchSubcategories } from '@/app/learning/data/data'
 import { HelpCircle } from 'lucide-react'; // 기본 아이콘용
 
 const token = typeof window !== 'undefined' ? localStorage.getItem('access') : null;
@@ -60,10 +60,13 @@ export default function PythonMasteryExplorer() {
     const [showingResults, setShowingResults] = useState(false);
     const [feedback, setFeedback] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
     const [categories, setCategories] = useState<Category[]>([]);
-    const [subcategories, setSubcategories] = useState<any[]>([]);
+    const [dynamicQuizzes, setDynamicQuizzes] = useState<QuizData>({});
+    const [nodePositions, setNodePositions] = useState<Record<string, { x: number; y: number }>>({});
+    const nodeRefs = useState<Record<string, HTMLButtonElement | null>>({})[0];
+    const [subcategories, setSubcategories] = useState<SubCategory[]>([]);
     const [categoryProgress, setCategoryProgress] = useState<Record<number, number>>({});
     const [globalProgress, setGlobalProgress] = useState(0);
-    const [dynamicQuizzes, setDynamicQuizzes] = useState<QuizData>({});
+    const [totalNodesCount, setTotalNodesCount] = useState(0);
 
 
     //  -- db연결 데이터 -- 
@@ -139,14 +142,76 @@ export default function PythonMasteryExplorer() {
         }
     }, []);
 
+    const updateNodePositions = () => {
+        const newPositions: Record<string, { x: number; y: number }> = {};
+        const canvasElement = document.getElementById('knowledge-canvas');
+        if (!canvasElement) return;
+
+        const canvasRect = canvasElement.getBoundingClientRect();
+
+        Object.entries(nodeRefs).forEach(([id, el]) => {
+            if (el) {
+                const rect = el.getBoundingClientRect();
+                newPositions[id] = {
+                    x: (rect.left + rect.right) / 2 - canvasRect.left,
+                    y: (rect.top + rect.bottom) / 2 - canvasRect.top
+                };
+            }
+        });
+        setNodePositions(newPositions);
+    };
+
+    useEffect(() => {
+        if (isMounted && subcategories.length > 0) {
+            // Wait for DOM to update
+            const timer = setTimeout(updateNodePositions, 100);
+            window.addEventListener('resize', updateNodePositions);
+            
+            const observer = new ResizeObserver(updateNodePositions);
+            const canvasElement = document.getElementById('knowledge-canvas');
+            if (canvasElement) observer.observe(canvasElement);
+
+            return () => {
+                clearTimeout(timer);
+                window.removeEventListener('resize', updateNodePositions);
+                observer.disconnect();
+            };
+        }
+    }, [isMounted, subcategories, currentStageId]);
+
     useEffect(() => {
         if (isMounted) {
             localStorage.setItem('python_mastery_solved', JSON.stringify(solved));
         }
     }, [solved, isMounted]);
 
+    // 전체 노드 개수 계산 (모든 카테고리의 서브카테고리 합계)
+    useEffect(() => {
+        if (categories.length > 0) {
+            const fetchAllSubcategories = async () => {
+                try {
+                    const allSubcategoriesPromises = categories.map(cat => fetchSubcategories(cat.id, email));
+                    const allSubcategoriesResults = await Promise.all(allSubcategoriesPromises);
+                    const total = allSubcategoriesResults.reduce((acc: number, sub: any[]) => acc + sub.length, 0);
+                    setTotalNodesCount(total);
+                } catch (error) {
+                    console.error("Failed to fetch all subcategories for progress calculation:", error);
+                }
+            };
+            fetchAllSubcategories();
+        }
+    }, [categories, email]);
+
+    // 전체 진행률 계산
+    useEffect(() => {
+        if (totalNodesCount > 0) {
+            const progress = (solved.length / totalNodesCount) * 100;
+            setGlobalProgress(progress);
+        }
+    }, [solved, totalNodesCount]);
+
     // 진행률 통합 계산
-    const updateProgressForCategory = (categoryId: number, currentSolved: string[], nodes: any[]) => {
+    const updateProgressForCategory = (categoryId: number, currentSolved: string[], nodes: SubCategory[]) => {
         if (nodes.length === 0) return;
 
         const subIds = nodes.map(s => s.id.toString());
@@ -278,7 +343,7 @@ export default function PythonMasteryExplorer() {
                                 />
                                 <div className="flex items-center justify-between mt-4">
                                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">LV. {Math.floor(globalProgress / 20) + 1} EXPERT</span>
-                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{solvedCount} / {subcategories.length || 0} NODES</span>
+                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{solvedCount} / {totalNodesCount || 0} NODES</span>
                                 </div>
                             </div>
                         </div>
@@ -341,57 +406,54 @@ export default function PythonMasteryExplorer() {
                         <span className="text-gray-400 text-xs font-bold tracking-widest uppercase">Select a node to begin the trial</span>
                     </div>
 
-                    <div className="relative flex justify-center">
-                        {/* Lines SVG */}
-                        <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ minWidth: "600px" }}>
-                            {subcategories.map((node, i) => {
-                                const pos = getNodePosition(i);
-                                const x1 = pos.x * 200 + 100;
-                                const y1 = pos.y * 150 + 44;
+                        {/* Nodes Container */}
+                        <div id="knowledge-canvas" className="relative">
+                            {/* Lines SVG */}
+                            <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
+                                {subcategories.map((node) => {
+                                    const center = nodePositions[node.id.toString()];
+                                    if (!center) return null;
 
-                                if (node.req) {
-                                    const reqIndex = subcategories.findIndex(n => n.id === node.req || n.name === node.req);
-                                    if (reqIndex !== -1) {
-                                        const reqPos = getNodePosition(reqIndex);
-                                        const x2 = reqPos.x * 200 + 100;
-                                        const y2 = reqPos.y * 150 + 44;
-                                        const isReqSolved = solved.includes(node.req.toString());
-
-                                        return (
-                                            <line
-                                                key={`line-${node.id}`}
-                                                x1={x2} y1={y2} x2={x1} y2={y1}
-                                                stroke={isReqSolved ? "#f47725" : "#f1f5f9"}
-                                                strokeWidth="2"
-                                                strokeDasharray={isReqSolved ? "0" : "8,8"}
-                                                className="transition-all duration-1000"
-                                            />
-                                        );
+                                    if (node.req) {
+                                        const reqCenter = nodePositions[node.req.toString()];
+                                        if (reqCenter) {
+                                            const isReqSolved = solved.includes(node.req.toString());
+                                            return (
+                                                <line
+                                                    key={`line-${node.id}`}
+                                                    x1={reqCenter.x} y1={reqCenter.y}
+                                                    x2={center.x} y2={center.y}
+                                                    stroke={isReqSolved ? "#f47725" : "#f1f5f9"}
+                                                    strokeWidth="2"
+                                                    strokeDasharray={isReqSolved ? "0" : "8,8"}
+                                                    className="transition-all duration-1000"
+                                                />
+                                            );
+                                        }
                                     }
-                                }
-                                return null;
-                            })}
-                        </svg>
+                                    return null;
+                                })}
+                            </svg>
 
-                        {/* Nodes */}
-                        <div className="grid grid-cols-2 gap-x-24 gap-y-20 relative px-12">
-                            {subcategories.map((node, i) => {
-                                const isSolved = solved.includes(node.id.toString());
-                                const canUnlock = node.req ? solved.includes(node.req.toString()) : true;
+                            <div className="grid grid-cols-2 gap-x-24 gap-y-20 relative px-12 pb-12">
+                                {subcategories.map((node) => {
+                                    const isSolved = solved.includes(node.id.toString());
+                                    const canUnlock = node.req ? solved.includes(node.req.toString()) : true;
 
-                                return (
-                                    <div
-                                        key={node.id}
-                                        className="relative flex flex-col items-center"
-                                    >
-                                        <button
-                                            disabled={!canUnlock}
-                                            onClick={() => setModalNode(node.id.toString())}
-                                            className={`group w-44 p-5 rounded-3xl transition-all ${isSolved
-                                                ? 'bg-gradient-primary text-white shadow-lg' :
-                                                canUnlock ? 'white-card hover:border-[#f47725]' : 'bg-gray-50 opacity-40 grayscale pointer-events-none'
-                                                }`}
+                                    return (
+                                        <div
+                                            key={node.id}
+                                            className="relative flex flex-col items-center"
                                         >
+                                            <button
+                                                ref={(el) => { nodeRefs[node.id.toString()] = el; }}
+                                                disabled={!canUnlock}
+                                                onClick={() => setModalNode(node.id.toString())}
+                                                className={`group w-44 p-5 rounded-3xl transition-all ${isSolved
+                                                    ? 'bg-gradient-primary text-white shadow-lg' :
+                                                    canUnlock ? 'white-card hover:border-[#f47725]' : 'bg-gray-50 opacity-40 grayscale pointer-events-none'
+                                                    }`}
+                                            >
                                             <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-all ${isSolved ? 'bg-white/20' : 'bg-gray-100 group-hover:bg-[#f47725]/10'}`}>
                                                 {isSolved ? <CheckCircle2 className="text-white w-6 h-6" /> : <Zap className={`${canUnlock ? 'text-[#f47725]' : 'text-gray-400'} w-6 h-6`} />}
                                             </div>
@@ -403,13 +465,12 @@ export default function PythonMasteryExplorer() {
                                     </div>
                                 );
                             })}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
             {/* Quiz Modal */}
-            {modalNode && QUIZZES[modalNode] && (
+            {modalNode && QUIZZES[modalNode as string] && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
                     <div className="bg-white w-full max-w-lg rounded-[2.5rem] p-10 shadow-2xl relative animate-up">
                         <button onClick={closeQuiz} className="absolute top-8 right-8 text-gray-400 hover:text-black transition-colors">
@@ -503,6 +564,7 @@ export default function PythonMasteryExplorer() {
                     </div>
                 </div>
             )}
+            </div>
         </div>
     );
 }
