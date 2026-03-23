@@ -1,7 +1,4 @@
-import { IconName } from './icon';
-import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:8000/api';
+import { Category, SubCategory, QuizData, Title, Quiz } from './interface';
 
 // ---------------------------------------------------------
 // ------------------- Active API / Mock -------------------
@@ -26,101 +23,6 @@ export const fetchQuestions = async (subcategoryId: number): Promise<QuizData | 
     return {};
 };
 
-export const postQuizResult = async (data: {
-    learning_id: number;
-    answers: {
-        question_group_id: number;
-        selected_question_choice_id: number;
-    }[];
-}) => {
-    try {
-        const token = localStorage.getItem('access_token');
-        const response = await axios.post(`${API_BASE_URL}/quiz/submit/`, data, {
-            headers: {
-                Authorization: token ? `Bearer ${token}` : ""
-            }
-        });
-        return response.data;
-    } catch (error) {
-        console.error("Failed to post quiz result:", error);
-        throw error;
-    }
-};
-
-// 퀴즈 완료 후 DB 저장을 위한 헬퍼 함수
-export const saveQuizResultToDb = async (sub_id: number, userAnswersIndex: number[]) => {
-    const quiz = QUIZZES[sub_id.toString()];
-    if (!quiz) return;
-
-    const payload = {
-        learning_id: sub_id,
-        answers: userAnswersIndex.map((ans_idx, q_idx) => {
-            // stable mapping logic (백엔드와 일치해야 함)
-            const group_id = sub_id * 100 + q_idx;
-            const choice_id = group_id * 10 + ans_idx;
-            return {
-                question_group_id: group_id,
-                selected_question_choice_id: choice_id
-            };
-        })
-    };
-    return await postQuizResult(payload);
-};
-
-
-
-export interface QuizData {
-    [key: string]: {
-        questions: Question[];
-    };
-}
-
-export interface Category {
-    id: number;
-    name: string;
-    subcategories?: SubCategory[]; // 진행률 계산을 위해 추가
-    currentProgress?: number; // 프론트엔드용 진행률
-}
-
-export interface Question {
-    q: string;
-    a: string[];
-    correct: number;
-}
-
-export interface Quiz {
-    questions: Question[];
-}
-
-export interface Difficulty {
-    id: string;
-    label: string;
-    type: 'basic' | 'challenge';
-    spReward: number;
-    title: string;
-    icon: IconName;
-}
-
-export interface SubCategory {
-    id: number;
-    name: string;
-    description: string;
-    order: number;
-    is_unlocked: boolean;
-    is_completed: boolean;
-    best_score: number;
-    attempt_count: number;
-    req?: number; // 선행 노드 ID 추가
-}
-
-export interface Title {
-    id: string;
-    name: string;
-    condition: string;
-    description: string;
-    icon: IconName;
-}
-
 // --- Mock Data ---
 export const MOCK_CATEGORIES: Category[] = [
     { id: 1, name: "Python 기초", currentProgress: 0 },
@@ -128,185 +30,65 @@ export const MOCK_CATEGORIES: Category[] = [
     { id: 3, name: "머신러닝 기초", currentProgress: 0 },
 ];
 
-export const MOCK_SUBCATEGORIES: Record<number, SubCategory[]> = {
-    1: [ // Python 기초
-        {
-            id: 101,
-            name: "파이썬 시작하기",
-            description: "환경 설정과 Hello World 출력을 배웁니다.",
-            order: 1,
-            is_unlocked: true,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 0
-        },
-        {
-            id: 102,
-            name: "변수와 연산자",
-            description: "데이터를 저장하고 계산하는 기본 원리를 배웁니다.",
-            order: 2,
-            is_unlocked: false,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 101
-        },
-        {
-            id: 103,
-            name: "조건문 (if)",
-            description: "상황에 따라 프로그램의 흐름을 제어합니다.",
-            order: 3,
-            is_unlocked: false,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 101
-        },
-        {
-            id: 104,
-            name: "반복문 (for/while)",
-            description: "효율적인 코드 작성을 위한 반복 처리를 배웁니다.",
-            order: 4,
-            is_unlocked: false,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 102
-        },
-        {
-            id: 105,
-            name: "기초 종합 문제",
-            description: "1~4번 과정의 내용을 복합적으로 해결합니다.",
-            order: 5,
-            is_unlocked: false,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 104
-        }
-    ],
-    2: [
-        {
-            id: 201,
-            name: "Pandas 기초: DataFrame 마스터",
-            description: "2차원 자료구조인 DataFrame의 생성과 데이터 확인 방법을 배웁니다.",
-            order: 1,
-            is_unlocked: true,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 0
-        },
-        {
-            id: 202,
-            name: "데이터 시각화: Matplotlib & Seaborn",
-            description: "데이터의 추세와 분포를 그래프로 표현하는 기술을 익힙니다.",
-            order: 2,
-            is_unlocked: false,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 201
-        },
-        {
-            id: 203,
-            name: "데이터 전처리: 결측치와 정규화",
-            description: "학습 모델에 넣기 전 데이터를 깨끗하게 정제하는 과정을 배웁니다.",
-            order: 3,
-            is_unlocked: false,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 201
-        },
-        {
-            id: 204,
-            name: "데이터셋 로드와 텐서 변환",
-            description: "Pandas 데이터를 PyTorch의 Tensor로 변환하여 학습 준비를 마칩니다.",
-            order: 4,
-            is_unlocked: false,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 203
-        },
-        {
-            id: 205,
-            name: "데이터 분석 종합 프로젝트",
-            description: "실제 데이터를 활용해 전처리부터 시각화까지 전 과정을 수행합니다.",
-            order: 5,
-            is_unlocked: false,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 204
-        }
-    ],
-    3: [ // 머신러닝 기초
-        {
-            id: 301,
-            name: "파이토치 텐서의 기초",
-            description: "딥러닝의 기본 단위인 텐서의 개념과 생성 방법을 배웁니다.",
-            order: 1,
-            is_unlocked: true,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 0
-        },
-        {
-            id: 302,
-            name: "데이터 로딩과 데이터셋",
-            description: "Dataset과 DataLoader를 이용한 효율적인 데이터 처리 기법을 배웁니다.",
-            order: 2,
-            is_unlocked: false,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 301
-        },
-        {
-            id: 303,
-            name: "신경망 계층과 자동 미분",
-            description: "모델의 레이어 구성과 PyTorch의 핵심인 Autograd를 이해합니다.",
-            order: 3,
-            is_unlocked: false,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 301
-        },
-        {
-            id: 304,
-            name: "파이토치 워크플로우",
-            description: "데이터 준비부터 모델 학습, 예측까지의 전체 과정을 실습합니다.",
-            order: 4,
-            is_unlocked: false,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 302
-        },
-        {
-            id: 305,
-            name: "최적화 및 모듈화",
-            description: "하이퍼파라미터 튜닝, 손실 함수 및 최적화 기법을 배웁니다.",
-            order: 5,
-            is_unlocked: false,
-            is_completed: false,
-            best_score: 0,
-            attempt_count: 0,
-            req: 304
-        }
-    ]
-};
-
 export const TITLES: Title[] = [
     { id: 't1', name: '파이썬의 첫걸음', condition: '101 해결', description: '환상님의 위대한 여정이 시작되었습니다.', icon: 'Star' },
     { id: 't2', name: '논리 마스터', condition: '103 해결', description: '복잡한 조건도 명쾌하게 해결하는 통찰력!', icon: 'Shield' },
     { id: 't3', name: '코드 연구자', condition: '진척도 50% 달성', description: '끊임없이 탐구하는 환상님의 모습은 모두의 귀감입니다.', icon: 'BookOpen' },
 ];
+
+export const MOCK_SUBCATEGORIES: Record<number, SubCategory[]> = {
+    1: [ // Python 기초
+        {
+            id: 101, name: "파이썬 시작하기", description: "환경 설정과 Hello World 출력을 배웁니다.", order: 1, is_unlocked: true, is_completed: false, best_score: 0, attempt_count: 0, req: 0
+        },
+        {
+            id: 102, name: "변수와 연산자", description: "데이터를 저장하고 계산하는 기본 원리를 배웁니다.", order: 2, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 101
+        },
+        {
+            id: 103, name: "조건문 (if)", description: "상황에 따라 프로그램의 흐름을 제어합니다.", order: 3, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 101
+        },
+        {
+            id: 104, name: "반복문 (for/while)", description: "효율적인 코드 작성을 위한 반복 처리를 배웁니다.", order: 4, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 102
+        },
+        {
+            id: 105, name: "기초 종합 문제", description: "1~4번 과정의 내용을 복합적으로 해결합니다.", order: 5, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 104
+        }
+    ],
+    2: [
+        {
+            id: 201, name: "Pandas 기초: DataFrame 마스터", description: "2차원 자료구조인 DataFrame의 생성과 데이터 확인 방법을 배웁니다.", order: 1, is_unlocked: true, is_completed: false, best_score: 0, attempt_count: 0, req: 0
+        },
+        {
+            id: 202, name: "데이터 시각화: Matplotlib & Seaborn", description: "데이터의 추세와 분포를 그래프로 표현하는 기술을 익힙니다.", order: 2, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 201
+        },
+        {
+            id: 203, name: "데이터 전처리: 결측치와 정규화", description: "학습 모델에 넣기 전 데이터를 깨끗하게 정제하는 과정을 배웁니다.", order: 3, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 201
+        },
+        {
+            id: 204, name: "데이터셋 로드와 텐서 변환", description: "Pandas 데이터를 PyTorch의 Tensor로 변환하여 학습 준비를 마칩니다.", order: 4, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 203
+        },
+        {
+            id: 205, name: "데이터 분석 종합 프로젝트", description: "실제 데이터를 활용해 전처리부터 시각화까지 전 과정을 수행합니다.", order: 5, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 204
+        }
+    ],
+    3: [ // 머신러닝 기초
+        {
+            id: 301, name: "파이토치 텐서의 기초", description: "딥러닝의 기본 단위인 텐서의 개념과 생성 방법을 배웁니다.", order: 1, is_unlocked: true, is_completed: false, best_score: 0, attempt_count: 0, req: 0
+        },
+        {
+            id: 302, name: "데이터 로딩과 데이터셋", description: "Dataset과 DataLoader를 이용한 효율적인 데이터 처리 기법을 배웁니다.", order: 2, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 301
+        },
+        {
+            id: 303, name: "신경망 계층과 자동 미분", description: "모델의 레이어 구성과 PyTorch의 핵심인 Autograd를 이해합니다.", order: 3, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 301
+        },
+        {
+            id: 304, name: "파이토치 워크플로우", description: "데이터 준비부터 모델 학습, 예측까지의 전체 과정을 실습합니다.", order: 4, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 302
+        },
+        {
+            id: 305, name: "최적화 및 모듈화", description: "하이퍼파라미터 튜닝, 손실 함수 및 최적화 기법을 배웁니다.", order: 5, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 304
+        }
+    ]
+};
 
 export const QUIZZES: Record<string, Quiz> = {
     // --- Python 기초 (101-105) ---

@@ -5,7 +5,9 @@ import {
     Award, Trophy, CheckCircle2, Zap, ZapOff, X
 } from 'lucide-react';
 import { ICON_MAP, LUCIDE_ICONS } from '@/app/learning/data/icon'
-import { QUIZZES, QuizData, Category, SubCategory, categoryList, fetchSubcategories, postQuizResult, saveQuizResultToDb } from '@/app/learning/data/data'
+import { QuizData, Category, SubCategory } from '@/app/learning/data/interface'
+import { QUIZZES, categoryList, fetchSubcategories } from '@/app/learning/data/data'
+import { saveQuizResultToDb } from '@/app/learning/data/apiClient'
 import { HelpCircle } from 'lucide-react'; // 기본 아이콘용
 
 const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
@@ -127,7 +129,7 @@ export default function PythonMasteryExplorer() {
             // Wait for DOM to update
             const timer = setTimeout(updateNodePositions, 100);
             window.addEventListener('resize', updateNodePositions);
-            
+
             const observer = new ResizeObserver(updateNodePositions);
             const canvasElement = document.getElementById('knowledge-canvas');
             if (canvasElement) observer.observe(canvasElement);
@@ -218,10 +220,10 @@ export default function PythonMasteryExplorer() {
         if (!modalNode) return;
         const quiz = QUIZZES[modalNode];
         if (!quiz) return;
-        
+
         try {
             const score = calculateScore();
-            
+
             if (!solved.includes(modalNode)) {
                 const newSolved = [...solved, modalNode];
                 setSolved(newSolved);
@@ -231,7 +233,7 @@ export default function PythonMasteryExplorer() {
                     updateProgressForCategory(currentStageId, newSolved, subcategories);
                 }
             }
-            
+
             setFeedback({ msg: '지식을 습득하고 기록을 저장했습니다!', type: 'success' });
             setTimeout(closeQuiz, 1500); // 1.5초 후 닫기
         } catch (error) {
@@ -371,54 +373,54 @@ export default function PythonMasteryExplorer() {
                         <span className="text-gray-400 text-xs font-bold tracking-widest uppercase">Select a node to begin the trial</span>
                     </div>
 
-                        {/* Nodes Container */}
-                        <div id="knowledge-canvas" className="relative">
-                            {/* Lines SVG */}
-                            <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
-                                {subcategories.map((node) => {
-                                    const center = nodePositions[node.id.toString()];
-                                    if (!center) return null;
+                    {/* Nodes Container */}
+                    <div id="knowledge-canvas" className="relative">
+                        {/* Lines SVG */}
+                        <svg className="absolute inset-0 w-full h-full pointer-events-none overflow-visible">
+                            {subcategories.map((node) => {
+                                const center = nodePositions[node.id.toString()];
+                                if (!center) return null;
 
-                                    if (node.req) {
-                                        const reqCenter = nodePositions[node.req.toString()];
-                                        if (reqCenter) {
-                                            const isReqSolved = solved.includes(node.req.toString());
-                                            return (
-                                                <line
-                                                    key={`line-${node.id}`}
-                                                    x1={reqCenter.x} y1={reqCenter.y}
-                                                    x2={center.x} y2={center.y}
-                                                    stroke={isReqSolved ? "#f47725" : "#f1f5f9"}
-                                                    strokeWidth="2"
-                                                    strokeDasharray={isReqSolved ? "0" : "8,8"}
-                                                    className="transition-all duration-1000"
-                                                />
-                                            );
-                                        }
+                                if (node.req) {
+                                    const reqCenter = nodePositions[node.req.toString()];
+                                    if (reqCenter) {
+                                        const isReqSolved = solved.includes(node.req.toString());
+                                        return (
+                                            <line
+                                                key={`line-${node.id}`}
+                                                x1={reqCenter.x} y1={reqCenter.y}
+                                                x2={center.x} y2={center.y}
+                                                stroke={isReqSolved ? "#f47725" : "#f1f5f9"}
+                                                strokeWidth="2"
+                                                strokeDasharray={isReqSolved ? "0" : "8,8"}
+                                                className="transition-all duration-1000"
+                                            />
+                                        );
                                     }
-                                    return null;
-                                })}
-                            </svg>
+                                }
+                                return null;
+                            })}
+                        </svg>
 
-                            <div className="grid grid-cols-2 gap-x-24 gap-y-20 relative px-12 pb-12">
-                                {subcategories.map((node) => {
-                                    const isSolved = solved.includes(node.id.toString());
-                                    const canUnlock = node.req ? solved.includes(node.req.toString()) : true;
+                        <div className="grid grid-cols-2 gap-x-24 gap-y-20 relative px-12 pb-12">
+                            {subcategories.map((node) => {
+                                const isSolved = solved.includes(node.id.toString());
+                                const canUnlock = node.req ? solved.includes(node.req.toString()) : true;
 
-                                    return (
-                                        <div
-                                            key={node.id}
-                                            className="relative flex flex-col items-center"
+                                return (
+                                    <div
+                                        key={node.id}
+                                        className="relative flex flex-col items-center"
+                                    >
+                                        <button
+                                            ref={(el) => { nodeRefs[node.id.toString()] = el; }}
+                                            disabled={!canUnlock}
+                                            onClick={() => setModalNode(node.id.toString())}
+                                            className={`group w-44 p-5 rounded-3xl transition-all ${isSolved
+                                                ? 'bg-gradient-primary text-white shadow-lg' :
+                                                canUnlock ? 'white-card hover:border-[#f47725]' : 'bg-gray-50 opacity-40 grayscale pointer-events-none'
+                                                }`}
                                         >
-                                            <button
-                                                ref={(el) => { nodeRefs[node.id.toString()] = el; }}
-                                                disabled={!canUnlock}
-                                                onClick={() => setModalNode(node.id.toString())}
-                                                className={`group w-44 p-5 rounded-3xl transition-all ${isSolved
-                                                    ? 'bg-gradient-primary text-white shadow-lg' :
-                                                    canUnlock ? 'white-card hover:border-[#f47725]' : 'bg-gray-50 opacity-40 grayscale pointer-events-none'
-                                                    }`}
-                                            >
                                             <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-4 transition-all ${isSolved ? 'bg-white/20' : 'bg-gray-100 group-hover:bg-[#f47725]/10'}`}>
                                                 {isSolved ? <CheckCircle2 className="text-white w-6 h-6" /> : <Zap className={`${canUnlock ? 'text-[#f47725]' : 'text-gray-400'} w-6 h-6`} />}
                                             </div>
@@ -430,105 +432,105 @@ export default function PythonMasteryExplorer() {
                                     </div>
                                 );
                             })}
-                            </div>
                         </div>
                     </div>
+                </div>
 
-            {/* Quiz Modal */}
-            {modalNode && QUIZZES[modalNode as string] && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-                    <div className="bg-white w-full max-w-lg rounded-[2.5rem] p-10 shadow-2xl relative animate-up">
-                        <button onClick={closeQuiz} className="absolute top-8 right-8 text-gray-400 hover:text-black transition-colors">
-                            <X className="w-6 h-6" />
-                        </button>
+                {/* Quiz Modal */}
+                {modalNode && QUIZZES[modalNode as string] && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+                        <div className="bg-white w-full max-w-lg rounded-[2.5rem] p-10 shadow-2xl relative animate-up">
+                            <button onClick={closeQuiz} className="absolute top-8 right-8 text-gray-400 hover:text-black transition-colors">
+                                <X className="w-6 h-6" />
+                            </button>
 
-                        {!showingResults ? (
-                            <>
-                                <div className="mb-8 text-center">
-                                    <div className="text-[#f47725] text-[10px] font-black tracking-[0.3em] uppercase mb-3">
-                                        Knowledge Trial ({currentQuestionIdx + 1} / {QUIZZES[modalNode].questions.length})
+                            {!showingResults ? (
+                                <>
+                                    <div className="mb-8 text-center">
+                                        <div className="text-[#f47725] text-[10px] font-black tracking-[0.3em] uppercase mb-3">
+                                            Knowledge Trial ({currentQuestionIdx + 1} / {QUIZZES[modalNode].questions.length})
+                                        </div>
+                                        <h3 className="text-3xl font-black text-black italic uppercase">{subcategories.find(n => n.id.toString() === modalNode)?.name}</h3>
+                                        <div className="w-full h-2 bg-gray-100 rounded-full mt-6 overflow-hidden">
+                                            <div
+                                                className="h-full bg-gradient-primary transition-all duration-500"
+                                                style={{ width: `${((currentQuestionIdx + 1) / QUIZZES[modalNode].questions.length) * 100}%` }}
+                                            />
+                                        </div>
                                     </div>
-                                    <h3 className="text-3xl font-black text-black italic uppercase">{subcategories.find(n => n.id.toString() === modalNode)?.name}</h3>
-                                    <div className="w-full h-2 bg-gray-100 rounded-full mt-6 overflow-hidden">
-                                        <div
-                                            className="h-full bg-gradient-primary transition-all duration-500"
-                                            style={{ width: `${((currentQuestionIdx + 1) / QUIZZES[modalNode].questions.length) * 100}%` }}
-                                        />
-                                    </div>
-                                </div>
 
-                                <p className="text-xl text-black mb-10 text-center font-bold leading-relaxed">
-                                    {QUIZZES[modalNode].questions[currentQuestionIdx]?.q}
-                                </p>
-
-                                <div className="grid gap-4">
-                                    {QUIZZES[modalNode].questions[currentQuestionIdx]?.a.map((opt, idx) => (
-                                        <button
-                                            key={idx}
-                                            onClick={() => handleQuizAnswer(idx)}
-                                            className="w-full p-5 text-left rounded-2xl bg-[#f8f9fa] border-2 border-transparent hover:border-[#f47725] hover:bg-white transition-all text-gray-700 font-bold group"
-                                        >
-                                            <div className="flex items-center gap-4">
-                                                <div className="w-8 h-8 rounded-xl bg-gray-200 flex items-center justify-center text-xs text-gray-500 group-hover:bg-[#f47725] group-hover:text-white transition-all">
-                                                    {idx + 1}
-                                                </div>
-                                                {opt}
-                                            </div>
-                                        </button>
-                                    ))}
-                                </div>
-                            </>
-                        ) : (
-                            <div className="text-center py-4 animate-up">
-                                <div className="mb-10">
-                                    <div className="w-24 h-24 bg-[#f47725]/10 rounded-full flex items-center justify-center mx-auto mb-8">
-                                        <Trophy className={`w-12 h-12 ${calculateScore() / QUIZZES[modalNode].questions.length >= 0.8 ? 'text-[#f47725]' : 'text-gray-300'}`} />
-                                    </div>
-                                    <h3 className="text-4xl font-black mb-3 text-black italic uppercase">TRIAL COMPLETE</h3>
-                                    <p className="text-gray-400 font-black tracking-widest text-sm">
-                                        SCORE: {calculateScore()} / {QUIZZES[modalNode].questions.length}
+                                    <p className="text-xl text-black mb-10 text-center font-bold leading-relaxed">
+                                        {QUIZZES[modalNode].questions[currentQuestionIdx]?.q}
                                     </p>
+
+                                    <div className="grid gap-4">
+                                        {QUIZZES[modalNode].questions[currentQuestionIdx]?.a.map((opt, idx) => (
+                                            <button
+                                                key={idx}
+                                                onClick={() => handleQuizAnswer(idx)}
+                                                className="w-full p-5 text-left rounded-2xl bg-[#f8f9fa] border-2 border-transparent hover:border-[#f47725] hover:bg-white transition-all text-gray-700 font-bold group"
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-8 h-8 rounded-xl bg-gray-200 flex items-center justify-center text-xs text-gray-500 group-hover:bg-[#f47725] group-hover:text-white transition-all">
+                                                        {idx + 1}
+                                                    </div>
+                                                    {opt}
+                                                </div>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="text-center py-4 animate-up">
+                                    <div className="mb-10">
+                                        <div className="w-24 h-24 bg-[#f47725]/10 rounded-full flex items-center justify-center mx-auto mb-8">
+                                            <Trophy className={`w-12 h-12 ${calculateScore() / QUIZZES[modalNode].questions.length >= 0.8 ? 'text-[#f47725]' : 'text-gray-300'}`} />
+                                        </div>
+                                        <h3 className="text-4xl font-black mb-3 text-black italic uppercase">TRIAL COMPLETE</h3>
+                                        <p className="text-gray-400 font-black tracking-widest text-sm">
+                                            SCORE: {calculateScore()} / {QUIZZES[modalNode].questions.length}
+                                        </p>
+                                    </div>
+
+                                    {calculateScore() / QUIZZES[modalNode].questions.length >= 0.8 ? (
+                                        <div>
+                                            <div className="bg-[#f47725]/5 border border-[#f47725]/10 p-6 rounded-3xl mb-10 text-[#f47725] font-bold text-sm leading-relaxed">
+                                                축하합니다! 전문가 수준의 이해도를 증명하셨습니다.<br />지식 마스터리를 획득할 준비가 되었습니다.
+                                            </div>
+                                            <button
+                                                onClick={handleClaimMastery}
+                                                className="w-full py-5 btn-primary rounded-2xl font-black text-xl shadow-xl active:scale-95"
+                                            >
+                                                마스터리 획득하기
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <div className="bg-gray-50 p-6 rounded-3xl mb-10 text-gray-500 font-bold text-sm leading-relaxed">
+                                                정답률이 부족합니다 (80% 이상 권장).<br />개념을 다시 복습하고 도전해 보세요.
+                                            </div>
+                                            <button
+                                                onClick={closeQuiz}
+                                                className="w-full py-5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl font-black text-xl transition-all"
+                                            >
+                                                다시 도전하기
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
-
-                                {calculateScore() / QUIZZES[modalNode].questions.length >= 0.8 ? (
-                                    <div>
-                                        <div className="bg-[#f47725]/5 border border-[#f47725]/10 p-6 rounded-3xl mb-10 text-[#f47725] font-bold text-sm leading-relaxed">
-                                            축하합니다! 전문가 수준의 이해도를 증명하셨습니다.<br />지식 마스터리를 획득할 준비가 되었습니다.
-                                        </div>
-                                        <button
-                                            onClick={handleClaimMastery}
-                                            className="w-full py-5 btn-primary rounded-2xl font-black text-xl shadow-xl active:scale-95"
-                                        >
-                                            마스터리 획득하기
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <div>
-                                        <div className="bg-gray-50 p-6 rounded-3xl mb-10 text-gray-500 font-bold text-sm leading-relaxed">
-                                            정답률이 부족합니다 (80% 이상 권장).<br />개념을 다시 복습하고 도전해 보세요.
-                                        </div>
-                                        <button
-                                            onClick={closeQuiz}
-                                            className="w-full py-5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-2xl font-black text-xl transition-all"
-                                        >
-                                            다시 도전하기
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
 
-            {feedback && (
-                <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] animate-slide-up">
-                    <div className={`px-8 py-4 rounded-2xl font-black shadow-2xl flex items-center gap-3 border ${feedback.type === 'success' ? 'bg-emerald-500 text-white border-emerald-400' : 'bg-rose-500 text-white border-rose-400'}`}>
-                        {feedback.type === 'success' ? <CheckCircle2 /> : <ZapOff />}
-                        {feedback.msg}
+                {feedback && (
+                    <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] animate-slide-up">
+                        <div className={`px-8 py-4 rounded-2xl font-black shadow-2xl flex items-center gap-3 border ${feedback.type === 'success' ? 'bg-emerald-500 text-white border-emerald-400' : 'bg-rose-500 text-white border-rose-400'}`}>
+                            {feedback.type === 'success' ? <CheckCircle2 /> : <ZapOff />}
+                            {feedback.msg}
+                        </div>
                     </div>
-                </div>
-            )}
+                )}
             </div>
         </div>
     );
