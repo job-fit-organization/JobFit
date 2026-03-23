@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Zap } from 'lucide-react';
 // import axios from 'axios';
@@ -31,6 +32,16 @@ import { Zap } from 'lucide-react';
 // };
 
 export default function Header() {
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('access');
+        if (token) {
+            setIsLoggedIn(true);
+        }
+    }, []);
+
     return (
         <header className="flex justify-between items-center px-8 py-6 mx-auto sticky top-0 bg-white/80 backdrop-blur-md z-50">
             <Link href="/" className="flex items-center space-x-2">
@@ -47,11 +58,21 @@ export default function Header() {
                     <Link href="/test" className="text-black hover:text-[#ea002c] transition">테스트</Link>
                     <Link href="/learning" className="text-black hover:text-[#ea002c] transition">학습</Link>
                     <Link href="/survey" className="text-black hover:text-[#ea002c] transition">설문조사</Link>
+                    {isLoggedIn ? (
+                        <Link href="/mypage" className="text-black hover:text-[#ea002c] transition">마이페이지</Link>
+                    ) : ''
+                    }
                 </nav>
 
-                <button className="px-6 py-2 border-2 border-black text-black text-sm font-bold rounded-full hover:bg-black hover:text-white transition">
-                    <Link href="/login">로그인</Link>
-                </button>
+                {isLoggedIn ? (
+                    <button className="px-6 py-2 border-2 border-black text-black text-sm font-bold rounded-full hover:bg-black hover:text-white transition">
+                        <Link href="/logout">로그아웃</Link>
+                    </button>
+                ) : (
+                    <button className="px-6 py-2 border-2 border-black text-black text-sm font-bold rounded-full hover:bg-black hover:text-white transition">
+                        <Link href="/login">로그인</Link>
+                    </button>
+                )}
             </div>
         </header>
     );
