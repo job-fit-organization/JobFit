@@ -50,7 +50,7 @@ export default function Header() {
                 </nav>
 
                 <button className="px-6 py-2 border-2 border-black text-black text-sm font-bold rounded-full hover:bg-black hover:text-white transition">
-                    로그인
+                    <Link href="/login">로그인</Link>
                 </button>
             </div>
         </header>
