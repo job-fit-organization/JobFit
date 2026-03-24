@@ -11,7 +11,8 @@ from .views import (
     QuizSubmitView,
     JobTestQuestionView,
     JobTestSubmitView,
-    SeedDemoData
+    SeedDemoData,
+    SurveyView
 )
 from accounts.views import UserProfileView, UserRecommendationView, PlatformStatsView
 
@@ -29,6 +30,7 @@ urlpatterns = [
     path('quiz/submit/', QuizSubmitView.as_view(), name='quiz_submit'),
     path('job-test/questions/', JobTestQuestionView.as_view(), name='job-test_question_list'),
     path('job-test/submit/', JobTestSubmitView.as_view(), name='job-test_submit'),
+    path('survey/', SurveyView.as_view(), name='survey'),
     
     # Missing MyPage Routes
     path('users/stats/', PlatformStatsView.as_view(), name='platform_stats'),
