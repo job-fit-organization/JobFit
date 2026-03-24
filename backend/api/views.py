@@ -31,8 +31,8 @@ from .serializer import (
     QuizSubmitResponseSerializer,
     QuizQuestionListResponseSerializer,
     JobTestQuestionListResponseSerializer,
-    JobTestSubmitResponseSerializer
-
+    JobTestSubmitResponseSerializer,
+    SurveySerializer
 )
 from authentication.token import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
 
@@ -756,6 +756,13 @@ class JobTestSubmitView(APIView):
             )
 
 class SurveyView(APIView):
+    @extend_schema(
+        summary='설문조사 제출',
+        description='사용자의 만족도, 선호 기능, 피드백을 저장합니다.',
+        tags=['Survey'],
+        request=SurveySerializer,
+        responses={201: SurveySerializer}
+    )
     def post(self, request):
         serializer = SurveySerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

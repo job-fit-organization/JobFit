@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Send } from 'lucide-react';
 import Button, { cn } from '@/components/Button';
+import { postSurvey } from '@/app/learning/data/apiClient';
 
 // 설문조사 각 영역을 담당하는 작은 컴포넌트들이에요.
 import SurveyHeader from './_components/SurveyHeader';
@@ -47,19 +48,11 @@ export default function SurveyPage() {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:8000/api/survey/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ rating, features: selectedFeatures, feedback }),
-            });
-
-            if (response.ok) {
-                console.log('성공적으로 제출되었습니다.');
-            } else {
-                console.error('제출에 실패했습니다.');
-            }
+            await postSurvey({ rating, features: selectedFeatures, feedback });
+            console.log('성공적으로 제출되었습니다.');
         } catch (error) {
             console.error('API 호출 중 에러 발생:', error);
+            // 에러 발생 시에도 사용자 경험을 위해 성공 페이지로 넘기거나 알림을 줄 수 있음
         }
 
         setTimeout(() => {
