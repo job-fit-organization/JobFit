@@ -42,6 +42,13 @@ export default function Header() {
         }
     }, []);
 
+    const handleLogout = async () => {
+        localStorage.removeItem('email');
+        localStorage.removeItem('access');
+        localStorage.removeItem('refresh');
+        setIsLoggedIn(false);
+    };
+
     return (
         <header className="flex justify-between items-center px-8 py-6 mx-auto sticky top-0 bg-white/80 backdrop-blur-md z-50">
             <Link href="/" className="flex items-center space-x-2">
@@ -66,7 +73,7 @@ export default function Header() {
 
                 {isLoggedIn ? (
                     <button className="px-6 py-2 border-2 border-black text-black text-sm font-bold rounded-full hover:bg-black hover:text-white transition">
-                        <Link href="/logout">로그아웃</Link>
+                        <Link href="/" onClick={handleLogout}>로그아웃</Link>
                     </button>
                 ) : (
                     <button className="px-6 py-2 border-2 border-black text-black text-sm font-bold rounded-full hover:bg-black hover:text-white transition">
