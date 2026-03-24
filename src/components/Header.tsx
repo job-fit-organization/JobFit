@@ -31,21 +31,14 @@ import { Zap } from 'lucide-react';
 //     }
 // };
 
+import { useAuth } from '@/context/AuthContext';
+
 export default function Header() {
+    const { isLoggedIn, logout } = useAuth();
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    useEffect(() => {
-        const token = localStorage.getItem('user');
-        if (token) {
-            setIsLoggedIn(true);
-        }
-    }, []);
-
-    const handleLogout = async () => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('access_token');
-        setIsLoggedIn(false);
+    const handleLogout = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        logout();
         window.location.href = '/';
     };
 
@@ -59,7 +52,6 @@ export default function Header() {
                     JOB<span className="text-gradient no-italic">FIT</span>
                 </span>
             </Link>
-
             <div className="flex items-center space-x-8">
                 <nav className="hidden md:flex space-x-10 text-sm font-semibold">
                     <Link href="/test" className="text-black hover:text-[#ea002c] transition">테스트</Link>
