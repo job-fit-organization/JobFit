@@ -43,10 +43,10 @@ export default function Header() {
     }, []);
 
     const handleLogout = async () => {
-        localStorage.removeItem('email');
-        localStorage.removeItem('access');
-        localStorage.removeItem('refresh');
+        localStorage.removeItem('user');
+        localStorage.removeItem('access_token');
         setIsLoggedIn(false);
+        window.location.href = '/';
     };
 
     return (
