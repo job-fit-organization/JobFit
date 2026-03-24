@@ -325,12 +325,10 @@ export default function PythonMasteryExplorer() {
                         return (
                             <button
                                 key={cat.id}
-                                onClick={() => isUnlocked && setCurrentStageId(cat.id)}
+                                onClick={() => setCurrentStageId(cat.id)}
                                 className={`relative group p-8 rounded-[2rem] transition-all duration-500 text-left overflow-hidden h-40 ${isActive
                                     ? 'bg-gradient-primary shadow-[0_12px_30px_rgba(234,0,44,0.2)]'
-                                    : isUnlocked
-                                        ? 'white-card'
-                                        : 'bg-gray-100 opacity-50 cursor-not-allowed border-none'
+                                    : 'white-card'
                                     }`}
                             >
                                 <div className="flex justify-between items-start mb-4">
@@ -350,12 +348,6 @@ export default function PythonMasteryExplorer() {
                                     label="Proficiency"
                                     isActive={isActive}
                                 />
-
-                                {!isUnlocked && (
-                                    <div className="absolute inset-0 bg-gray-50/60 backdrop-blur-[1px] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <ZapOff className="text-gray-400 w-8 h-8" />
-                                    </div>
-                                )}
                             </button>
                         );
                     })}

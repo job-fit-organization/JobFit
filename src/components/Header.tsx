@@ -72,13 +72,13 @@ export default function Header() {
                 </nav>
 
                 {isLoggedIn ? (
-                    <button className="px-6 py-2 border-2 border-black text-black text-sm font-bold rounded-full hover:bg-black hover:text-white transition">
-                        <Link href="/" onClick={handleLogout}>로그아웃</Link>
-                    </button>
+                    <Link href="/" onClick={handleLogout} className="px-6 py-2 border-2 border-black text-black text-sm font-bold rounded-full hover:bg-black hover:text-white transition">
+                        로그아웃
+                    </Link>
                 ) : (
-                    <button className="px-6 py-2 border-2 border-black text-black text-sm font-bold rounded-full hover:bg-black hover:text-white transition">
-                        <Link href="/login">로그인</Link>
-                    </button>
+                    <Link href="/login" className="px-6 py-2 border-2 border-black text-black text-sm font-bold rounded-full hover:bg-black hover:text-white transition">
+                        로그인
+                    </Link>
                 )}
             </div>
         </header>
