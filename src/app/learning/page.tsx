@@ -36,7 +36,7 @@ const ProgressBar = ({
                 <span className={isLarge ? 'text-gray-400 text-xs font-black uppercase tracking-widest' : (isActive ? 'text-white/80' : 'text-gray-500')}>
                     {label}
                 </span>
-                <span className={isLarge ? 'text-4xl font-black text-black italic' : (isActive ? 'text-white' : 'text-gray-400')}>
+                <span className={isLarge ? 'text-4xl font-black text-black' : (isActive ? 'text-white' : 'text-gray-400')}>
                     {Math.round(progress)}%
                 </span>
             </div>
@@ -336,7 +336,7 @@ export default function PythonMasteryExplorer() {
                                 <div className="flex justify-between items-start mb-4">
                                     <div>
                                         <div className={`text-[10px] font-black uppercase tracking-[0.2em] mb-1 ${isActive ? 'text-white/70' : 'text-gray-400'}`}>
-                                            {idx + 1}차 전직
+                                            CLASS {idx + 1}
                                         </div>
                                         <h3 className={`text-2xl font-black tracking-tight ${isActive ? 'text-white' : 'text-black'}`}>{cat.name}</h3>
                                     </div>
@@ -368,7 +368,7 @@ export default function PythonMasteryExplorer() {
                     {/* Stage Details Header */}
                     <div className="relative flex flex-col items-center mb-20 text-center">
                         <div className="w-px h-16 bg-gradient-to-b from-transparent to-[#f47725]/30 mb-6" />
-                        <h2 className="text-3xl font-black text-black mb-2 uppercase italic">{currentCategory?.name || "Loading..."} <span className="text-gradient">Core Mastery</span></h2>
+                        <h2 className="text-3xl font-black text-black mb-2 uppercase">{currentCategory?.name || "Loading..."} <span className="text-gradient">Core Mastery</span></h2>
                         <span className="text-gray-400 text-xs font-bold tracking-widest uppercase">Select a node to begin the trial</span>
                     </div>
 
@@ -425,7 +425,7 @@ export default function PythonMasteryExplorer() {
                                             </div>
                                             <div className="text-center">
                                                 <div className={`text-[8px] font-bold uppercase mb-1 tracking-widest ${isSolved ? 'text-white/70' : 'text-gray-400'}`}>NODE {node.id}</div>
-                                                <div className={`text-sm font-black italic uppercase ${isSolved ? 'text-white' : 'text-black'}`}>{node.name}</div>
+                                                <div className={`text-sm font-black uppercase ${isSolved ? 'text-white' : 'text-black'}`}>{node.name}</div>
                                             </div>
                                         </button>
                                     </div>
@@ -449,7 +449,7 @@ export default function PythonMasteryExplorer() {
                                         <div className="text-[#f47725] text-[10px] font-black tracking-[0.3em] uppercase mb-3">
                                             Knowledge Trial ({currentQuestionIdx + 1} / {QUIZZES[modalNode].questions.length})
                                         </div>
-                                        <h3 className="text-3xl font-black text-black italic uppercase">{subcategories.find(n => n.id.toString() === modalNode)?.name}</h3>
+                                        <h3 className="text-3xl font-black text-black uppercase">{subcategories.find(n => n.id.toString() === modalNode)?.name}</h3>
                                         <div className="w-full h-2 bg-gray-100 rounded-full mt-6 overflow-hidden">
                                             <div
                                                 className="h-full bg-gradient-primary transition-all duration-500"
@@ -485,7 +485,7 @@ export default function PythonMasteryExplorer() {
                                         <div className="w-24 h-24 bg-[#f47725]/10 rounded-full flex items-center justify-center mx-auto mb-8">
                                             <Trophy className={`w-12 h-12 ${calculateScore() / QUIZZES[modalNode].questions.length >= 0.8 ? 'text-[#f47725]' : 'text-gray-300'}`} />
                                         </div>
-                                        <h3 className="text-4xl font-black mb-3 text-black italic uppercase">TRIAL COMPLETE</h3>
+                                        <h3 className="text-4xl font-black mb-3 text-black uppercase">TRIAL COMPLETE</h3>
                                         <p className="text-gray-400 font-black tracking-widest text-sm">
                                             SCORE: {calculateScore()} / {QUIZZES[modalNode].questions.length}
                                         </p>
