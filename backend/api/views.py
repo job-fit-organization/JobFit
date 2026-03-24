@@ -11,6 +11,7 @@ from drf_spectacular.utils import (
     extend_schema,
     OpenApiExample,
     OpenApiParameter,
+    OpenApiTypes,
     inline_serializer,
 )
 
@@ -548,8 +549,17 @@ class QuizSubmitView(APIView):
 class JobTestQuestionView(APIView):
     @extend_schema(
         summary='직무 추천 테스트 문제 조회',
-        description='직무 추천 테스트에 사용되는 문항을 question_group_id 기준으로 묶어서 조회합니다.',
+        description='사용자가 선택한 test_type에 따라 직무 추천 테스트 문항을 question_group_id 기준으로 묶어서 조회합니다.',
         tags=['Job Test'],
+        parameters=[
+            OpenApiParameter(
+                name='test_type',
+                description='불러올 테스트 유형 (E 또는 B)',
+                required=True,
+                type=OpenApiTypes.STR,
+                enum=['E', 'B']
+            )
+        ],
         responses={
             200: JobTestQuestionListResponseSerializer
         },
@@ -587,8 +597,25 @@ class JobTestQuestionView(APIView):
         ]
     )
     def get(self, request):
+        test_type = request.query_params.get('test_type')
+
+        test_type_mapping = {
+            'E': 'Test_E',
+            'B': 'Test_B',
+        }
+
+        question_type = test_type_mapping.get(test_type)
+
+        if not question_type:
+            return Response(
+                {
+                    'detail': '유효한 test_type을 입력해주세요. (E 또는 B)'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         question_choices = QuestionChoice.objects.filter(
-            question_type='Test'
+            question_type=question_type
         ).order_by('question_group_id', 'id')
 
         grouped_questions = OrderedDict()
@@ -608,11 +635,14 @@ class JobTestQuestionView(APIView):
                 'choice_text': item.choice_text
             })
 
-        question_serializer = QuestionGroupSerializer(list(grouped_questions.values()), many=True)
+        question_serializer = QuestionGroupSerializer(
+            list(grouped_questions.values()),
+            many=True
+        )
 
         return Response({
             'questions': question_serializer.data
-        })
+        }, status=status.HTTP_200_OK)
 
 # POST /api/job-test/submit/
 class JobTestSubmitView(APIView):
