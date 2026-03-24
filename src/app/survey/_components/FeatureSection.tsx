@@ -17,8 +17,6 @@ const FeatureSection = ({ selectedFeatures, onToggle, styles }: FeatureSectionPr
   const features = [
     '직무 적합도 테스트',
     '직무별 상세 로드맵',
-    '직무별 연봉 및 상세 정보',
-    '전체 직무 탐색 (Jobs)',
     '퀴즈 및 학습 트래킹'
   ];
 
