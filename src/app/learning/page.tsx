@@ -61,7 +61,6 @@ export default function PythonMasteryExplorer() {
     const [showingResults, setShowingResults] = useState(false);
     const [feedback, setFeedback] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
     const [categories, setCategories] = useState<Category[]>([]);
-    const [dynamicQuizzes, setDynamicQuizzes] = useState<QuizData>({});
     const [nodePositions, setNodePositions] = useState<Record<string, { x: number; y: number }>>({});
     const nodeRefs = useState<Record<string, HTMLButtonElement | null>>({})[0];
     const [subcategories, setSubcategories] = useState<SubCategory[]>([]);

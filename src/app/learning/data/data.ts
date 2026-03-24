@@ -38,55 +38,25 @@ export const TITLES: Title[] = [
 
 export const MOCK_SUBCATEGORIES: Record<number, SubCategory[]> = {
     1: [ // Python 기초
-        {
-            id: 101, name: "파이썬 시작하기", description: "환경 설정과 Hello World 출력을 배웁니다.", order: 1, is_unlocked: true, is_completed: false, best_score: 0, attempt_count: 0, req: 0
-        },
-        {
-            id: 102, name: "변수와 연산자", description: "데이터를 저장하고 계산하는 기본 원리를 배웁니다.", order: 2, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 101
-        },
-        {
-            id: 103, name: "조건문 (if)", description: "상황에 따라 프로그램의 흐름을 제어합니다.", order: 3, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 101
-        },
-        {
-            id: 104, name: "반복문 (for/while)", description: "효율적인 코드 작성을 위한 반복 처리를 배웁니다.", order: 4, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 102
-        },
-        {
-            id: 105, name: "기초 종합 문제", description: "1~4번 과정의 내용을 복합적으로 해결합니다.", order: 5, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 104
-        }
+        { id: 101, name: "파이썬 시작하기", description: "환경 설정과 Hello World 출력을 배웁니다.", order: 1, is_unlocked: true, is_completed: false, best_score: 0, attempt_count: 0, req: 0 },
+        { id: 102, name: "변수와 연산자", description: "데이터를 저장하고 계산하는 기본 원리를 배웁니다.", order: 2, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 101 },
+        { id: 103, name: "조건문 (if)", description: "상황에 따라 프로그램의 흐름을 제어합니다.", order: 3, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 101 },
+        { id: 104, name: "반복문 (for/while)", description: "효율적인 코드 작성을 위한 반복 처리를 배웁니다.", order: 4, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 102 },
+        { id: 105, name: "기초 종합 문제", description: "1~4번 과정의 내용을 복합적으로 해결합니다.", order: 5, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 104 }
     ],
     2: [
-        {
-            id: 201, name: "Pandas 기초: DataFrame 마스터", description: "2차원 자료구조인 DataFrame의 생성과 데이터 확인 방법을 배웁니다.", order: 1, is_unlocked: true, is_completed: false, best_score: 0, attempt_count: 0, req: 0
-        },
-        {
-            id: 202, name: "데이터 시각화: Matplotlib & Seaborn", description: "데이터의 추세와 분포를 그래프로 표현하는 기술을 익힙니다.", order: 2, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 201
-        },
-        {
-            id: 203, name: "데이터 전처리: 결측치와 정규화", description: "학습 모델에 넣기 전 데이터를 깨끗하게 정제하는 과정을 배웁니다.", order: 3, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 201
-        },
-        {
-            id: 204, name: "데이터셋 로드와 텐서 변환", description: "Pandas 데이터를 PyTorch의 Tensor로 변환하여 학습 준비를 마칩니다.", order: 4, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 203
-        },
-        {
-            id: 205, name: "데이터 분석 종합 프로젝트", description: "실제 데이터를 활용해 전처리부터 시각화까지 전 과정을 수행합니다.", order: 5, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 204
-        }
+        { id: 201, name: "Pandas 기초: DataFrame 마스터", description: "2차원 자료구조인 DataFrame의 생성과 데이터 확인 방법을 배웁니다.", order: 1, is_unlocked: true, is_completed: false, best_score: 0, attempt_count: 0, req: 0 },
+        { id: 202, name: "데이터 시각화: Matplotlib & Seaborn", description: "데이터의 추세와 분포를 그래프로 표현하는 기술을 익힙니다.", order: 2, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 201 },
+        { id: 203, name: "데이터 전처리: 결측치와 정규화", description: "학습 모델에 넣기 전 데이터를 깨끗하게 정제하는 과정을 배웁니다.", order: 3, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 201 },
+        { id: 204, name: "데이터셋 로드와 텐서 변환", description: "Pandas 데이터를 PyTorch의 Tensor로 변환하여 학습 준비를 마칩니다.", order: 4, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 203 },
+        { id: 205, name: "데이터 분석 종합 프로젝트", description: "실제 데이터를 활용해 전처리부터 시각화까지 전 과정을 수행합니다.", order: 5, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 204 }
     ],
     3: [ // 머신러닝 기초
-        {
-            id: 301, name: "파이토치 텐서의 기초", description: "딥러닝의 기본 단위인 텐서의 개념과 생성 방법을 배웁니다.", order: 1, is_unlocked: true, is_completed: false, best_score: 0, attempt_count: 0, req: 0
-        },
-        {
-            id: 302, name: "데이터 로딩과 데이터셋", description: "Dataset과 DataLoader를 이용한 효율적인 데이터 처리 기법을 배웁니다.", order: 2, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 301
-        },
-        {
-            id: 303, name: "신경망 계층과 자동 미분", description: "모델의 레이어 구성과 PyTorch의 핵심인 Autograd를 이해합니다.", order: 3, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 301
-        },
-        {
-            id: 304, name: "파이토치 워크플로우", description: "데이터 준비부터 모델 학습, 예측까지의 전체 과정을 실습합니다.", order: 4, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 302
-        },
-        {
-            id: 305, name: "최적화 및 모듈화", description: "하이퍼파라미터 튜닝, 손실 함수 및 최적화 기법을 배웁니다.", order: 5, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 304
-        }
+        { id: 301, name: "파이토치 텐서의 기초", description: "딥러닝의 기본 단위인 텐서의 개념과 생성 방법을 배웁니다.", order: 1, is_unlocked: true, is_completed: false, best_score: 0, attempt_count: 0, req: 0 },
+        { id: 302, name: "데이터 로딩과 데이터셋", description: "Dataset과 DataLoader를 이용한 효율적인 데이터 처리 기법을 배웁니다.", order: 2, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 301 },
+        { id: 303, name: "신경망 계층과 자동 미분", description: "모델의 레이어 구성과 PyTorch의 핵심인 Autograd를 이해합니다.", order: 3, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 301 },
+        { id: 304, name: "파이토치 워크플로우", description: "데이터 준비부터 모델 학습, 예측까지의 전체 과정을 실습합니다.", order: 4, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 302 },
+        { id: 305, name: "최적화 및 모듈화", description: "하이퍼파라미터 튜닝, 손실 함수 및 최적화 기법을 배웁니다.", order: 5, is_unlocked: false, is_completed: false, best_score: 0, attempt_count: 0, req: 304 }
     ]
 };
 
