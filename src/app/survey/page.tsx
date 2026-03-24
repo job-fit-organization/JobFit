@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Send } from 'lucide-react';
 import Button, { cn } from '@/components/Button';
-import { postSurvey } from '@/app/learning/data/apiClient';
 
 // 설문조사 각 영역을 담당하는 작은 컴포넌트들이에요.
 import SurveyHeader from './_components/SurveyHeader';
@@ -48,7 +47,6 @@ export default function SurveyPage() {
         e.preventDefault();
 
         try {
-            await postSurvey({ rating, features: selectedFeatures, feedback });
             console.log('성공적으로 제출되었습니다.');
         } catch (error) {
             console.error('API 호출 중 에러 발생:', error);
