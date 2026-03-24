@@ -4,7 +4,7 @@ from rest_framework import status, serializers
 from rest_framework.authentication import get_authorization_header
 from rest_framework.views import APIView 
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import AuthenticationFailed , APIException
 
 from drf_spectacular.utils import (
@@ -36,6 +36,7 @@ from .serializer import (
     SurveySerializer
 )
 from authentication.token import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
+from authentication.authenticators import CustomJWTAuthentication
 
 from django.shortcuts import get_object_or_404
 from django.db import transaction
@@ -410,10 +411,11 @@ class QuizQuestionListView(APIView):
             'questions': question_serializer.data
         })
 
-# POST /api/quiz/submit/ : url자체에 파라미터를 담아서 보내는 GET과 달리, POST에서는 request에 담아서 파라미터를 보냄
 class QuizSubmitView(APIView):
-    # # 사용자 로그인 여부 확인
-    # permission_classes = [IsAuthenticated]
+    # JWT 인증만 사용하도록 설정 (SessionAuthentication 제외로 CSRF 체크 우회)
+    authentication_classes = [CustomJWTAuthentication]
+    # 사용자 로그인 여부와 관계없이 제출 허용
+    permission_classes = [AllowAny]
     
     @extend_schema(
         summary='퀴즈 제출',
@@ -491,7 +493,7 @@ class QuizSubmitView(APIView):
         # 한 번에 수행되어야 하는 일련의 작업들에 대한 로직을 with transaction.atomic()으로 묶어줌
         with transaction.atomic():
             attempt = Attempt.objects.create(
-                user=request.user,
+                user=request.user if request.user.is_authenticated else None,
                 attempt_type='quiz',
                 learning=learning
             )
@@ -644,9 +646,11 @@ class JobTestQuestionView(APIView):
             'questions': question_serializer.data
         }, status=status.HTTP_200_OK)
 
-# POST /api/job-test/submit/
 class JobTestSubmitView(APIView):
-    permission_classes = [IsAuthenticated]
+    # JWT 인증만 사용하도록 설정 (SessionAuthentication 제외로 CSRF 체크 우회)
+    authentication_classes = [CustomJWTAuthentication]
+    # 사용자 로그인 여부와 관계없이 제출 허용
+    permission_classes = [AllowAny]
 
     @extend_schema(
         summary='직무 추천 테스트 제출',
@@ -726,7 +730,7 @@ class JobTestSubmitView(APIView):
 
         with transaction.atomic():
             attempt = Attempt.objects.create(
-                user=request.user,
+                user=request.user if request.user.is_authenticated else None,
                 attempt_type='job_test'
             )
 
@@ -786,6 +790,10 @@ class JobTestSubmitView(APIView):
             )
 
 class SurveyView(APIView):
+    # JWT 인증만 사용하도록 설정 (SessionAuthentication 제외로 CSRF 체크 우회)
+    authentication_classes = [CustomJWTAuthentication]
+    # 사용자 로그인 여부와 관계없이 제출 허용
+    permission_classes = [AllowAny]
     @extend_schema(
         summary='설문조사 제출',
         description='사용자의 만족도, 선호 기능, 피드백을 저장합니다.',
