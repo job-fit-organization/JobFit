@@ -74,18 +74,6 @@ export default function MyPage() {
 
     return (
         <div className={STYLES.layout}>
-            {/* 상단 퀵 메뉴바 -> 추후 메인 헤더로 변경 예정*/}
-            <div className={STYLES.floatingNav}>
-                <div className={STYLES.navCard}>
-                    <button onClick={handleWithdraw} className={STYLES.withdrawBtn}>
-                        탈퇴
-                    </button>
-                    <button onClick={handleLogoutWithConfirm} className={STYLES.logoutBtn}>
-                        <LogOut size={16} /> 로그아웃
-                    </button>
-                </div>
-            </div>
-
             {/* 메인 컨텐츠 영역 */}
             <div className={STYLES.contentWrapper}>
                 <Header title="마이페이지" subtitle="내 정보와 테스트 결과를 확인하세요." />

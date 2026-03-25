@@ -8,7 +8,7 @@ interface FeatureSectionProps {
 
 const STYLE = {
   featureBtn: "px-4 py-3 rounded-xl text-left text-sm font-medium transition-all border",
-  selected: "bg-blue-50 border-blue-500 text-blue-700 shadow-sm",
+  selected: "bg-main-1/5 border-main-1 text-main-1 shadow-sm",
   unselected: "bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50",
 };
 

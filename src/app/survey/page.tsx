@@ -18,10 +18,10 @@ const STYLE = {
     card: "bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 space-y-8",
     section: "space-y-3",
     label: "block text-sm font-semibold text-slate-900",
-    textArea: "w-full px-4 py-3 rounded-xl bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white resize-none transition-all",
+    textArea: "w-full px-4 py-3 rounded-xl bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-main-1 focus:bg-white resize-none transition-all",
     starContainer: "flex gap-2 justify-center py-4 bg-slate-50 rounded-xl",
     featureGrid: "grid grid-cols-1 md:grid-cols-2 gap-3",
-    submitBtn: "w-full py-4 text-lg font-semibold shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 transform hover:-translate-y-1 transition-all",
+    submitBtn: "w-full py-4 text-lg font-semibold shadow-lg shadow-main-1/30 flex items-center justify-center gap-2 bg-gradient-primary hover:opacity-90 transform hover:-translate-y-1 transition-all",
 };
 
 export default function SurveyPage() {
