@@ -25,10 +25,13 @@ export const postQuizResult = async (data: {
 }) => {
     try {
         const token = localStorage.getItem('access_token');
+        const headers: Record<string, string> = {};
+        if (token) {
+            headers.Authorization = `Bearer ${token}`;
+        }
+
         const response = await axios.post(`${API_BASE_URL}/quiz/submit/`, data, {
-            headers: {
-                Authorization: token ? `Bearer ${token}` : ""
-            }
+            headers
         });
         return response.data;
     } catch (error) {

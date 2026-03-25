@@ -95,6 +95,7 @@ class Attempt(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        null=True, blank=True,
         related_name='attempts'
     )
     attempt_type = models.CharField(max_length=20, choices=ATTEMPT_TYPE)

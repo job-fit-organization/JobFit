@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, Github, Chrome, Zap, Loader2 } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 const STYLES = {
     container: "min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4",
@@ -34,6 +35,7 @@ const STYLES = {
 
 export default function LoginPage() {
     const router = useRouter();
+    const { login } = useAuth();
     const [isLoading, setIsLoading] = useState(false);
 
     // 소셜 로그인 도입 전 사용할 테스트 계정 자동 로그인 처리
@@ -75,8 +77,7 @@ export default function LoginPage() {
                             nickname: name,
                             email: email
                         };
-                        localStorage.setItem('access_token', data.token);
-                        localStorage.setItem('user', JSON.stringify(userData));
+                        login(data.token, userData);
 
                         // 2. 가짜 데이터 시딩 (마이페이지 풍성하게 보이게 하기)
                         await fetch('http://localhost:8000/api/seed-demo-data/', {
@@ -187,11 +188,10 @@ export default function LoginPage() {
                         </div>
                     </div>
                 )}
-                {/*이용약관 부분 추가 필요 ★★★*/}
                 <div className={STYLES.footerText}>
                     <p className={STYLES.footerLinks}>
-                        계속 진행하면 <span className={STYLES.linkText}>이용약관</span> 및 <br />
-                        <span className={STYLES.linkText}>개인정보처리방침</span>에 동의하게 됩니다.
+                        계속 진행하면 <Link href="/login/terms" className={STYLES.linkText}>이용약관</Link> 및 <br />
+                        <Link href="/login/privacy" className={STYLES.linkText}>개인정보처리방침</Link>에 동의하게 됩니다.
                     </p>
                 </div>
             </div>
