@@ -187,11 +187,10 @@ export default function LoginPage() {
                         </div>
                     </div>
                 )}
-                {/*이용약관 부분 추가 필요 ★★★*/}
                 <div className={STYLES.footerText}>
                     <p className={STYLES.footerLinks}>
-                        계속 진행하면 <span className={STYLES.linkText}>이용약관</span> 및 <br />
-                        <span className={STYLES.linkText}>개인정보처리방침</span>에 동의하게 됩니다.
+                        계속 진행하면 <Link href="/login/terms" className={STYLES.linkText}>이용약관</Link> 및 <br />
+                        <Link href="/login/privacy" className={STYLES.linkText}>개인정보처리방침</Link>에 동의하게 됩니다.
                     </p>
                 </div>
             </div>
