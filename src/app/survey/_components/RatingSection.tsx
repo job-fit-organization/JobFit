@@ -33,7 +33,7 @@ const RatingSection = ({ rating, onRate, styles }: RatingSectionProps) => {
               className={cn(
                 STYLE.starIcon,
                 // 색상 변경
-                star <= rating ? "text-yellow-400 fill-yellow-400" : "text-slate-300"
+                star <= rating ? "text-serve-1 fill-serve-1" : "text-slate-300"
               )}
             />
           </button>

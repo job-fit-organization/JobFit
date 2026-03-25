@@ -3,7 +3,7 @@ import { MessageSquare } from 'lucide-react';
 const STYLE = {
   container: "text-center mb-10",
   title: "text-3xl font-bold text-slate-900 flex items-center justify-center gap-3",
-  icon: "w-8 h-8 text-blue-600",
+  icon: "w-8 h-8 text-main-1",
   description: "mt-2 text-slate-600",
 };
 
