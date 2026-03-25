@@ -7,7 +7,7 @@ import {
 import { ICON_MAP, LUCIDE_ICONS } from '@/app/learning/data/icon'
 import { QuizData, Category, SubCategory } from '@/app/learning/data/interface'
 import { QUIZZES, categoryList, fetchSubcategories } from '@/app/learning/data/data'
-import { saveQuizResultToDb } from '@/app/learning/data/apiClient'
+import { saveQuizResultToDb, fetchQuizQuestions } from '@/app/learning/data/apiClient'
 import { HelpCircle } from 'lucide-react'; // 기본 아이콘용
 
 const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
@@ -68,6 +68,10 @@ export default function PythonMasteryExplorer() {
     const [globalProgress, setGlobalProgress] = useState(0);
     const [totalNodesCount, setTotalNodesCount] = useState(0);
 
+    const [questionsFromServer, setQuestionsFromServer] = useState<any[]>([]);
+    const [quizResultFromServer, setQuizResultFromServer] = useState<any>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
 
     //  test 데이터 
     useEffect(() => {
@@ -122,6 +126,21 @@ export default function PythonMasteryExplorer() {
         });
         setNodePositions(newPositions);
     };
+
+    useEffect(() => {
+        if (modalNode) {
+            const lid = parseInt(modalNode);
+            if (!isNaN(lid)) {
+                fetchQuizQuestions(lid).then(res => {
+                    if (res.questions) {
+                        setQuestionsFromServer(res.questions);
+                    }
+                }).catch(err => {
+                    console.error("Failed to fetch questions:", err);
+                });
+            }
+        }
+    }, [modalNode]);
 
     useEffect(() => {
         if (isMounted && subcategories.length > 0) {
@@ -196,21 +215,40 @@ export default function PythonMasteryExplorer() {
 
     const solvedCount = Array.isArray(solved) ? solved.length : 0;
 
+
     const handleQuizAnswer = (choiceId: number) => {
         if (!modalNode) return;
-        const quiz = QUIZZES[modalNode];
-        if (!quiz) return;
 
-        const newAnswers = [...userAnswers, choiceId];
+        // 서버 질문이 있으면 서버 형식으로 저장, 없으면 기존 방식(인덱스) 유지
+        let newAnswers: any[];
+        if (questionsFromServer.length > 0) {
+            const currentQ = questionsFromServer[currentQuestionIdx];
+            newAnswers = [...userAnswers, {
+                question_group_id: currentQ.question_group_id,
+                selected_question_choice_id: choiceId
+            }];
+        } else {
+            newAnswers = [...userAnswers, choiceId];
+        }
+
         setUserAnswers(newAnswers);
 
-        if (currentQuestionIdx < quiz.questions.length - 1) {
+        const totalQuestions = questionsFromServer.length > 0
+            ? questionsFromServer.length
+            : (QUIZZES[modalNode]?.questions.length || 0);
+
+        if (currentQuestionIdx < totalQuestions - 1) {
             setCurrentQuestionIdx(prev => prev + 1);
         } else {
             setShowingResults(true);
+            setIsSubmitting(true);
             // 모든 문제를 풀었을 때 (5문제 다 풀었을 때) 즉시 DB에 저장
-            saveQuizResultToDb(parseInt(modalNode), newAnswers).catch(err => {
+            saveQuizResultToDb(parseInt(modalNode), newAnswers).then(res => {
+                setQuizResultFromServer(res);
+                setIsSubmitting(false);
+            }).catch(err => {
                 console.error("Failed to automatically save quiz result:", err);
+                setIsSubmitting(false);
             });
         }
     };
@@ -247,9 +285,12 @@ export default function PythonMasteryExplorer() {
         setUserAnswers([]);
         setShowingResults(false);
         setFeedback(null);
+        setQuestionsFromServer([]);
+        setQuizResultFromServer(null);
     };
 
     const calculateScore = () => {
+        if (quizResultFromServer) return quizResultFromServer.score;
         if (!modalNode) return 0;
         const quiz = QUIZZES[modalNode];
         if (!quiz) return 0;
@@ -428,7 +469,7 @@ export default function PythonMasteryExplorer() {
                 </div>
 
                 {/* Quiz Modal */}
-                {modalNode && QUIZZES[modalNode as string] && (
+                {modalNode && (
                     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
                         <div className="bg-white w-full max-w-lg rounded-[2.5rem] p-10 shadow-2xl relative animate-up">
                             <button onClick={closeQuiz} className="absolute top-8 right-8 text-gray-400 hover:text-black transition-colors">
@@ -439,51 +480,77 @@ export default function PythonMasteryExplorer() {
                                 <>
                                     <div className="mb-8 text-center">
                                         <div className="text-[#f47725] text-[10px] font-black tracking-[0.3em] uppercase mb-3">
-                                            Knowledge Trial ({currentQuestionIdx + 1} / {QUIZZES[modalNode].questions.length})
+                                            Knowledge Trial ({currentQuestionIdx + 1} / {questionsFromServer.length > 0 ? questionsFromServer.length : (QUIZZES[modalNode]?.questions.length || 0)})
                                         </div>
                                         <h3 className="text-3xl font-black text-black uppercase">{subcategories.find(n => n.id.toString() === modalNode)?.name}</h3>
                                         <div className="w-full h-2 bg-gray-100 rounded-full mt-6 overflow-hidden">
                                             <div
                                                 className="h-full bg-gradient-primary transition-all duration-500"
-                                                style={{ width: `${((currentQuestionIdx + 1) / QUIZZES[modalNode].questions.length) * 100}%` }}
+                                                style={{ width: `${((currentQuestionIdx + 1) / (questionsFromServer.length > 0 ? questionsFromServer.length : (QUIZZES[modalNode]?.questions.length || 1))) * 100}%` }}
                                             />
                                         </div>
                                     </div>
 
                                     <p className="text-xl text-black mb-10 text-center font-bold leading-relaxed">
-                                        {QUIZZES[modalNode].questions[currentQuestionIdx]?.q}
+                                        {questionsFromServer.length > 0
+                                            ? questionsFromServer[currentQuestionIdx]?.question_text
+                                            : QUIZZES[modalNode]?.questions[currentQuestionIdx]?.q}
                                     </p>
 
                                     <div className="grid gap-4">
-                                        {QUIZZES[modalNode].questions[currentQuestionIdx]?.a.map((opt, idx) => (
-                                            <button
-                                                key={idx}
-                                                onClick={() => handleQuizAnswer(idx)}
-                                                className="w-full p-5 text-left rounded-2xl bg-[#f8f9fa] border-2 border-transparent hover:border-[#f47725] hover:bg-white transition-all text-gray-700 font-bold group"
-                                            >
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-8 h-8 rounded-xl bg-gray-200 flex items-center justify-center text-xs text-gray-500 group-hover:bg-[#f47725] group-hover:text-white transition-all">
-                                                        {idx + 1}
+                                        {questionsFromServer.length > 0 ? (
+                                            questionsFromServer[currentQuestionIdx]?.choices.map((opt: any, idx: number) => (
+                                                <button
+                                                    key={opt.id}
+                                                    onClick={() => handleQuizAnswer(opt.id)}
+                                                    className="w-full p-5 text-left rounded-2xl bg-[#f8f9fa] border-2 border-transparent hover:border-[#f47725] hover:bg-white transition-all text-gray-700 font-bold group"
+                                                >
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-8 h-8 rounded-xl bg-gray-200 flex items-center justify-center text-xs text-gray-500 group-hover:bg-[#f47725] group-hover:text-white transition-all">
+                                                            {idx + 1}
+                                                        </div>
+                                                        {opt.choice_text}
                                                     </div>
-                                                    {opt}
-                                                </div>
-                                            </button>
-                                        ))}
+                                                </button>
+                                            ))
+                                        ) : (
+                                            QUIZZES[modalNode]?.questions[currentQuestionIdx]?.a.map((opt, idx) => (
+                                                <button
+                                                    key={idx}
+                                                    onClick={() => handleQuizAnswer(idx)}
+                                                    className="w-full p-5 text-left rounded-2xl bg-[#f8f9fa] border-2 border-transparent hover:border-[#f47725] hover:bg-white transition-all text-gray-700 font-bold group"
+                                                >
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-8 h-8 rounded-xl bg-gray-200 flex items-center justify-center text-xs text-gray-500 group-hover:bg-[#f47725] group-hover:text-white transition-all">
+                                                            {idx + 1}
+                                                        </div>
+                                                        {opt}
+                                                    </div>
+                                                </button>
+                                            ))
+                                        )}
                                     </div>
                                 </>
                             ) : (
                                 <div className="text-center py-4 animate-up">
-                                    <div className="mb-10">
-                                        <div className="w-24 h-24 bg-[#f47725]/10 rounded-full flex items-center justify-center mx-auto mb-8">
-                                            <Trophy className={`w-12 h-12 ${calculateScore() / QUIZZES[modalNode].questions.length >= 0.8 ? 'text-[#f47725]' : 'text-gray-300'}`} />
+                                    {isSubmitting ? (
+                                        <div className="text-center py-10">
+                                            <div className="w-12 h-12 border-4 border-[#f47725] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                                            <p className="text-gray-500 font-bold">결과를 채점 중입니다...</p>
                                         </div>
-                                        <h3 className="text-4xl font-black mb-3 text-black uppercase">TRIAL COMPLETE</h3>
-                                        <p className="text-gray-400 font-black tracking-widest text-sm">
-                                            SCORE: {calculateScore()} / {QUIZZES[modalNode].questions.length}
-                                        </p>
-                                    </div>
+                                    ) : (
+                                        <>
+                                            <div className="mb-10">
+                                                <div className="w-24 h-24 bg-[#f47725]/10 rounded-full flex items-center justify-center mx-auto mb-8">
+                                                    <Trophy className={`w-12 h-12 ${calculateScore() / (questionsFromServer.length > 0 ? questionsFromServer.length : (QUIZZES[modalNode]?.questions.length || 1)) >= 0.8 ? 'text-[#f47725]' : 'text-gray-300'}`} />
+                                                </div>
+                                                <h3 className="text-4xl font-black mb-3 text-black uppercase">TRIAL COMPLETE</h3>
+                                                <p className="text-gray-400 font-black tracking-widest text-sm">
+                                                    SCORE: {calculateScore()} / {questionsFromServer.length > 0 ? questionsFromServer.length : (QUIZZES[modalNode]?.questions.length || 0)}
+                                                </p>
+                                            </div>
 
-                                    {calculateScore() / QUIZZES[modalNode].questions.length >= 0.8 ? (
+                                            {calculateScore() / (questionsFromServer.length > 0 ? questionsFromServer.length : (QUIZZES[modalNode]?.questions.length || 1)) >= 0.8 ? (
                                         <div>
                                             <div className="bg-[#f47725]/5 border border-[#f47725]/10 p-6 rounded-3xl mb-10 text-[#f47725] font-bold text-sm leading-relaxed">
                                                 축하합니다! 전문가 수준의 이해도를 증명하셨습니다.<br />지식 마스터리를 획득할 준비가 되었습니다.
@@ -507,6 +574,8 @@ export default function PythonMasteryExplorer() {
                                                 다시 도전하기
                                             </button>
                                         </div>
+                                            )}
+                                        </>
                                     )}
                                 </div>
                             )}

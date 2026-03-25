@@ -25,7 +25,9 @@ export const postQuizResult = async (data: {
 }) => {
     try {
         const token = localStorage.getItem('access_token');
-        const headers: Record<string, string> = {};
+        const headers: Record<string, string> = {
+            'Content-Type': 'application/json'
+        };
         if (token) {
             headers.Authorization = `Bearer ${token}`;
         }
@@ -40,24 +42,28 @@ export const postQuizResult = async (data: {
     }
 };
 
-// 퀴즈 완료 후 DB 저장을 위한 헬퍼 함수
-export const saveQuizResultToDb = async (sub_id: number, userAnswersIndex: number[]) => {
-    const quiz = QUIZZES[sub_id.toString()];
-    if (!quiz) return;
+export const fetchQuizQuestions = async (learning_id: number) => {
+    try {
+        const response = await apiClient.get(`/learnings/${learning_id}/questions/`);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to fetch quiz questions:", error);
+        throw error;
+    }
+};
 
+
+// 퀴즈 완료 후 DB 저장을 위한 헬퍼 함수
+export const saveQuizResultToDb = async (learning_id: number, answers: {
+    question_group_id: number;
+    selected_question_choice_id: number;
+}[]) => {
     const payload = {
-        learning_id: sub_id,
-        answers: userAnswersIndex.map((ans_idx, q_idx) => {
-            // stable mapping logic (백엔드와 일치해야 함)
-            const group_id = sub_id * 100 + q_idx;
-            const choice_id = group_id * 10 + ans_idx;
-            return {
-                question_group_id: group_id,
-                selected_question_choice_id: choice_id
-            };
-        })
+        learning_id,
+        answers
     };
     return await postQuizResult(payload);
 };
+
 
 export default apiClient;
