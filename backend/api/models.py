@@ -59,7 +59,8 @@ class QuestionChoice(models.Model):
     # 상수: 퀴즈 OR 테스트
     QUESTION_TYPE = [
         ('Quiz', '퀴즈'),
-        ('Test', '테스트')
+        ('Test_B', '테스트(입문자)'),
+        ('Test_E', '테스트(전문가)')
     ]
 
     question_group_id = models.PositiveIntegerField(db_index=True)
@@ -73,11 +74,10 @@ class QuestionChoice(models.Model):
     question_text = models.TextField()
     choice_text = models.TextField()
     is_correct = models.BooleanField(null=True, blank=True)
-    recommended_job = models.ForeignKey(
-        Job,
-        on_delete=models.SET_NULL,
-        related_name='recommended_question_choices',
-        null=True, blank=True
+    job_scores = models.JSONField(
+        default=dict,
+        blank=True,
+        help_text="직무별 가중치 (예: {'DaS': 3, 'MLO': 1})"
     )
 
     class Meta:
@@ -95,6 +95,7 @@ class Attempt(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        null=True, blank=True,
         related_name='attempts'
     )
     attempt_type = models.CharField(max_length=20, choices=ATTEMPT_TYPE)
@@ -135,3 +136,18 @@ class UserResponse(models.Model):
 
     def __str__(self):
         return f'Attempt {self.attempt_id} - Q{self.question_group_id}'
+
+class Survey(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name='surveys'
+    )
+    rating = models.PositiveSmallIntegerField()
+    features = models.JSONField()
+    feedback = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Survey {self.id} - Rating: {self.rating}'

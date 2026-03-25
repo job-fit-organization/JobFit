@@ -4,13 +4,14 @@ from rest_framework import status, serializers
 from rest_framework.authentication import get_authorization_header
 from rest_framework.views import APIView 
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import AuthenticationFailed , APIException
 
 from drf_spectacular.utils import (
     extend_schema,
     OpenApiExample,
     OpenApiParameter,
+    OpenApiTypes,
     inline_serializer,
 )
 
@@ -31,10 +32,11 @@ from .serializer import (
     QuizSubmitResponseSerializer,
     QuizQuestionListResponseSerializer,
     JobTestQuestionListResponseSerializer,
-    JobTestSubmitResponseSerializer
-
+    JobTestSubmitResponseSerializer,
+    SurveySerializer
 )
 from authentication.token import create_access_token, create_refresh_token, decode_access_token, decode_refresh_token
+from authentication.authenticators import CustomJWTAuthentication
 
 from django.shortcuts import get_object_or_404
 from django.db import transaction
@@ -409,10 +411,11 @@ class QuizQuestionListView(APIView):
             'questions': question_serializer.data
         })
 
-# POST /api/quiz/submit/ : url자체에 파라미터를 담아서 보내는 GET과 달리, POST에서는 request에 담아서 파라미터를 보냄
 class QuizSubmitView(APIView):
-    # # 사용자 로그인 여부 확인
-    # permission_classes = [IsAuthenticated]
+    # JWT 인증만 사용하도록 설정 (SessionAuthentication 제외로 CSRF 체크 우회)
+    authentication_classes = [CustomJWTAuthentication]
+    # 사용자 로그인 여부와 관계없이 제출 허용
+    permission_classes = [AllowAny]
     
     @extend_schema(
         summary='퀴즈 제출',
@@ -490,7 +493,7 @@ class QuizSubmitView(APIView):
         # 한 번에 수행되어야 하는 일련의 작업들에 대한 로직을 with transaction.atomic()으로 묶어줌
         with transaction.atomic():
             attempt = Attempt.objects.create(
-                user=request.user,
+                user=request.user if request.user.is_authenticated else None,
                 attempt_type='quiz',
                 learning=learning
             )
@@ -548,8 +551,17 @@ class QuizSubmitView(APIView):
 class JobTestQuestionView(APIView):
     @extend_schema(
         summary='직무 추천 테스트 문제 조회',
-        description='직무 추천 테스트에 사용되는 문항을 question_group_id 기준으로 묶어서 조회합니다.',
+        description='사용자가 선택한 test_type에 따라 직무 추천 테스트 문항을 question_group_id 기준으로 묶어서 조회합니다.',
         tags=['Job Test'],
+        parameters=[
+            OpenApiParameter(
+                name='test_type',
+                description='불러올 테스트 유형 (E 또는 B)',
+                required=True,
+                type=OpenApiTypes.STR,
+                enum=['E', 'B']
+            )
+        ],
         responses={
             200: JobTestQuestionListResponseSerializer
         },
@@ -587,8 +599,25 @@ class JobTestQuestionView(APIView):
         ]
     )
     def get(self, request):
+        test_type = request.query_params.get('test_type')
+
+        test_type_mapping = {
+            'E': 'Test_E',
+            'B': 'Test_B',
+        }
+
+        question_type = test_type_mapping.get(test_type)
+
+        if not question_type:
+            return Response(
+                {
+                    'detail': '유효한 test_type을 입력해주세요. (E 또는 B)'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         question_choices = QuestionChoice.objects.filter(
-            question_type='Test'
+            question_type=question_type
         ).order_by('question_group_id', 'id')
 
         grouped_questions = OrderedDict()
@@ -608,15 +637,20 @@ class JobTestQuestionView(APIView):
                 'choice_text': item.choice_text
             })
 
-        question_serializer = QuestionGroupSerializer(list(grouped_questions.values()), many=True)
+        question_serializer = QuestionGroupSerializer(
+            list(grouped_questions.values()),
+            many=True
+        )
 
         return Response({
             'questions': question_serializer.data
-        })
+        }, status=status.HTTP_200_OK)
 
-# POST /api/job-test/submit/
 class JobTestSubmitView(APIView):
-    permission_classes = [IsAuthenticated]
+    # JWT 인증만 사용하도록 설정 (SessionAuthentication 제외로 CSRF 체크 우회)
+    authentication_classes = [CustomJWTAuthentication]
+    # 사용자 로그인 여부와 관계없이 제출 허용
+    permission_classes = [AllowAny]
 
     @extend_schema(
         summary='직무 추천 테스트 제출',
@@ -696,7 +730,7 @@ class JobTestSubmitView(APIView):
 
         with transaction.atomic():
             attempt = Attempt.objects.create(
-                user=request.user,
+                user=request.user if request.user.is_authenticated else None,
                 attempt_type='job_test'
             )
 
@@ -754,3 +788,25 @@ class JobTestSubmitView(APIView):
                 },
                 status=status.HTTP_201_CREATED
             )
+
+class SurveyView(APIView):
+    # JWT 인증만 사용하도록 설정 (SessionAuthentication 제외로 CSRF 체크 우회)
+    authentication_classes = [CustomJWTAuthentication]
+    # 사용자 로그인 여부와 관계없이 제출 허용
+    permission_classes = [AllowAny]
+    @extend_schema(
+        summary='설문조사 제출',
+        description='사용자의 만족도, 선호 기능, 피드백을 저장합니다.',
+        tags=['Survey'],
+        request=SurveySerializer,
+        responses={201: SurveySerializer}
+    )
+    def post(self, request):
+        serializer = SurveySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        # 로그인 되어 있으면 유저 정보 연결
+        user = request.user if request.user.is_authenticated else None
+        serializer.save(user=user)
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

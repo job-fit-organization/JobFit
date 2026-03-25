@@ -12,13 +12,20 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
-# from dotenv import load_dotenv
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!c&^g^22^_drykorkwe!%r_7u2&+fc0jp)3n@(!2*r+#)j!-kr'
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+# .env 파일 로드
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+DEBUG = env('DEBUG')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -98,11 +105,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME', 'jobfit'), 
-        'USER': os.environ.get('DB_USER', 'root'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'password'),
-        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-        'PORT': os.environ.get('DB_PORT', '3306')
+        'NAME': env('DB_NAME', default='jobfit'), 
+        'USER': env('DB_USER', default='root'),
+        'PASSWORD': env('DB_PASSWORD', default='password'),
+        'HOST': env('DB_HOST', default='127.0.0.1'),
+        'PORT': env('DB_PORT', default='3306')
     }
 }
 
@@ -141,7 +148,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 # Kakao Login Configuration
-# load_dotenv(BASE_DIR.parent / '.env') # Load from JobFit/.env
+KAKAO_REST_API_KEY = env('KAKAO_REST_API_KEY', default='')
+KAKAO_REDIRECT_URI = env('KAKAO_REDIRECT_URI', default='http://localhost:3000/mypage/login/callback')
 
-KAKAO_REST_API_KEY = os.environ.get('KAKAO_REST_API_KEY', '').strip()
-KAKAO_REDIRECT_URI = os.environ.get('KAKAO_REDIRECT_URI', 'http://localhost:3000/mypage/login/callback').strip()
+# Groq API Configuration
+GROQ_API_KEY = env('GROQ_API_KEY', default='')
