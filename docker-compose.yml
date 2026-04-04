@@ -15,13 +15,13 @@ services:
 
   app:
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile
     container_name: jobfit_app
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
+      - ./frontend:/app
       - /app/node_modules
       - /app/.next
     environment:
