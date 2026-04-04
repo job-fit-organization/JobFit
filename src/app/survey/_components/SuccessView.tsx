@@ -5,11 +5,11 @@ import { CheckCircle2 } from 'lucide-react';
 const STYLE = {
   overlay: "min-h-screen bg-slate-50 flex items-center justify-center p-4",
   card: "bg-white max-w-md w-full p-8 rounded-2xl shadow-xl text-center space-y-6",
-  iconWrapper: "w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto",
-  icon: "w-10 h-10 text-green-600",
+  iconWrapper: "w-20 h-20 bg-serve-2/10 rounded-full flex items-center justify-center mx-auto",
+  icon: "w-10 h-10 text-serve-2",
   title: "text-2xl font-bold text-slate-900",
   description: "text-slate-600",
-  button: "w-full bg-blue-600 hover:bg-blue-700",
+  button: "w-full bg-main-1 hover:bg-main-1/90",
 };
 
 const SuccessView = ({ onHomeClick }: { onHomeClick: () => void }) => {

@@ -19,7 +19,7 @@
 프로젝트 최상단 (JobFit 폴더) 터미널에서 아래 명령어를 실행하여 DB를 켭니다.
 
 ```bash
-docker-compose up -d db
+docker-compose up -d
 ```
 > **주의:** Docker Desktop 프로그램이 반드시 켜져 있어야 합니다.
 
@@ -48,11 +48,15 @@ source venv/bin/activate
 백엔드에서 로컬 DB 컨테이너로 정상적으로 연결하기 위해 `backend/` 폴더 내에 `.env` 파일을 만들고 아래 내용을 입력합니다.
 
 ```env
+SECRET_KEY='django-insecure-!c&^g^22^_drykorkwe!%r_7u2&+fc0jp)3n@(!2*r+#)j!-kr'
+
 DB_NAME=jobfit
 DB_USER=myuser
 DB_PASSWORD=mypassword
-DB_HOST=127.0.0.1
+DB_HOST=localhost
 DB_PORT=3306
+
+GROQ_API_KEY=${your_key}
 ```
 > **참고:** Docker 내부망에서는 `db`라는 호스트 이름으로 접근하지만, 로컬에서 실행하는 파이썬(Django)은 `127.0.0.1`(localhost)로 접속해야 합니다.
 
@@ -71,6 +75,22 @@ Django에서 기본적으로 제공하는 모델들(User, Session 등)의 DB 테
 
 ```bash
 python manage.py migrate
+```
+
+### 5-1️⃣ 테스트 데이터 로드 (선택)
+
+테스트용 질문과 선택지를 DB에 로드합니다.
+
+```bash
+python manage.py load_tests
+```
+
+### 5-2️⃣ AI 콘텐츠 생성 (선택)
+
+AI를 이용해 퀴즈, 직무 설명 등의 콘텐츠를 생성합니다.
+
+```bash
+python manage.py generate_content
 ```
 
 ### 6️⃣ 로컬 서버 실행

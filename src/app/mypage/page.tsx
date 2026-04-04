@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { LogOut } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
 
 import { Header } from './_components/common';
 import { LoggedInView } from './_components/LoggedInView';
@@ -19,39 +20,21 @@ const STYLES = {
 };
 
 export default function MyPage() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [currentUser, setCurrentUser] = useState<any>(null);
-    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+    const { isLoggedIn, user, logout } = useAuth();
     const router = useRouter();
 
     // 로그인(토큰) 여부 검사
     useEffect(() => {
         const token = localStorage.getItem('access_token');
-        const userStr = localStorage.getItem('user');
-
-        if (token && userStr) {
-            try {
-                const userObj = JSON.parse(userStr);
-                setCurrentUser(userObj);
-                setIsLoggedIn(true);
-            } catch (e) {
-                console.error("유저 파싱 오류:", e);
-                router.push('/login');
-            }
-        } else {
+        if (!token) {
             router.push('/login');
         }
-        setIsCheckingAuth(false);
     }, [router]);
 
     // 로그아웃
-    const handleLogout = () => {
+    const handleLogoutWithConfirm = () => {
         if (window.confirm("로그아웃 하시겠습니까?")) {
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('refresh_token');
-            localStorage.removeItem('user');
-            setCurrentUser(null);
-            setIsLoggedIn(false);
+            logout();
             router.push('/');
         }
     };
@@ -75,11 +58,7 @@ export default function MyPage() {
 
             if (res.ok) {
                 alert("회원 탈퇴 처리되었습니다.");
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('refresh_token');
-                localStorage.removeItem('user');
-                setCurrentUser(null);
-                setIsLoggedIn(false);
+                logout();
                 router.push('/');
             } else {
                 const errorData = await res.json();
@@ -91,35 +70,14 @@ export default function MyPage() {
         }
     };
 
-    // 검증 대기 중 로딩
-    if (isCheckingAuth) {
-        return (
-            <div className={STYLES.loadingView}>
-                <div className={STYLES.spinner}></div>
-            </div>
-        );
-    }
-
     if (!isLoggedIn) return null;
 
     return (
         <div className={STYLES.layout}>
-            {/* 상단 퀵 메뉴바 -> 추후 메인 헤더로 변경 예정*/}
-            <div className={STYLES.floatingNav}>
-                <div className={STYLES.navCard}>
-                    <button onClick={handleWithdraw} className={STYLES.withdrawBtn}>
-                        탈퇴
-                    </button>
-                    <button onClick={handleLogout} className={STYLES.logoutBtn}>
-                        <LogOut size={16} /> 로그아웃
-                    </button>
-                </div>
-            </div>
-
             {/* 메인 컨텐츠 영역 */}
             <div className={STYLES.contentWrapper}>
                 <Header title="마이페이지" subtitle="내 정보와 테스트 결과를 확인하세요." />
-                <LoggedInView currentUser={currentUser} />
+                <LoggedInView currentUser={user} />
             </div>
         </div>
     );
