@@ -1,12 +1,13 @@
 # 수집해야할 데이터들
 
 ## Products (기술/모듈/툴) -> 커리큘럼 / 개념설명, 연습문제 포함 여부
+너는 IT 교육 전문가야. 위 페이지를 기반으로 PostgreSQL을 교육하는 커리큘럼을 만들어줘. 커리큘럼을 보는 사람이 참고할 수 있도록, 링크를 포함해서 커리큘럼을 만들어야 해. 그리고 바로 사용할 수 있도록 마크다운(.md)이나 csv 형식으로 만들어줘.
 
 - SQL
   - https://neon.com/postgresql/tutorial -> 커리큘럼
   - https://pgexercises.com/questions/basic/ -> 연습문제
 - Docker
-  - https://docker-curriculum.com/ -> 커리큘럼
+  - https://docker-curriculum.com/ -> 커리큘럼에 링크 포함해서
   - https://www.geeksforgeeks.org/devops/docker-tutorial/ -> 커리큘럼
   - https://www.geeksforgeeks.org/devops/introduction-to-docker/ -> 세부 내용
   - https://www.geeksforgeeks.org/linux-unix/how-to-install-and-configure-docker-in-ubuntu/ -> 세부 내용

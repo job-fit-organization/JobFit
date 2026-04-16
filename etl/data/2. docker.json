@@ -1,0 +1,123 @@
+[
+  {
+    "step": "1",
+    "topic": "Docker 개요와 설치",
+    "objectives": "Docker와 컨테이너의 개념을 설명하고, VM과의 차이를 이해하며, 로컬 환경에 Docker를 설치하고 정상 동작을 확인할 수 있다.",
+    "key_contents": "What is Docker, What are containers, Why use containers, Docker 설치 및 환경 점검, docker run hello-world",
+    "urls": [
+      "https://docker-curriculum.com/",
+      "https://www.geeksforgeeks.org/devops/introduction-to-docker/",
+      "https://www.geeksforgeeks.org/linux-unix/how-to-install-and-configure-docker-in-ubuntu/"
+    ]
+  },
+  {
+    "step": "2",
+    "topic": "첫 컨테이너 실행과 기본 명령어",
+    "objectives": "이미지와 컨테이너의 차이를 이해하고, docker pull/run/ps/rm 등을 사용할 수 있으며, 인터랙티브 컨테이너 내부 명령을 실습할 수 있다.",
+    "key_contents": "Busybox 실습, docker run, 컨테이너 생명주기, docker ps, docker ps -a, docker rm, docker container prune, Docker terminology",
+    "urls": [
+      "https://docker-curriculum.com/",
+      "https://www.geeksforgeeks.org/docker-commands/",
+      "https://www.geeksforgeeks.org/devops/running-commands-inside-docker-container/"
+    ]
+  },
+  {
+    "step": "3",
+    "topic": "Docker 아키텍처와 핵심 개념",
+    "objectives": "Docker Client, Docker Daemon, Image, Container, Registry의 역할을 설명하고 Docker 아키텍처를 개념적으로 이해할 수 있다.",
+    "key_contents": "Docker Client / Daemon, Images / Containers / Registry / Docker Hub, Docker Architecture",
+    "urls": [
+      "https://docker-curriculum.com/",
+      "https://www.geeksforgeeks.org/devops/architecture-of-docker/",
+      "https://www.geeksforgeeks.org/devops/what-is-docker-hub/"
+    ]
+  },
+  {
+    "step": "4",
+    "topic": "이미지 만들기와 Dockerfile",
+    "objectives": "Dockerfile의 역할을 이해하고 직접 작성할 수 있으며, 이미지를 build하고 태깅할 수 있고, 이미지 최적화의 기본 원칙을 이해할 수 있다.",
+    "key_contents": "Static Sites, Docker Images, Our First Image, Dockerfile, Dockerfile syntax, 이미지 최적화",
+    "urls": [
+      "https://docker-curriculum.com/",
+      "https://www.geeksforgeeks.org/devops/what-is-dockerfile-syntax/",
+      "https://www.geeksforgeeks.org/devops/what-is-dockerfile/",
+      "https://www.geeksforgeeks.org/devops/what-is-docker-image/",
+      "https://www.geeksforgeeks.org/devops/how-to-optimize-docker-image/"
+    ]
+  },
+  {
+    "step": "5",
+    "topic": "이미지 공유와 Docker Hub",
+    "objectives": "Docker Hub의 역할을 이해하고, 이미지를 태깅하고 Push/Pull 흐름을 실습하며, 공개 이미지와 사설 저장소의 차이를 이해할 수 있다.",
+    "key_contents": "Docker Hub, Login / Push / Pull, Public vs Private repositories",
+    "urls": [
+      "https://hub.docker.com/",
+      "https://www.geeksforgeeks.org/devops/what-is-docker-hub/",
+      "https://www.geeksforgeeks.org/devops/docker-for-pulling-and-pushing-images/",
+      "https://www.geeksforgeeks.org/devops/docker-publishing-images-to-docker-hub/"
+    ]
+  },
+  {
+    "step": "6",
+    "topic": "멀티 컨테이너 환경과 Docker Compose",
+    "objectives": "멀티 컨테이너 애플리케이션의 필요성을 이해하고, Docker Compose 파일을 작성해 여러 서비스를 함께 실행할 수 있으며, 개발 환경에서 Compose 기반 워크플로를 구성할 수 있다.",
+    "key_contents": "Multi Container Environments, Food Trucks 예제, Docker Compose, Development Workflow",
+    "urls": [
+      "https://docker-curriculum.com/",
+      "https://www.geeksforgeeks.org/devops/docker-compose/",
+      "https://www.geeksforgeeks.org/software-engineering/docker-compose-tool-to-run-multi-container-applications/"
+    ]
+  },
+  {
+    "step": "7",
+    "topic": "네트워크와 데이터 저장",
+    "objectives": "컨테이너 간 통신 구조를 이해하고, Docker Network와 Port 매핑을 구성하며, Volume과 Bind Mount를 구분하고 적절히 사용할 수 있다.",
+    "key_contents": "Docker Network, Docker Ports, Bridge Networking, Volumes, Bind Mount, Data persistence",
+    "urls": [
+      "https://docker-curriculum.com/",
+      "https://www.geeksforgeeks.org/devops/basics-of-docker-networking/",
+      "https://www.geeksforgeeks.org/devops/docker-managing-ports/",
+      "https://www.geeksforgeeks.org/linux-unix/creating-a-network-in-docker-and-connecting-a-container-to-that-network/",
+      "https://www.geeksforgeeks.org/devops/connecting-two-docker-containers-over-the-same-network/",
+      "https://www.geeksforgeeks.org/devops/how-to-use-docker-default-bridge-networking/",
+      "https://www.geeksforgeeks.org/devops/what-is-docker-volume/",
+      "https://www.geeksforgeeks.org/devops/mounting-a-volume-inside-docker-container/",
+      "https://www.geeksforgeeks.org/devops/docker-volume-vs-bind-mount/"
+    ]
+  },
+  {
+    "step": "8",
+    "topic": "배포, 운영, 보안 기초",
+    "objectives": "Docker 기반 애플리케이션 배포 흐름을 이해하고, 레지스트리, 보안, 운영 관점의 기본 개념을 설명하며, Docker 이후 오케스트레이션 학습 방향을 잡을 수 있다.",
+    "key_contents": "Docker on AWS, AWS Elastic Container Service, Docker Registry, Public / Private Registry, Security Best Practices, Docker vs Kubernetes, Docker Swarm 개요",
+    "urls": [
+      "https://docker-curriculum.com/",
+      "https://www.geeksforgeeks.org/devops/what-is-docker-registry/",
+      "https://www.geeksforgeeks.org/devops/docker-using-public-repositories-to-host-docker-images/",
+      "https://www.geeksforgeeks.org/devops/docker-private-registries/",
+      "https://www.geeksforgeeks.org/cloud-computing/creating-a-private-repository-and-push-an-image-to-that-private-repository/",
+      "https://www.geeksforgeeks.org/devops/docker-swarm-building-a-highly-scalable-cluster/",
+      "https://www.geeksforgeeks.org/devops/docker-security-best-practices/"
+    ]
+  },
+  {
+    "step": "advanced 1",
+    "topic": "이미지 최적화와 경량화",
+    "objectives": "레이어 최적화, 불필요 패키지 제거, 베이스 이미지 선택을 통해 Docker 이미지를 경량화하는 원리를 이해할 수 있다.",
+    "key_contents": "레이어 최적화, 불필요 패키지 제거, 작은 베이스 이미지 선택",
+    "urls": [
+      "https://www.geeksforgeeks.org/devops/how-to-optimize-docker-image/"
+    ]
+  },
+  {
+    "step": "advanced 2",
+    "topic": "백업과 운영 자동화",
+    "objectives": "Docker Storage, 데이터 백업, 볼륨 관리 CLI를 이해하고 운영 자동화의 기초를 익힌다.",
+    "key_contents": "Docker Data Storage, 데이터 백업, 볼륨 관리 CLI",
+    "urls": [
+      "https://www.geeksforgeeks.org/cloud-computing/data-storage-in-docker/",
+      "https://www.geeksforgeeks.org/devops/backing-up-a-docker-container/",
+      "https://www.geeksforgeeks.org/devops/using-cli-to-manage-docker-volumes/"
+    ]
+  }
+]
