@@ -1,0 +1,166 @@
+[
+  {
+    "step": "basic_1",
+    "topic": "Git과 GitHub 이해하기, 설치, 초기 설정",
+    "objectives": "Git과 GitHub의 차이를 이해하고, Git을 설치한 뒤 사용자 정보를 설정할 수 있다.",
+    "key_contents": "Git vs GitHub, 버전 관리 개요, Git 설치, git config, 저장소 개념",
+    "urls": [
+      "https://www.geeksforgeeks.org/git/git-introduction/",
+      "https://www.geeksforgeeks.org/git/git-vs-github/",
+      "https://www.geeksforgeeks.org/git/version-control-systems/",
+      "https://www.geeksforgeeks.org/git/bare-repositories-in-git/",
+      "https://www.geeksforgeeks.org/git/git-environment-setup/",
+      "https://gitimmersion.com/lab_01.html"
+    ]
+  },
+  {
+    "step": "basic_2",
+    "topic": "로컬 저장소 시작: init, status, add, commit",
+    "objectives": "로컬 저장소를 만들고, 파일 변경사항을 추적하여 커밋할 수 있다.",
+    "key_contents": "git init, working directory, staging area, repository, git status, git add, git commit",
+    "urls": [
+      "https://www.geeksforgeeks.org/git/what-is-git-init/",
+      "https://www.geeksforgeeks.org/git/states-of-a-file-in-git-working-directory/",
+      "https://www.geeksforgeeks.org/git/git-status/",
+      "https://www.geeksforgeeks.org/git/what-is-git-add/",
+      "https://www.geeksforgeeks.org/git/committing-in-git/",
+      "https://gitimmersion.com/lab_03.html",
+      "https://gitimmersion.com/lab_04.html",
+      "https://gitimmersion.com/lab_05.html",
+      "https://gitimmersion.com/lab_06.html",
+      "https://gitimmersion.com/lab_07.html",
+      "https://gitimmersion.com/lab_08.html",
+      "https://gitimmersion.com/lab_09.html"
+    ]
+  },
+  {
+    "step": "basic_3",
+    "topic": "변경 이력 보기와 수정 관리",
+    "objectives": "커밋 이력을 확인하고, 변경 전후를 비교하며, 실수한 변경을 되돌리는 기초를 익힐 수 있다.",
+    "key_contents": "git log, git diff, git show, 파일 상태, undo 개요",
+    "urls": [
+      "https://www.geeksforgeeks.org/git/git-diff/",
+      "https://www.geeksforgeeks.org/git/undoing-in-git/",
+      "https://www.geeksforgeeks.org/git/how-to-undo-a-commit-in-git/",
+      "https://www.geeksforgeeks.org/git/how-to-check-git-logs/",
+      "https://www.geeksforgeeks.org/git/how-to-use-git-log-to-format-the-commit-history/",
+      "https://www.geeksforgeeks.org/git/git-git-show-command-line-utility/",
+      "https://gitimmersion.com/lab_10.html",
+      "https://gitimmersion.com/lab_14.html",
+      "https://gitimmersion.com/lab_15.html",
+      "https://gitimmersion.com/lab_16.html"
+    ]
+  },
+  {
+    "step": "basic_4",
+    "topic": "브랜치 이해와 생성, 이동",
+    "objectives": "브랜치의 개념을 이해하고, 브랜치를 생성·이동·관리할 수 있다.",
+    "key_contents": "git branch, git checkout, git switch",
+    "urls": [
+      "https://www.geeksforgeeks.org/git/branching-strategies-in-git/",
+      "https://www.geeksforgeeks.org/git/introduction-to-git-branch/",
+      "https://www.geeksforgeeks.org/git/how-to-create-branch-in-git/",
+      "https://www.geeksforgeeks.org/git/how-to-publish-a-new-branch-in-git/",
+      "https://www.geeksforgeeks.org/git/how-to-create-a-new-branch-in-git/",
+      "https://gitimmersion.com/lab_24.html",
+      "https://gitimmersion.com/lab_25.html"
+    ]
+  },
+  {
+    "step": "basic_5",
+    "topic": "병합과 충돌 해결",
+    "objectives": "브랜치를 병합하고, 충돌이 발생했을 때 원인을 이해하고 해결할 수 있다.",
+    "key_contents": "git merge, fast-forward merge, merge commit, merge conflict, conflict resolution",
+    "urls": [
+      "https://www.geeksforgeeks.org/git/git-merge/",
+      "https://www.geeksforgeeks.org/html/git-checkout-and-merge/",
+      "https://www.geeksforgeeks.org/git/how-to-merge-two-branches-in-git/",
+      "https://www.geeksforgeeks.org/git/how-to-merge-a-git-branch-into-master/",
+      "https://www.geeksforgeeks.org/git/how-to-replace-master-branch-with-another-branch-in-git/",
+      "https://www.geeksforgeeks.org/git/git-merge-and-merge-conflict/",
+      "https://gitimmersion.com/lab_28.html",
+      "https://gitimmersion.com/lab_29.html",
+      "https://gitimmersion.com/lab_30.html"
+    ]
+  },
+  {
+    "step": "basic_6",
+    "topic": "원격 저장소와 GitHub 연결",
+    "objectives": "원격 저장소 개념을 이해하고, GitHub 저장소와 로컬 저장소를 연결할 수 있다.",
+    "key_contents": "remote repository, origin, clone, git remote add, GitHub repository",
+    "urls": [
+      "https://www.geeksforgeeks.org/git/handling-repositories-with-git-remote/",
+      "https://www.geeksforgeeks.org/git/git-origin-master/",
+      "https://www.geeksforgeeks.org/git/what-is-git-clone/",
+      "https://www.geeksforgeeks.org/git/what-is-a-git-repository/",
+      "https://www.geeksforgeeks.org/git/git-setting-up-a-repository/",
+      "https://www.geeksforgeeks.org/git/creating-repository-in-github/",
+      "https://www.geeksforgeeks.org/git/working-with-git-repositories/",
+      "https://gitimmersion.com/lab_36.html",
+      "https://gitimmersion.com/lab_37.html",
+      "https://gitimmersion.com/lab_46.html",
+      "https://gitimmersion.com/lab_47.html"
+    ]
+  },
+  {
+    "step": "basic_7",
+    "topic": "push, pull, fetch를 통한 협업",
+    "objectives": "로컬과 원격 저장소 사이에서 코드를 동기화하고, 협업 흐름을 이해할 수 있다.",
+    "key_contents": "git push, git pull, git fetch, upstream branch, origin/main",
+    "urls": [
+      "https://www.geeksforgeeks.org/git/what-is-git-push/",
+      "https://www.geeksforgeeks.org/git/what-is-git-pull/",
+      "https://www.geeksforgeeks.org/git/getting-changes-from-a-git-repository/",
+      "https://www.geeksforgeeks.org/git/how-to-set-upstream-branch-on-git/",
+      "https://www.geeksforgeeks.org/git/git-origin-master/",
+      "https://gitimmersion.com/lab_39.html",
+      "https://gitimmersion.com/lab_44.html",
+      "https://gitimmersion.com/lab_48.html",
+      "https://gitimmersion.com/lab_49.html"
+    ]
+  },
+  {
+    "step": "basic_8",
+    "topic": "GitHub 협업 흐름: Fork, Pull Request, 리뷰",
+    "objectives": "GitHub 기반 협업 흐름을 이해하고, Fork 또는 브랜치 기반 협업 과정을 설명할 수 있다.",
+    "key_contents": "GitHub repository, fork, pull request, code review, issue 기반 협업",
+    "urls": [
+      "https://www.geeksforgeeks.org/git/git-fork/",
+      "https://www.geeksforgeeks.org/git/difference-between-fork-and-clone-in-github/",
+      "https://www.geeksforgeeks.org/git/how-to-fork-a-github-repository/",
+      "https://www.geeksforgeeks.org/git/sync-your-fork-with-master-in-github/",
+      "https://www.geeksforgeeks.org/git/how-to-update-or-sync-a-forked-repository-on-github/",
+      "https://www.geeksforgeeks.org/git/what-is-collaboration-in-git/",
+      "https://www.geeksforgeeks.org/git/forking-workflow-in-open-source-ecosystem/",
+      "https://www.geeksforgeeks.org/git/making-first-open-source-pull-request/"
+    ]
+  },
+  {
+    "step": "basic_9",
+    "topic": "이력 관리 심화: rebase, reflog, 복구",
+    "objectives": "히스토리를 정리하고, 실수로 잃어버린 작업을 복구하는 기초를 익힐 수 있다.",
+    "key_contents": "git rebase, reflog, recovering lost commits, clean history",
+    "urls": [
+      "https://www.geeksforgeeks.org/git/rebasing-of-branches-in-git/",
+      "https://www.geeksforgeeks.org/git/git-difference-between-merging-and-rebasing/",
+      "https://www.geeksforgeeks.org/git/using-refs-and-reflogs-in-git/",
+      "https://www.geeksforgeeks.org/git/recovering-lost-commits-in-git/",
+      "https://gitimmersion.com/lab_34.html"
+    ]
+  },
+  {
+    "step": "basic_10",
+    "topic": "실무 운영: 태그, 워크플로, 브랜치 전략",
+    "objectives": "릴리스 태그와 브랜치 전략의 필요성을 이해하고, 팀 단위 Git 운영 규칙을 설계할 수 있다.",
+    "key_contents": "git tag, branching strategy, release flow, 협업 규칙",
+    "urls": [
+      "https://www.geeksforgeeks.org/git/using-tags-in-git/",
+      "https://www.geeksforgeeks.org/git/branching-strategies-in-git/".
+      "https://www.geeksforgeeks.org/git/git-workflows-for-agile-development-teams/",
+      "https://www.geeksforgeeks.org/git/git-workflow-etiquettes/",
+      "https://www.geeksforgeeks.org/git/git-flow-vs-github-flow/",
+      "https://www.geeksforgeeks.org/git/git-workflows-with-open-source-collaboration/",
+      "https://www.geeksforgeeks.org/devops/how-to-create-a-basic-ci-workflow-using-github-actions/"
+    ]
+  }
+]
