@@ -133,7 +133,6 @@
       "https://www.geeksforgeeks.org/devops/connecting-an-aws-ec2-instance-of-a-private-subnet-using-bastion-host/",
       "https://www.geeksforgeeks.org/computer-networks/difference-between-security-group-and-network-acl-in-aws/",
       "https://www.geeksforgeeks.org/devops/introduction-to-amazon-lightsail/",
-      "https://www.geeksforgeeks.org/cloud-computing/aws-cloudformation/",
       "https://www.geeksforgeeks.org/devops/amazon-web-services-working-with-dns/",
       "https://www.geeksforgeeks.org/cloud-computing/introduction-to-amazon-route53/"
     ]
@@ -212,7 +211,11 @@
       "https://www.w3schools.com/aws/aws_cloudessentials_ps_pricemodels.php",
       "https://www.w3schools.com/aws/aws_cloudessentials_ps_billingservices.php",
       "https://www.w3schools.com/aws/aws_cloudessentials_ps_supportplans.php",
-      "https://www.w3schools.com/aws/aws_cloudessentials_ps_marketplace.php"
+      "https://www.w3schools.com/aws/aws_cloudessentials_ps_marketplace.php",
+      "https://www.w3schools.com/aws/aws_cloudessentials_ps_costoptimization.php",
+      "https://www.geeksforgeeks.org/devops/cost-explorer-aws-cost-management/",
+      "https://www.geeksforgeeks.org/devops/amazon-web-services-budget-setup/",
+      "https://www.geeksforgeeks.org/devops/amazon-web-services-cost-and-usage-report/"
     ]
   },
   {
@@ -221,8 +224,16 @@
     "objectives": "코드 기반으로 인프라를 구성하는 기본 개념을 이해하고 반복 가능한 배포 방식을 익힐 수 있다.",
     "key_contents": "CloudFormation 개요, 프로비저닝 개념, Elastic Beanstalk 개요, 인프라 자동화 필요성, 배포 표준화",
     "urls": [
-      "https://www.w3schools.com/aws/index.php",
-      "https://www.geeksforgeeks.org/devops/aws-tutorial/"
+      "https://www.w3schools.com/aws/aws_cloudessentials_awsprovision.php",
+      "https://www.w3schools.com/aws/aws_cloudessentials_awsprovisionservices.php",
+      "https://www.w3schools.com/aws/aws_cloudessentials_awsbeanstalk.php",
+      "https://www.w3schools.com/aws/aws_cloudessentials_awscloudformation.php",
+      "https://www.geeksforgeeks.org/cloud-computing/aws-cloudformation/",
+      "https://www.geeksforgeeks.org/devops/introduction-to-aws-elastic-beanstalk/",
+      "https://www.geeksforgeeks.org/devops/how-to-attach-ebs-volume-in-ec2-instance/",
+      "https://www.geeksforgeeks.org/devops/amazon-web-services-replacing-unhealthy-ec2-instance-in-elastic-beanstalk-environment/",
+      "https://www.geeksforgeeks.org/cloud-computing/launching-an-application-on-aws-beanstalk/",
+      "https://www.geeksforgeeks.org/devops/amazon-web-services-adding-security-group-to-elastic-beanstalk-environment/"
     ]
   },
   {
@@ -230,16 +241,16 @@
     "topic": "마이그레이션과 Well-Architected 관점",
     "objectives": "기존 시스템을 AWS로 이전할 때 고려해야 할 전략과 설계 원칙을 이해할 수 있다.",
     "key_contents": "AWS Migration 개요, Migration Strategies, 데이터 이전 방식, AWS CAF, Well-Architected Framework 기초",
-    "urls": ["https://www.w3schools.com/aws/index.php"]
-  },
-  {
-    "step": "15",
-    "topic": "종합 실습과 Cloud Practitioner 대비",
-    "objectives": "지금까지 학습한 서비스를 연결해 기초 아키텍처를 설계하고 AWS Cloud Practitioner 수준의 핵심 개념을 정리할 수 있다.",
-    "key_contents": "EC2+S3+RDS 기반 아키텍처 실습, IAM 보안 적용, VPC 네트워크 구성, 비용 점검, 핵심 서비스 복습, 자격증 대비 포인트 정리",
     "urls": [
-      "https://www.w3schools.com/aws/index.php",
-      "https://www.geeksforgeeks.org/devops/aws-tutorial/"
+      "https://www.w3schools.com/aws/aws_cloudessentials_mig_migrationandinnovationintroduction.php",
+      "https://www.w3schools.com/aws/aws_cloudessentials_mig_awscaf.php",
+      "https://www.w3schools.com/aws/aws_cloudessentials_mig_migrationstrategies.php",
+      "https://www.w3schools.com/aws/aws_cloudessentials_mig_migrationservices.php",
+      "https://www.w3schools.com/aws/aws_cloudessentials_mig_databasemigrations.php",
+      "https://www.w3schools.com/aws/aws_cloudessentials_mig_datatransferonline.php",
+      "https://www.w3schools.com/aws/aws_cloudessentials_mig_awssnowfamily.php",
+      "https://www.w3schools.com/aws/aws_cloudessentials_clo_thecloudjourney.php",
+      "https://www.w3schools.com/aws/aws_cloudessentials_clo_awswellarchitectedframework.php",
     ]
   }
 ]
