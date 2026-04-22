@@ -1,0 +1,116 @@
+[
+  {
+    "step": "1",
+    "topic": "MCP 개요와 학습 환경 준비",
+    "objectives": "MCP의 학습 목표와 전체 로드맵을 이해하고, 실습에 필요한 개발 환경과 선수지식을 점검할 수 있다.",
+    "key_contents": "MCP Course 전체 구조 이해, 학습 목표 확인, AI/LLM/API 기초 점검, Python 또는 TypeScript 선택, 계정 및 실습 환경 준비",
+    "urls": [
+      "https://huggingface.co/learn/mcp-course/en/unit1/introduction",
+      "https://modelcontextprotocol.io/docs/getting-started/intro"
+    ]
+  },
+  {
+    "step": "2",
+    "topic": "MCP가 필요한 이유와 적용 가치",
+    "objectives": "MCP가 해결하는 문제를 이해하고, 표준 프로토콜이 AI 애플리케이션 생태계에 주는 가치를 설명할 수 있다.",
+    "key_contents": "USB-C for AI 비유, M×N Integration Problem, M+N 구조, 표준화와 상호운용성, 외부 도구·데이터·워크플로 연결의 의미",
+    "urls": [
+      "https://huggingface.co/learn/mcp-course/en/unit1/introduction",
+      "https://huggingface.co/learn/mcp-course/en/unit1/key-concepts",
+      "https://modelcontextprotocol.io/docs/getting-started/intro"
+    ]
+  },
+  {
+    "step": "3",
+    "topic": "MCP 핵심 용어와 아키텍처 이해",
+    "objectives": "Host, Client, Server의 역할을 구분하고 MCP의 전체 아키텍처를 설명할 수 있다.",
+    "key_contents": "Host-Client-Server 구조, 1:1 Client-Server 연결, 로컬 서버와 원격 서버, 데이터 레이어와 전송 레이어, MCP 참여자 간 상호작용",
+    "urls": [
+      "https://huggingface.co/learn/mcp-course/en/unit1/key-concepts",
+      "https://huggingface.co/learn/mcp-course/en/unit1/architectural-components",
+      "https://modelcontextprotocol.io/docs/learn/architecture"
+    ]
+  },
+  {
+    "step": "4",
+    "topic": "MCP 통신 프로토콜과 연결 수명주기",
+    "objectives": "MCP의 메시지 구조와 초기화 과정을 이해하고, 프로토콜 수준의 흐름을 설명할 수 있다.",
+    "key_contents": "JSON-RPC 2.0, request/response/notification, initialize handshake, capability negotiation, protocol version 협상, notifications/initialized 흐름",
+    "urls": [
+      "https://huggingface.co/learn/mcp-course/en/unit1/communication-protocol",
+      "https://modelcontextprotocol.io/docs/learn/architecture"
+    ]
+  },
+  {
+    "step": "5",
+    "topic": "MCP Capabilities I: Tools, Resources, Prompts",
+    "objectives": "서버가 제공하는 핵심 capabilities를 이해하고 각각의 활용 시나리오를 설계할 수 있다.",
+    "key_contents": "Tools의 실행 기능, Resources의 읽기 전용 컨텍스트, Prompts의 워크플로 가이드 역할, tools/list·resources/list·prompts/list 기반 동적 discovery",
+    "urls": [
+      "https://huggingface.co/learn/mcp-course/en/unit1/capabilities",
+      "https://huggingface.co/learn/mcp-course/en/unit1/key-concepts",
+      "https://modelcontextprotocol.io/docs/learn/architecture",
+      "https://modelcontextprotocol.io/docs/develop/build-server"
+    ]
+  },
+  {
+    "step": "6",
+    "topic": "MCP Capabilities II: Sampling, Elicitation, Notifications, Logging",
+    "objectives": "고급 상호작용 기능을 이해하고, 사용자 승인과 제어를 고려한 MCP 설계를 할 수 있다.",
+    "key_contents": "Sampling의 서버 주도 LLM 요청, Elicitation을 통한 사용자 추가 입력, list_changed 등 알림 구조, 서버 로깅과 디버깅을 위한 로그 전달",
+    "urls": [
+      "https://huggingface.co/learn/mcp-course/en/unit1/capabilities",
+      "https://modelcontextprotocol.io/docs/tools/debugging"
+    ]
+  },
+  {
+    "step": "7",
+    "topic": "전송 방식과 보안 기초",
+    "objectives": "stdio와 Streamable HTTP의 차이를 이해하고 상황에 맞는 MCP 연결 방식을 선택할 수 있다.",
+    "key_contents": "stdio transport, Streamable HTTP transport, 로컬 vs 원격 서버, 인증 헤더와 API 키, OAuth 권장 사항, 네트워크 기반 MCP 연결 고려사항",
+    "urls": [
+      "https://huggingface.co/learn/mcp-course/en/unit1/communication-protocol"
+    ]
+  },
+  {
+    "step": "8",
+    "topic": "MCP SDK와 언어별 구현 전략",
+    "objectives": "공식 SDK의 역할을 이해하고, 프로젝트 목적에 맞는 언어와 SDK를 선택할 수 있다.",
+    "key_contents": "Python·TypeScript 중심 학습 전략, 공식 SDK의 역할, 저수준 프로토콜 추상화, 서버/클라이언트 공통 개발 패턴, 언어 독립적 설계",
+    "urls": [
+      "https://huggingface.co/learn/mcp-course/en/unit1/sdk",
+      "https://modelcontextprotocol.io/docs/sdk"
+    ]
+  },
+  {
+    "step": "9",
+    "topic": "MCP Client 설정과 외부 서버 연결",
+    "objectives": "MCP 클라이언트의 역할을 이해하고 설정 파일을 통해 서버를 연결할 수 있다.",
+    "key_contents": "MCP Client의 책임, Host 내부 Client 개념, 클라이언트 설정 파일 구조, 로컬 서버 연결, 원격 서버 연결, 주요 클라이언트 사용 방식 이해",
+    "urls": [
+      "https://huggingface.co/learn/mcp-course/en/unit1/mcp-clients",
+      "https://modelcontextprotocol.io/docs/develop/build-client"
+    ]
+  },
+  {
+    "step": "10",
+    "topic": "MCP Inspector와 디버깅 실습",
+    "objectives": "Inspector와 로그를 활용해 MCP 서버/클라이언트 문제를 진단하고 수정할 수 있다.",
+    "key_contents": "MCP Inspector 사용법, transport-agnostic 테스트, tools/prompts/resources 호출 점검, stderr 로깅, 환경 변수·working directory·초기화 오류 점검",
+    "urls": [
+      "https://modelcontextprotocol.io/docs/tools/inspector",
+      "https://modelcontextprotocol.io/docs/tools/debugging"
+    ]
+  },
+  {
+    "step": "11",
+    "topic": "실전 확장: Hugging Face MCP Server와 Gradio 연동",
+    "objectives": "기존 MCP 생태계를 활용해 외부 플랫폼과 모델 도구를 연결하는 방법을 익힐 수 있다.",
+    "key_contents": "Hugging Face MCP Server 연결, Hub 리소스 탐색, community tools 활용, MCP-compatible Gradio Spaces 연결, 도구 재사용과 확장 전략",
+    "urls": [
+      "https://huggingface.co/learn/mcp-course/en/unit1/hf-mcp-server",
+      "https://huggingface.co/learn/mcp-course/en/unit1/gradio-mcp",
+      "https://huggingface.co/learn/mcp-course/en/unit1/mcp-clients"
+    ]
+  }
+]

@@ -1,0 +1,162 @@
+[
+  {
+    "step": "1",
+    "topic": "시계열분석 개요와 Python 실습 환경 준비",
+    "objectives": "시계열분석과 예측의 목적을 이해하고, Python 기반 실습 환경을 구성할 수 있다.",
+    "key_contents": "시계열과 예측의 정의, 예측의 활용 사례, Forecasting/Goals/Planning의 차이, Python 실습 환경, 데이터와 모듈 준비",
+    "urls": [
+      "https://otexts.com/fpppy/01-intro.html",
+      "https://otexts.com/fpppy/UsingPython.html"
+    ]
+  },
+  {
+    "step": "2",
+    "topic": "예측 문제 정의와 예측 과제 설계",
+    "objectives": "무엇을, 어느 수준에서, 어떤 기간까지 예측할지 정의하고 예측 과제를 설계할 수 있다.",
+    "key_contents": "문제 정의, 예측 대상 결정, 집계 수준 결정, 예측 주기와 예측 시계 설정, 사용자의 요구 파악, 예측 시스템 설계 기초",
+    "urls": [
+      "https://otexts.com/fpppy/01-intro.html"
+    ]
+  },
+  {
+    "step": "3",
+    "topic": "시계열 데이터 구조와 데이터 준비",
+    "objectives": "시계열 데이터를 올바른 구조로 정리하고 분석 가능한 형태로 준비할 수 있다.",
+    "key_contents": "정시계열과 데이터프레임, timestamp와 period, key variable, csv 불러오기, seasonal period 설정, 시계열 데이터 전처리",
+    "urls": [
+      "https://otexts.com/fpppy/02-graphics.html",
+      "https://otexts.com/fpppy/UsingPython.html"
+    ]
+  },
+  {
+    "step": "4",
+    "topic": "시계열 시각화와 탐색적 데이터 분석",
+    "objectives": "그래프를 통해 추세, 계절성, 이상치, 자기상관 등 주요 패턴을 탐색할 수 있다.",
+    "key_contents": "time plot, seasonal plot, seasonal subseries plot, scatterplot, lag plot, ACF, white noise 판별, 초기 EDA 절차",
+    "urls": [
+      "https://otexts.com/fpppy/02-graphics.html"
+    ]
+  },
+  {
+    "step": "5",
+    "topic": "시계열 분해와 패턴 이해",
+    "objectives": "시계열을 추세, 계절성, 불규칙 성분으로 분해하고 구조를 해석할 수 있다.",
+    "key_contents": "시계열 분해 개념, trend/seasonality/residual, additive와 multiplicative 관점, decomposition 결과 해석",
+    "urls": [
+      "https://otexts.com/fpppy/03-decomposition.html"
+    ]
+  },
+  {
+    "step": "6",
+    "topic": "시계열 특징 추출과 데이터 요약",
+    "objectives": "시계열의 핵심 특징을 수치화하여 비교하고 모델링 전 진단에 활용할 수 있다.",
+    "key_contents": "feature extraction, 변동성, 추세 강도, 계절성 강도, 시계열 요약 통계, 시계열 비교와 군집화 기초",
+    "urls": [
+      "https://otexts.com/fpppy/04-features.html"
+    ]
+  },
+  {
+    "step": "7",
+    "topic": "예측의 기본 절차와 성능 평가 기초",
+    "objectives": "예측 과제의 기본 5단계를 이해하고 예측 결과를 평가하는 기본 틀을 설명할 수 있다.",
+    "key_contents": "문제 정의, 정보 수집, 탐색적 분석, 모델 선택과 적합, 모델 사용과 평가, forecast distribution, point forecast, prediction interval",
+    "urls": [
+      "https://otexts.com/fpppy/01-intro.html",
+      "https://otexts.com/fpppy/05-toolbox.html"
+    ]
+  },
+  {
+    "step": "8",
+    "topic": "기초 예측 기법과 예측가의 도구상자",
+    "objectives": "기준선 예측 모델을 이해하고 시계열 예측 성능 비교의 출발점을 만들 수 있다.",
+    "key_contents": "naive method, seasonal naive, drift method, training/test split, rolling evaluation, accuracy 측정, benchmark model 비교",
+    "urls": [
+      "https://otexts.com/fpppy/05-toolbox.html"
+    ]
+  },
+  {
+    "step": "9",
+    "topic": "판단적 예측과 정성적 예측",
+    "objectives": "데이터가 부족하거나 새 제품처럼 과거 데이터가 없는 상황에서 판단적 예측을 적용할 수 있다.",
+    "key_contents": "judgmental forecasting, Delphi method, scenario forecasting, analogy forecasting, 신제품 수요 예측, judgmental adjustment 원칙",
+    "urls": [
+      "https://otexts.com/fpppy/06-judgmental.html",
+      "https://otexts.com/fpppy/01-intro.html"
+    ]
+  },
+  {
+    "step": "10",
+    "topic": "시계열 회귀모형",
+    "objectives": "외생변수를 활용해 시계열을 설명하고 예측하는 회귀모형을 구축할 수 있다.",
+    "key_contents": "time series regression, predictor variables, dummy variable, trend and seasonality regression, explanatory model 설계",
+    "urls": [
+      "https://otexts.com/fpppy/07-regression.html",
+      "https://otexts.com/fpppy/01-intro.html"
+    ]
+  },
+  {
+    "step": "11",
+    "topic": "지수평활법",
+    "objectives": "수준, 추세, 계절성을 반영하는 지수평활 계열 모델을 이해하고 적용할 수 있다.",
+    "key_contents": "simple exponential smoothing, Holt method, Holt-Winters method, ETS 개념, level/trend/seasonal component 추정",
+    "urls": [
+      "https://otexts.com/fpppy/08-exponential-smoothing.html"
+    ]
+  },
+  {
+    "step": "12",
+    "topic": "ARIMA 모형",
+    "objectives": "자기회귀와 이동평균 기반의 시계열 모델링 과정을 이해하고 예측에 적용할 수 있다.",
+    "key_contents": "stationarity, differencing, AR/MA/ARIMA, seasonal ARIMA, model identification, 진단과 해석",
+    "urls": [
+      "https://otexts.com/fpppy/09-arima.html"
+    ]
+  },
+  {
+    "step": "13",
+    "topic": "동적 회귀와 외생변수 결합 예측",
+    "objectives": "시계열 정보와 외생변수를 함께 사용하는 혼합형 예측 모델을 설계할 수 있다.",
+    "key_contents": "dynamic regression, ARIMA errors, transfer function 관점, explanatory model과 time series model 결합",
+    "urls": [
+      "https://otexts.com/fpppy/10-dynamic-regression.html",
+      "https://otexts.com/fpppy/01-intro.html"
+    ]
+  },
+  {
+    "step": "14",
+    "topic": "계층형·그룹형 시계열 예측",
+    "objectives": "제품군, 지역, 조직 단위처럼 여러 집계 수준이 있는 데이터를 일관되게 예측할 수 있다.",
+    "key_contents": "hierarchical time series, grouped time series, reconciliation, aggregated vs disaggregated forecasting, 실무 수요예측 구조",
+    "urls": [
+      "https://otexts.com/fpppy/11-hierarchical-forecasting.html"
+    ]
+  },
+  {
+    "step": "15",
+    "topic": "고급 예측 기법과 실무 적용",
+    "objectives": "복잡한 시계열 문제에 맞는 고급 방법을 이해하고 실무 이슈를 고려해 모델을 운영할 수 있다.",
+    "key_contents": "advanced forecasting methods, practical issues, missing values, outliers, short series, forecast combinations, 실무 운영 고려사항",
+    "urls": [
+      "https://otexts.com/fpppy/12-advanced.html",
+      "https://otexts.com/fpppy/13-practical.html"
+    ]
+  },
+  {
+    "step": "16",
+    "topic": "딥러닝 기반 시계열 예측",
+    "objectives": "신경망 기반 시계열 예측의 기본 개념과 전통적 통계모형과의 차이를 이해할 수 있다.",
+    "key_contents": "neural networks for forecasting, 딥러닝 기반 시계열 모델 개요, 데이터 요구사항, 전통 모델과 비교",
+    "urls": [
+      "https://otexts.com/fpppy/14-neural-networks.html"
+    ]
+  },
+  {
+    "step": "17",
+    "topic": "파운데이션 모델과 최신 시계열 예측 트렌드",
+    "objectives": "최신 시계열 파운데이션 모델의 개념을 이해하고 향후 확장 학습 방향을 설계할 수 있다.",
+    "key_contents": "foundation forecasting models, 범용 시계열 모델 개념, 최신 예측 트렌드, 전통적 방법과 최신 방법의 연결",
+    "urls": [
+      "https://otexts.com/fpppy/15-foundation-models.html"
+    ]
+  }
+]

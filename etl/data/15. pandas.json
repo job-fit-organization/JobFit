@@ -1,0 +1,114 @@
+[
+  {
+    "step": "1",
+    "topic": "Pandas 개요와 개발 환경 준비",
+    "objectives": "Pandas의 역할을 이해하고, Series와 DataFrame 중심의 학습 준비를 마친다.",
+    "key_contents": "Pandas가 무엇인지, 어떤 문제를 해결하는지 이해한다. Python 환경에서 pandas를 설치하고 import하는 방법을 익힌다. Series와 DataFrame의 차이를 개념적으로 구분한다. 실습 환경은 로컬 Python 또는 Jupyter Notebook 기준으로 준비한다.",
+    "urls": [
+      "https://www.w3schools.com/python/pandas/default.asp",
+      "https://www.w3schools.com/python/pandas/pandas_intro.asp",
+      "https://www.w3schools.com/python/pandas/pandas_getting_started.asp"
+    ]
+  },
+  {
+    "step": "2",
+    "topic": "Series와 DataFrame 기초",
+    "objectives": "Pandas의 핵심 자료구조를 만들고 기본 구조를 읽을 수 있다.",
+    "key_contents": "Series와 DataFrame 생성 방법을 익힌다. 행과 열, 인덱스, 컬럼의 개념을 이해한다. loc를 활용한 행 접근의 기초를 익힌다. 간단한 사전(dict)과 리스트를 이용해 DataFrame을 생성해본다.",
+    "urls": [
+      "https://www.w3schools.com/python/pandas/pandas_series.asp",
+      "https://www.w3schools.com/python/pandas/pandas_dataframes.asp",
+      "https://www.kaggle.com/code/residentmario/creating-reading-and-writing"
+    ]
+  },
+  {
+    "step": "3",
+    "topic": "데이터 읽기와 쓰기: CSV/JSON 중심",
+    "objectives": "외부 데이터를 DataFrame으로 불러오고 저장하는 기본 입출력을 수행할 수 있다.",
+    "key_contents": "read_csv, read_json의 기본 사용법을 학습한다. 파일 경로, 구분자, 인코딩 같은 실무에서 자주 만나는 입력 이슈를 이해한다. 데이터를 저장하거나 다시 내보내는 기본 흐름도 함께 익힌다.",
+    "urls": [
+      "https://www.w3schools.com/python/pandas/pandas_csv.asp",
+      "https://www.w3schools.com/python/pandas/pandas_json.asp",
+      "https://github.com/jvns/pandas-cookbook/blob/master/cookbook/Chapter%201%20-%20Reading%20from%20a%20CSV.ipynb"
+    ]
+  },
+  {
+    "step": "4",
+    "topic": "인덱싱, 선택, 조건 필터링",
+    "objectives": "필요한 행과 열을 정확하게 선택하고 조건 기반으로 데이터를 추출할 수 있다.",
+    "key_contents": "컬럼 선택, 행 슬라이싱, 조건식 기반 필터링을 익힌다. loc와 인덱스를 활용한 선택을 अभ्यास한다. 실제 데이터에서 원하는 레코드만 추출하는 패턴을 반복 실습한다.",
+    "urls": [
+      "https://www.kaggle.com/code/residentmario/indexing-selecting-assigning",
+      "https://www.w3schools.com/python/pandas/pandas_dataframes.asp",
+      "https://github.com/jvns/pandas-cookbook/blob/master/cookbook/Chapter%202%20-%20Selecting%20data%20%26%20finding%20the%20most%20common%20complaint%20type.ipynb",
+      "https://github.com/jvns/pandas-cookbook/blob/master/cookbook/Chapter%203%20-%20Which%20borough%20has%20the%20most%20noise%20complaints%20(or%2C%20more%20selecting%20data).ipynb"
+    ]
+  },
+  {
+    "step": "5",
+    "topic": "기초 탐색과 요약 분석",
+    "objectives": "데이터를 빠르게 훑어보고 요약 통계로 핵심 특징을 파악할 수 있다.",
+    "key_contents": "head, tail, info, describe 같은 기본 탐색 도구를 익힌다. summary functions를 사용해 분포와 대표값을 파악한다. map 또는 apply 계열 사고방식을 통해 값 변환과 해석의 기초를 익힌다.",
+    "urls": [
+      "https://www.kaggle.com/code/residentmario/summary-functions-and-maps",
+      "https://www.w3schools.com/python/pandas/pandas_analyzing.asp"
+    ]
+  },
+  {
+    "step": "6",
+    "topic": "정렬, 그룹화, 집계",
+    "objectives": "데이터를 기준별로 묶고 의미 있는 통계 결과를 도출할 수 있다.",
+    "key_contents": "sort_values를 활용한 정렬을 익힌다. groupby와 aggregate를 사용해 범주별 집계를 수행한다. 실전 데이터에서 요일별, 지역별, 유형별 분석 문제를 해결하는 흐름을 연습한다.",
+    "urls": [
+      "https://www.kaggle.com/code/residentmario/grouping-and-sorting",
+      "https://www.w3schools.com/python/pandas/pandas_analyzing.asp",
+      "https://github.com/jvns/pandas-cookbook/blob/master/cookbook/Chapter%204%20-%20Find%20out%20on%20which%20weekday%20people%20bike%20the%20most%20with%20groupby%20and%20aggregate.ipynb"
+    ]
+  },
+  {
+    "step": "7",
+    "topic": "자료형, 문자열, 날짜/시간 처리",
+    "objectives": "실무 데이터에서 자주 만나는 자료형 문제를 해결하고 문자열·시간 데이터를 다룰 수 있다.",
+    "key_contents": "컬럼의 dtype을 확인하고 적절한 형으로 변환하는 흐름을 익힌다. 문자열 컬럼 처리와 벡터화된 문자열 연산을 실습한다. 날짜 문자열, Unix timestamp 같은 시간 데이터 전처리 감각을 익힌다.",
+    "urls": [
+      "https://www.kaggle.com/code/residentmario/data-types-and-missing-values",
+      "https://www.w3schools.com/python/pandas/pandas_cleaning_wrong_format.asp",
+      "https://github.com/jvns/pandas-cookbook/blob/master/cookbook/Chapter%206%20-%20String%20Operations-%20Which%20month%20was%20the%20snowiest.ipynb",
+      "https://github.com/jvns/pandas-cookbook/blob/master/cookbook/Chapter%208%20-%20How%20to%20deal%20with%20timestamps.ipynb"
+    ]
+  },
+  {
+    "step": "8",
+    "topic": "결측치와 이상 데이터 정제",
+    "objectives": "결측치, 잘못된 형식, 잘못된 값, 중복 데이터 같은 품질 문제를 정리할 수 있다.",
+    "key_contents": "isna, fillna, dropna 중심으로 결측치 처리를 학습한다. 잘못된 형식의 값, 범위를 벗어난 값, 중복 행 제거 방법을 익힌다. 정제 전후 데이터 품질을 비교하며 실무형 전처리 루틴을 만든다.",
+    "urls": [
+      "https://www.kaggle.com/code/residentmario/data-types-and-missing-values",
+      "https://www.w3schools.com/python/pandas/pandas_cleaning.asp",
+      "https://www.w3schools.com/python/pandas/pandas_cleaning_empty_cells.asp",
+      "https://www.w3schools.com/python/pandas/pandas_cleaning_wrong_format.asp",
+      "https://www.w3schools.com/python/pandas/pandas_cleaning_wrong_data.asp",
+      "https://www.w3schools.com/python/pandas/pandas_cleaning_duplicates.asp"
+    ]
+  },
+  {
+    "step": "9",
+    "topic": "데이터 결합과 외부 소스 연계",
+    "objectives": "여러 데이터셋을 합쳐 더 풍부한 분석 테이블을 만들 수 있다.",
+    "key_contents": "rename을 통해 컬럼명을 정리하고 merge, concat 계열의 결합 사고방식을 익힌다. 서로 다른 데이터 소스를 하나의 분석용 테이블로 연결하는 방법을 배운다. 간단한 웹 데이터나 SQL 데이터 소스와의 연계를 이해한다.",
+    "urls": [
+      "https://www.kaggle.com/code/residentmario/renaming-and-combining",
+      "https://github.com/jvns/pandas-cookbook/blob/master/cookbook/Chapter%205%20-%20Combining%20dataframes%20and%20scraping%20Canadian%20weather%20data.ipynb"
+    ]
+  },
+  {
+    "step": "10",
+    "topic": "상관관계, 시각화",
+    "objectives": "분석 결과를 해석하고 간단한 시각화까지 완성할 수 있다.",
+    "key_contents": "correlation의 의미를 이해하고 데이터 간 관계를 탐색한다. Pandas 기본 plotting으로 빠르게 시각화한다.",
+    "urls": [
+      "https://www.w3schools.com/python/pandas/pandas_correlations.asp",
+      "https://www.w3schools.com/python/pandas/pandas_plotting.asp"
+    ]
+  }
+]

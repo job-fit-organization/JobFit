@@ -101,7 +101,7 @@
     ]
   },
   {
-    "step": "advanced 1",
+    "step": "9",
     "topic": "이미지 최적화와 경량화",
     "objectives": "레이어 최적화, 불필요 패키지 제거, 베이스 이미지 선택을 통해 Docker 이미지를 경량화하는 원리를 이해할 수 있다.",
     "key_contents": "레이어 최적화, 불필요 패키지 제거, 작은 베이스 이미지 선택",
@@ -110,7 +110,7 @@
     ]
   },
   {
-    "step": "advanced 2",
+    "step": "10",
     "topic": "백업과 운영 자동화",
     "objectives": "Docker Storage, 데이터 백업, 볼륨 관리 CLI를 이해하고 운영 자동화의 기초를 익힌다.",
     "key_contents": "Docker Data Storage, 데이터 백업, 볼륨 관리 CLI",

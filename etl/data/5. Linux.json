@@ -1,51 +1,61 @@
 [
   {
-    "step": "basic_1",
+    "step": "1",
     "topic": "Linux와 Bash Command Line 입문",
     "objectives": "Linux 터미널과 셸의 개념을 이해하고, Bash 환경에서 기본 명령을 실행할 수 있다.",
     "key_contents": "Linux command line 개요, terminal과 shell의 역할, Bash 소개, prompt 구조, 명령어와 옵션/인자 이해, command history와 기본 단축키",
     "urls": [
-      "https://ryanstutorials.net/linuxtutorial/commandline.php"
+      "https://ryanstutorials.net/linuxtutorial/commandline.php",
+      "https://www.geeksforgeeks.org/linux-unix/basic-linux-commands/",
+      "https://www.geeksforgeeks.org/linux-unix/linux-commands/"
     ]
   },
   {
-    "step": "basic_2",
-    "topic": "기본 네비게이션과 디렉터리 구조",
+    "step": "2",
+    "topic": "네비게이션과 디렉터리 구조",
     "objectives": "리눅스 디렉터리 구조를 이해하고, 현재 위치 확인 및 디렉터리 이동을 수행할 수 있다.",
     "key_contents": "pwd, ls, cd, 절대경로와 상대경로, 홈 디렉터리, 디렉터리 트리 이해, 경로 기반 탐색",
     "urls": [
-      "https://ryanstutorials.net/linuxtutorial/navigation.php"
+      "https://ryanstutorials.net/linuxtutorial/navigation.php",
+      "https://www.geeksforgeeks.org/linux-unix/linux-file-system/",
+      "https://www.geeksforgeeks.org/linux-unix/linux-file-hierarchy-structure/",
+      "https://www.geeksforgeeks.org/linux-unix/linux-directory-structure/",
+      "https://www.geeksforgeeks.org/linux-unix/file-system-navigation-commands-in-linux/",
+      "https://www.geeksforgeeks.org/linux-unix/absolute-relative-pathnames-unix/"
     ]
   },
   {
-    "step": "basic_3",
+    "step": "3",
     "topic": "파일과 디렉터리 더 깊게 이해하기",
     "objectives": "리눅스에서 파일과 디렉터리의 특성을 이해하고, 숨김 파일 및 파일 타입을 구분할 수 있다.",
     "key_contents": "파일과 디렉터리의 차이, 숨김 파일, 파일 타입 식별, long listing 해석, 파일명과 경로 규칙",
-    "urls": [
-      "https://ryanstutorials.net/linuxtutorial/aboutfiles.php"
-    ]
+    "urls": ["https://ryanstutorials.net/linuxtutorial/aboutfiles.php"]
   },
   {
-    "step": "basic_4",
+    "step": "4",
     "topic": "Manual Pages와 도움말 활용",
     "objectives": "새로운 명령어를 스스로 학습할 수 있도록 man page와 help 문서를 읽고 필요한 정보를 찾을 수 있다.",
     "key_contents": "man pages, 도움말 구조, 명령어 옵션 찾기, synopsis 읽는 법, self-learning 습관",
-    "urls": [
-      "https://ryanstutorials.net/linuxtutorial/manual.php"
-    ]
+    "urls": ["https://ryanstutorials.net/linuxtutorial/manual.php"]
   },
   {
-    "step": "basic_5",
+    "step": "5",
     "topic": "파일 조작과 디렉터리 관리",
     "objectives": "파일과 디렉터리를 생성, 삭제, 복사, 이동, 이름 변경할 수 있다.",
     "key_contents": "mkdir, rmdir, touch, cp, mv, rm, 파일/폴더 생성과 삭제, 복사/이동/이름 변경, 안전한 파일 작업 습관",
     "urls": [
-      "https://ryanstutorials.net/linuxtutorial/filemanipulation.php"
+      "https://ryanstutorials.net/linuxtutorial/filemanipulation.php",
+      "https://www.geeksforgeeks.org/linux-unix/how-to-manage-directories-in-linux/",
+      "https://www.geeksforgeeks.org/linux-unix/mkdir-command-in-linux-with-examples/",
+      "https://www.geeksforgeeks.org/linux-unix/rmdir-command-in-linux-with-examples/",
+      "https://www.geeksforgeeks.org/linux-unix/touch-command-in-linux-with-examples/",
+      "https://www.geeksforgeeks.org/linux-unix/cp-command-linux-examples/",
+      "https://www.geeksforgeeks.org/linux-unix/mv-command-linux-examples/",
+      "https://www.geeksforgeeks.org/linux-unix/rm-command-linux-examples/"
     ]
   },
   {
-    "step": "basic_6",
+    "step": "6",
     "topic": "Vi 텍스트 에디터 기초",
     "objectives": "Vi 에디터를 사용해 파일을 생성·수정·저장·종료할 수 있다.",
     "key_contents": "vi/vim 실행, command mode와 insert mode, 저장/종료, 기본 편집 명령, 검색과 이동",
@@ -55,44 +65,48 @@
     ]
   },
   {
-    "step": "basic_7",
+    "step": "7",
     "topic": "와일드카드와 파일 선택 패턴",
     "objectives": "와일드카드를 활용해 여러 파일을 한 번에 선택하고 작업할 수 있다.",
     "key_contents": "globbing, *, ?, [] 패턴, 여러 파일 선택, 명령어와 패턴 결합, 반복 작업 단축",
-    "urls": [
-      "https://ryanstutorials.net/linuxtutorial/wildcards.php"
-    ]
+    "urls": ["https://ryanstutorials.net/linuxtutorial/wildcards.php"]
   },
   {
-    "step": "basic_8",
+    "step": "8",
     "topic": "리눅스 권한과 보안 기초",
     "objectives": "파일과 디렉터리의 권한 구조를 읽고, chmod를 사용해 권한을 변경할 수 있다.",
     "key_contents": "read/write/execute, user/group/others, permission string 해석, chmod, 파일과 디렉터리 권한 차이",
     "urls": [
-      "https://ryanstutorials.net/linuxtutorial/permissions.php"
+      "https://ryanstutorials.net/linuxtutorial/permissions.php",
+      "https://www.geeksforgeeks.org/linux-unix/set-file-permissions-linux/",
+      "https://www.geeksforgeeks.org/linux-unix/chmod-command-linux/"
     ]
   },
   {
-    "step": "basic_9",
+    "step": "9",
     "topic": "필터 명령으로 데이터 다루기",
     "objectives": "텍스트 데이터를 필터링하고 가공하는 기본 명령들을 활용할 수 있다.",
     "key_contents": "cat, head, tail, sort, uniq, wc, cut 등 필터 명령, 텍스트 처리, 간단한 로그/데이터 분석",
     "urls": [
-      "https://ryanstutorials.net/linuxtutorial/filters.php"
+      "https://ryanstutorials.net/linuxtutorial/filters.php",
+      "https://www.geeksforgeeks.org/linux-unix/cat-command-in-linux-with-examples/",
+      "https://www.geeksforgeeks.org/linux-unix/sort-command-linuxunix-examples/",
+      "https://www.geeksforgeeks.org/linux-unix/wc-command-linux-examples/"
     ]
   },
   {
-    "step": "basic_10",
+    "step": "10",
     "topic": "grep과 정규표현식",
     "objectives": "grep과 정규표현식을 사용해 원하는 패턴의 텍스트를 검색할 수 있다.",
     "key_contents": "grep 기본 사용법, 패턴 검색, 정규표현식 기초, 로그 검색, 텍스트 매칭 자동화",
     "urls": [
       "https://ryanstutorials.net/linuxtutorial/grep.php",
-      "https://ryanstutorials.net/linuxtutorial/cheatsheetgrep.php"
+      "https://ryanstutorials.net/linuxtutorial/cheatsheetgrep.php",
+      "https://www.geeksforgeeks.org/linux-unix/grep-command-in-unixlinux/"
     ]
   },
   {
-    "step": "basic_11",
+    "step": "11",
     "topic": "파이프와 리다이렉션",
     "objectives": "여러 명령어를 연결해 더 강력한 명령 흐름을 만들고, 입출력을 파일로 리다이렉션할 수 있다.",
     "key_contents": "pipe(|), stdout, stdin, stderr, >, >>, 조합형 명령어, 명령 연결을 통한 생산성 향상",
@@ -102,22 +116,34 @@
     ]
   },
   {
-    "step": "basic_12",
+    "step": "12",
     "topic": "프로세스 관리와 작업 제어",
     "objectives": "현재 실행 중인 프로세스를 확인하고, 백그라운드 작업과 종료 제어를 수행할 수 있다.",
     "key_contents": "process 개념, ps, top, kill, jobs, foreground/background, hung process 처리, 시스템 상태 확인",
     "urls": [
       "https://ryanstutorials.net/linuxtutorial/processes.php",
-      "https://ryanstutorials.net/linuxtutorial/"
+      "https://www.geeksforgeeks.org/linux-unix/ps-command-in-linux-with-examples/",
+      "https://www.geeksforgeeks.org/linux-unix/top-command-in-linux-with-examples/",
+      "https://www.geeksforgeeks.org/linux-unix/htop-command-in-linux-with-examples/",
+      "https://www.geeksforgeeks.org/linux-unix/kill-command-in-linux-with-examples/",
+      "https://www.geeksforgeeks.org/linux-unix/nice-and-renice-command-in-linux-with-examples/"
     ]
   },
   {
-    "step": "basic_13",
+    "step": "13",
     "topic": "Bash 스크립팅 입문",
     "objectives": "반복 작업을 자동화하는 간단한 Bash 스크립트를 작성하고 실행할 수 있다.",
     "key_contents": "bash scripting 기초, shebang, 변수, 조건문, 반복문, 실행 권한, 자동화 사고방식",
     "urls": [
-      "https://ryanstutorials.net/linuxtutorial/scripting.php"
+      "https://ryanstutorials.net/linuxtutorial/scripting.php",
+      "https://www.geeksforgeeks.org/linux-unix/shell-scripting-rules-for-naming-variable-name/",
+      "https://www.geeksforgeeks.org/linux-unix/bash-scripting-introduction-to-bash-and-bash-scripting/",
+      "https://www.geeksforgeeks.org/linux-unix/bash-script-define-bash-variables-and-its-types/",
+      "https://www.geeksforgeeks.org/linux-unix/bash-scripting-working-of-bash-scripting/",
+      "https://www.geeksforgeeks.org/linux-unix/how-to-run-bash-script-in-linux/",
+      "https://www.geeksforgeeks.org/linux-unix/bash-scripting-functions/",
+      "https://www.geeksforgeeks.org/computer-networks/difference-between-sh-and-bash/",
+      "https://www.geeksforgeeks.org/linux-unix/basic-operators-in-shell-scripting/"
     ]
   }
 ]

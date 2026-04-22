@@ -1,6 +1,6 @@
 [
   {
-    "step": "basic_1",
+    "step": "1",
     "topic": "Git과 GitHub 이해하기, 설치, 초기 설정",
     "objectives": "Git과 GitHub의 차이를 이해하고, Git을 설치한 뒤 사용자 정보를 설정할 수 있다.",
     "key_contents": "Git vs GitHub, 버전 관리 개요, Git 설치, git config, 저장소 개념",
@@ -14,7 +14,7 @@
     ]
   },
   {
-    "step": "basic_2",
+    "step": "2",
     "topic": "로컬 저장소 시작: init, status, add, commit",
     "objectives": "로컬 저장소를 만들고, 파일 변경사항을 추적하여 커밋할 수 있다.",
     "key_contents": "git init, working directory, staging area, repository, git status, git add, git commit",
@@ -34,7 +34,7 @@
     ]
   },
   {
-    "step": "basic_3",
+    "step": "3",
     "topic": "변경 이력 보기와 수정 관리",
     "objectives": "커밋 이력을 확인하고, 변경 전후를 비교하며, 실수한 변경을 되돌리는 기초를 익힐 수 있다.",
     "key_contents": "git log, git diff, git show, 파일 상태, undo 개요",
@@ -52,7 +52,7 @@
     ]
   },
   {
-    "step": "basic_4",
+    "step": "4",
     "topic": "브랜치 이해와 생성, 이동",
     "objectives": "브랜치의 개념을 이해하고, 브랜치를 생성·이동·관리할 수 있다.",
     "key_contents": "git branch, git checkout, git switch",
@@ -67,7 +67,7 @@
     ]
   },
   {
-    "step": "basic_5",
+    "step": "5",
     "topic": "병합과 충돌 해결",
     "objectives": "브랜치를 병합하고, 충돌이 발생했을 때 원인을 이해하고 해결할 수 있다.",
     "key_contents": "git merge, fast-forward merge, merge commit, merge conflict, conflict resolution",
@@ -84,7 +84,7 @@
     ]
   },
   {
-    "step": "basic_6",
+    "step": "6",
     "topic": "원격 저장소와 GitHub 연결",
     "objectives": "원격 저장소 개념을 이해하고, GitHub 저장소와 로컬 저장소를 연결할 수 있다.",
     "key_contents": "remote repository, origin, clone, git remote add, GitHub repository",
@@ -103,7 +103,7 @@
     ]
   },
   {
-    "step": "basic_7",
+    "step": "7",
     "topic": "push, pull, fetch를 통한 협업",
     "objectives": "로컬과 원격 저장소 사이에서 코드를 동기화하고, 협업 흐름을 이해할 수 있다.",
     "key_contents": "git push, git pull, git fetch, upstream branch, origin/main",
@@ -120,7 +120,7 @@
     ]
   },
   {
-    "step": "basic_8",
+    "step": "8",
     "topic": "GitHub 협업 흐름: Fork, Pull Request, 리뷰",
     "objectives": "GitHub 기반 협업 흐름을 이해하고, Fork 또는 브랜치 기반 협업 과정을 설명할 수 있다.",
     "key_contents": "GitHub repository, fork, pull request, code review, issue 기반 협업",
@@ -136,7 +136,7 @@
     ]
   },
   {
-    "step": "basic_9",
+    "step": "9",
     "topic": "이력 관리 심화: rebase, reflog, 복구",
     "objectives": "히스토리를 정리하고, 실수로 잃어버린 작업을 복구하는 기초를 익힐 수 있다.",
     "key_contents": "git rebase, reflog, recovering lost commits, clean history",
@@ -149,13 +149,13 @@
     ]
   },
   {
-    "step": "basic_10",
+    "step": "10",
     "topic": "실무 운영: 태그, 워크플로, 브랜치 전략",
     "objectives": "릴리스 태그와 브랜치 전략의 필요성을 이해하고, 팀 단위 Git 운영 규칙을 설계할 수 있다.",
     "key_contents": "git tag, branching strategy, release flow, 협업 규칙",
     "urls": [
       "https://www.geeksforgeeks.org/git/using-tags-in-git/",
-      "https://www.geeksforgeeks.org/git/branching-strategies-in-git/".
+      "https://www.geeksforgeeks.org/git/branching-strategies-in-git/",
       "https://www.geeksforgeeks.org/git/git-workflows-for-agile-development-teams/",
       "https://www.geeksforgeeks.org/git/git-workflow-etiquettes/",
       "https://www.geeksforgeeks.org/git/git-flow-vs-github-flow/",
