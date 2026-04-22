@@ -4,63 +4,55 @@
 너는 IT 교육 전문가야. 위 페이지를 기반으로 PostgreSQL을 교육하는 커리큘럼을 만들어줘. 커리큘럼을 보는 사람이 참고할 수 있도록, 링크를 포함해서 커리큘럼을 만들어야 해. 그리고 바로 사용할 수 있도록 마크다운(.md)이나 csv 형식으로 만들어줘.
 
 - SQL
-  - https://neon.com/postgresql/tutorial -> 커리큘럼
-  - https://pgexercises.com/questions/basic/ -> 연습문제
+  - https://neon.com/postgresql/tutorial
+  - https://pgexercises.com/questions/basic/
+  - https://www.geeksforgeeks.org/postgresql/postgresql-tutorial/
 - Docker
-  - https://docker-curriculum.com/ -> 커리큘럼에 링크 포함해서
-  - https://www.geeksforgeeks.org/devops/docker-tutorial/ -> 커리큘럼
-  - https://www.geeksforgeeks.org/devops/introduction-to-docker/ -> 세부 내용
-  - https://www.geeksforgeeks.org/linux-unix/how-to-install-and-configure-docker-in-ubuntu/ -> 세부 내용
-  - https://www.geeksforgeeks.org/devops/architecture-of-docker/ -> 세부 내용
-  - 
+  - https://docker-curriculum.com/
+  - https://www.geeksforgeeks.org/devops/docker-tutorial/
 - Python
-  - https://www.w3schools.com/python/default.asp -> 웹에서 파이썬 실행 환경 제공
-  - https://www.geeksforgeeks.org/python/python-programming-language-tutorial/ -> 웹에서 파이썬 실행 환경 제공
+  - https://www.w3schools.com/python/default.asp
+  - https://www.geeksforgeeks.org/python/python-programming-language-tutorial/
 - Github
-  - https://gitimmersion.com/index.html -> 따라해보기 쉬운 UI?
-  - https://www.geeksforgeeks.org/git/git-tutorial/ -> 단원별로 퀴즈 제공, 파이썬 실행 환경 대신 실행 결과 예시 제공
+  - https://www.w3schools.com/git/default.asp?remote=github
+  - https://www.geeksforgeeks.org/git/git-tutorial/
 - Linux
-  - https://labex.io/linuxjourney -> 연습문제 포함, 유료
+  - https://www.geeksforgeeks.org/linux-unix/linux-tutorial/
   - https://ryanstutorials.net/linuxtutorial/
 - AWS
   - https://www.w3schools.com/aws/index.php
   - https://www.geeksforgeeks.org/devops/aws-tutorial/
 - LangChain
   - https://www.geeksforgeeks.org/data-science/langchain-tutorial/
-  - https://github.com/LangChain-OpenTutorial/LangChain-OpenTutorial -> 한국인들이 만든 튜토리얼 github, 실행해볼 수 있는 ipynb 파일 포함
+  - https://github.com/LangChain-OpenTutorial/LangChain-OpenTutorial
 - RAG
-  - https://github.com/langchain-ai/rag-from-scratch -> Langchain에서 만든 github
+  - https://github.com/langchain-ai/rag-from-scratch
   - http://github.com/pixegami/langchain-rag-tutorial?tab=readme-ov-file
 - A2A
-  - https://a2a-protocol.org/latest/tutorials/ -> 공식 제공 문서
-  - https://a2aprotocol.ai/blog/python-a2a-tutorial -> 코드 위주로 실행해볼 수 있는 자료 제공
+  - https://a2a-protocol.org/latest/tutorials/
+  - https://a2aprotocol.ai/blog/python-a2a-tutorial
   - https://adk.dev/a2a/intro/
 - MCP
-  - https://huggingface.co/learn/mcp-course/en/unit0/introduction -> 허깅페이스 제공, 일부 퀴즈 제공
-  - https://modelcontextprotocol.io/docs/getting-started/intro -> MCP 공식 문서
+  - https://huggingface.co/learn/mcp-course/en/unit0/introduction
+  - https://modelcontextprotocol.io/docs/getting-started/intro
 - ML
   - https://www.w3schools.com/python/python_ml_getting_started.asp
-  - https://developers.google.com/machine-learning/crash-course?hl=ko
-  - https://www.kaggle.com/learn/intro-to-machine-learning
-  - https://www.kaggle.com/learn/intermediate-machine-learning
-  - https://www.kaggle.com/learn/feature-engineering
+  - https://www.geeksforgeeks.org/machine-learning/machine-learning/
 - Pytorch
-  - https://docs.pytorch.org/tutorials/beginner/basics/intro.html -> 파이토치 공식 제공, FashionMNIST 데이터셋, 코랩에서 실행 가능
-  - https://www.learnpytorch.io -> 파이토치 기초 ~ 모듈화, 논문 재현, 모델 배포까지 단계적으로
-  - https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial2/Introduction_to_PyTorch.html -> 기본적인 파이토치 딥러닝 모델 파이프라인 템플릿
+  - https://docs.pytorch.org/tutorials/beginner/basics/intro.html
+  - https://www.learnpytorch.io
+  - https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial2/Introduction_to_PyTorch.html
 - Huggingface(sLLM)
-  - https://huggingface.co/learn/llm-course/ko/chapter1/1 -> Hugging Face Hub에서 모델을 사용하여 데이터셋으로 fine-tuning 후 Hub에 모델을 공유하는 방법까지, 일부 단원에는 마무리 퀴즈 제공
-  - https://docs.axolotl.ai/docs/getting-started.html -> LLM 파인튜닝 프레임워크 1. 아홀로틀 -
-  - https://unsloth.ai/docs/get-started/fine-tuning-for-beginners -> LLM 파인튜닝 프레임워크 2. 언슬롯 - 모델별로 튜토리얼 제공
+  - https://huggingface.co/learn/llm-course/chapter1/1
+  - https://www.geeksforgeeks.org/artificial-intelligence/hugging-face-tutorial/
 - 시계열 분석
-  - https://www.kaggle.com/code/prashant111/complete-guide-on-time-series-analysis-in-python#11.-How-to-test-for-stationarity?-
-  - https://otexts.com/fpppy/nbs/01-intro.html -> statsforecast 라이브러리를 사용해 시계열 분석
+  - https://otexts.com/fpppy/nbs/01-intro.html
+  - https://www.geeksforgeeks.org/machine-learning/time-series-analysis-and-forecasting/?utm_source=copilot.com
 - pandas
-  - https://www.kaggle.com/learn/pandas
-  - https://github.com/jvns/pandas-cookbook?tab=readme-ov-file
-  - https://www.w3schools.com/python/pandas/default.asp -> 퀴즈 제공
+  - https://www.geeksforgeeks.org/pandas/pandas-tutorial/
+  - https://www.w3schools.com/python/pandas/default.asp
 - data visualization
-  - https://www.kaggle.com/learn/data-visualization
+  - https://www.geeksforgeeks.org/data-visualization/python-data-visualization-tutorial/
   - https://www.w3schools.com/python/matplotlib_intro.asp
 
 ## Roles (직무)
