@@ -1,170 +1,150 @@
-[
-  {
-    "step": "1",
-    "topic": "PostgreSQL 시작하기: 설치, 접속, 샘플 DB 구성",
-    "objectives": "PostgreSQL의 역할과 특징을 설명하고, 설치·접속·dvdrental 샘플 DB 적재까지 수행할 수 있다.",
-    "key_contents": "PostgreSQL 개요, 샘플 데이터베이스, Windows·macOS·Linux 설치, DB 접속, 샘플 DB 로드",
-    "urls": [
-      "https://neon.com/postgresql/tutorial",
-      "https://neon.com/postgresql/postgresql-getting-started",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-what-is-postgresql",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-sample-database",
-      "https://neon.com/postgresql/postgresql-getting-started/install-postgresql/",
-      "https://neon.com/postgresql/postgresql-getting-started/connect-to-postgresql-database",
-      "https://neon.com/postgresql/postgresql-getting-started/load-postgresql-sample-database",
-      "https://neon.com/postgresql/postgresql-getting-started/install-postgresql-macos",
-      "https://neon.com/postgresql/postgresql-getting-started/install-postgresql-linux"
-    ]
-  },
-  {
-    "step": "2",
-    "topic": "데이터 조회의 기초: SELECT, 정렬, 중복 제거",
-    "objectives": "단일 테이블에서 필요한 컬럼을 조회하고, 별칭·정렬·중복 제거를 적용할 수 있다.",
-    "key_contents": "SELECT, Column Aliases, ORDER BY, SELECT DISTINCT",
-    "urls": [
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-select",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-column-alias",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-order-by",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-select-distinct"
-    ]
-  },
-  {
-    "step": "3",
-    "topic": "데이터 필터링: 조건식과 패턴 검색",
-    "objectives": "조건식을 조합해 원하는 행만 추출하고, 부분·범위·목록 검색과 결과 제한을 수행할 수 있다.",
-    "key_contents": "WHERE, AND, OR, LIMIT, FETCH, IN, BETWEEN, LIKE, IS NULL",
-    "urls": [
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-where",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-and",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-or",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-limit",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-fetch",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-in",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-between",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-like",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-is-null"
-    ]
-  },
-  {
-    "step": "4",
-    "topic": "여러 테이블 다루기: JOIN과 관계형 사고",
-    "objectives": "관계형 DB의 연결 개념을 이해하고 상황에 맞는 JOIN을 선택할 수 있다.",
-    "key_contents": "Joins overview, Table aliases, INNER JOIN, LEFT JOIN, RIGHT JOIN, SELF JOIN, FULL OUTER JOIN, CROSS JOIN, NATURAL JOIN",
-    "urls": [
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-joins",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-alias",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-inner-join",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-left-join",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-right-join",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-self-join",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-full-outer-join",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-cross-join",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-natural-join"
-    ]
-  },
-  {
-    "step": "5",
-    "topic": "집계와 보고서 SQL: GROUP BY, HAVING, 집합 연산",
-    "objectives": "집계 함수와 그룹화를 사용해 요약 보고서를 만들고, 집합 연산 및 다차원 집계를 이해할 수 있다.",
-    "key_contents": "GROUP BY, HAVING, UNION, INTERSECT, EXCEPT, GROUPING SETS, CUBE, ROLLUP",
-    "urls": [
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-group-by",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-having",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-union",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-intersect",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-except",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-grouping-sets",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-cube",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-rollup"
-    ]
-  },
-  {
-    "step": "6",
-    "topic": "고급 조회: 서브쿼리와 CTE",
-    "objectives": "서브쿼리와 상관 서브쿼리를 구분하고, CTE와 재귀 CTE를 활용할 수 있다.",
-    "key_contents": "Subquery, Correlated Subquery, ANY, ALL, EXISTS, CTE, Recursive CTE",
-    "urls": [
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-subquery",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-correlated-subquery",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-any",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-all",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-exists",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-cte",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-recursive-query"
-    ]
-  },
-  {
-    "step": "7",
-    "topic": "데이터 변경과 무결성: INSERT, UPDATE, DELETE, Transaction",
-    "objectives": "데이터를 안전하게 추가·수정·삭제하고, 트랜잭션과 UPSERT의 사용 시점을 이해할 수 있다.",
-    "key_contents": "INSERT, INSERT multiple rows, UPDATE, UPDATE JOIN, DELETE, UPSERT, MERGE, BEGIN, COMMIT, ROLLBACK",
-    "urls": [
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-insert",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-insert-multiple-rows",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-update",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-update-join",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-delete",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-upsert",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-merge",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-transaction"
-    ]
-  },
-  {
-    "step": "8",
-    "topic": "스키마 설계와 실무 확장: 테이블, 제약조건, 데이터 타입, Import/Export",
-    "objectives": "테이블을 설계·생성·변경하고, 제약조건과 데이터 타입을 적절히 선택하며 CSV import/export를 수행할 수 있다.",
-    "key_contents": "CREATE TABLE, ALTER TABLE, DROP/TRUNCATE TABLE, SERIAL, IDENTITY, SEQUENCE, PK, FK, CHECK, UNIQUE, NOT NULL, DEFAULT, 문자형, 숫자형, 날짜시간형, UUID, JSON, Array, CSV Import/Export",
-    "urls": [
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-data-types",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-create-table",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-alter-table",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-serial",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-sequences",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-identity-column",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-primary-key",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-foreign-key",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-check-constraint",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-unique-constraint",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-not-null-constraint",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-default-value",
-      "https://neon.com/postgresql/postgresql-tutorial/import-csv-file-into-posgresql-table",
-      "https://neon.com/postgresql/postgresql-tutorial/export-postgresql-table-to-csv-file",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-json",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-uuid",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-array"
-    ]
-  },
-  {
-    "step": "9",
-    "topic": "조건식과 실전 SQL 작성법",
-    "objectives": "CASE, COALESCE, NULLIF, CAST를 사용해 null 처리와 데이터 정제를 수행할 수 있다.",
-    "key_contents": "CASE, COALESCE, NULLIF, CAST",
-    "urls": [
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-case",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-coalesce",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-nullif",
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-cast"
-    ]
-  },
-  {
-    "step": "10",
-    "topic": "성능과 실행 계획",
-    "objectives": "EXPLAIN을 통해 느린 쿼리의 실행 계획을 해석하는 기초를 익힌다.",
-    "key_contents": "EXPLAIN, 실행 계획 해석, 쿼리 개선의 시작점",
-    "urls": [
-      "https://neon.com/postgresql/postgresql-tutorial/postgresql-explain"
-    ]
-  },
-  {
-    "step": "11",
-    "topic": "Views, Indexes, Functions, Triggers",
-    "objectives": "View, Index, PL/pgSQL 함수, Trigger의 역할과 활용 사례를 이해한다.",
-    "key_contents": "PL/pgSQL, Triggers, Views, Indexes",
-    "urls": [
-      "https://neon.com/postgresql/postgresql-plpgsql",
-      "https://neon.com/postgresql/postgresql-triggers",
-      "https://neon.com/postgresql/postgresql-views",
-      "https://neon.com/postgresql/postgresql-indexes"
-    ]
-  }
-]
+{
+  "tech": "postgresql",
+  "urls": [
+    "https://neon.com/postgresql/postgresql-getting-started",
+    "https://neon.com/postgresql/postgresql-getting-started/install-postgresql/",
+    "https://neon.com/postgresql/postgresql-getting-started/connect-to-postgresql-database",
+    "https://neon.com/postgresql/postgresql-getting-started/load-postgresql-sample-database",
+    "https://neon.com/postgresql/postgresql-getting-started/install-postgresql-macos",
+    "https://neon.com/postgresql/postgresql-getting-started/install-postgresql-linux",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-select",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-column-alias",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-order-by",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-select-distinct",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-where",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-and",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-or",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-limit",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-fetch",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-in",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-between",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-like",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-is-null",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-joins",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-alias",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-inner-join",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-left-join",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-right-join",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-self-join",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-full-outer-join",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-cross-join",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-natural-join",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-group-by",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-having",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-union",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-intersect",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-except",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-grouping-sets",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-cube",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-rollup",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-subquery",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-correlated-subquery",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-any",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-all",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-exists",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-cte",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-recursive-query",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-insert",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-insert-multiple-rows",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-update",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-update-join",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-delete",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-upsert",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-merge",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-transaction",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-data-types",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-create-table",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-alter-table",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-serial",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-sequences",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-identity-column",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-primary-key",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-foreign-key",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-check-constraint",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-unique-constraint",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-not-null-constraint",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-default-value",
+    "https://neon.com/postgresql/postgresql-tutorial/import-csv-file-into-posgresql-table",
+    "https://neon.com/postgresql/postgresql-tutorial/export-postgresql-table-to-csv-file",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-json",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-uuid",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-array",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-case",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-coalesce",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-nullif",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-cast",
+    "https://neon.com/postgresql/postgresql-tutorial/postgresql-explain",
+    "https://neon.com/postgresql/postgresql-plpgsql",
+    "https://neon.com/postgresql/postgresql-triggers",
+    "https://neon.com/postgresql/postgresql-views",
+    "https://neon.com/postgresql/postgresql-indexes"
+  ],
+  "curriculum": [
+    {
+      "step": "1",
+      "topic": "PostgreSQL 시작하기: 설치, 접속, 샘플 DB 구성",
+      "objectives": "PostgreSQL의 역할과 특징을 설명하고, 설치·접속·dvdrental 샘플 DB 적재까지 수행할 수 있다.",
+      "key_contents": "PostgreSQL 개요, 샘플 데이터베이스, Windows·macOS·Linux 설치, DB 접속, 샘플 DB 로드"
+    },
+    {
+      "step": "2",
+      "topic": "데이터 조회의 기초: SELECT, 정렬, 중복 제거",
+      "objectives": "단일 테이블에서 필요한 컬럼을 조회하고, 별칭·정렬·중복 제거를 적용할 수 있다.",
+      "key_contents": "SELECT, Column Aliases, ORDER BY, SELECT DISTINCT"
+    },
+    {
+      "step": "3",
+      "topic": "데이터 필터링: 조건식과 패턴 검색",
+      "objectives": "조건식을 조합해 원하는 행만 추출하고, 부분·범위·목록 검색과 결과 제한을 수행할 수 있다.",
+      "key_contents": "WHERE, AND, OR, LIMIT, FETCH, IN, BETWEEN, LIKE, IS NULL"
+    },
+    {
+      "step": "4",
+      "topic": "여러 테이블 다루기: JOIN과 관계형 사고",
+      "objectives": "관계형 DB의 연결 개념을 이해하고 상황에 맞는 JOIN을 선택할 수 있다.",
+      "key_contents": "Joins overview, Table aliases, INNER JOIN, LEFT JOIN, RIGHT JOIN, SELF JOIN, FULL OUTER JOIN, CROSS JOIN, NATURAL JOIN"
+    },
+    {
+      "step": "5",
+      "topic": "집계와 보고서 SQL: GROUP BY, HAVING, 집합 연산",
+      "objectives": "집계 함수와 그룹화를 사용해 요약 보고서를 만들고, 집합 연산 및 다차원 집계를 이해할 수 있다.",
+      "key_contents": "GROUP BY, HAVING, UNION, INTERSECT, EXCEPT, GROUPING SETS, CUBE, ROLLUP"
+    },
+    {
+      "step": "6",
+      "topic": "고급 조회: 서브쿼리와 CTE",
+      "objectives": "서브쿼리와 상관 서브쿼리를 구분하고, CTE와 재귀 CTE를 활용할 수 있다.",
+      "key_contents": "Subquery, Correlated Subquery, ANY, ALL, EXISTS, CTE, Recursive CTE"
+    },
+    {
+      "step": "7",
+      "topic": "데이터 변경과 무결성: INSERT, UPDATE, DELETE, Transaction",
+      "objectives": "데이터를 안전하게 추가·수정·삭제하고, 트랜잭션과 UPSERT의 사용 시점을 이해할 수 있다.",
+      "key_contents": "INSERT, INSERT multiple rows, UPDATE, UPDATE JOIN, DELETE, UPSERT, MERGE, BEGIN, COMMIT, ROLLBACK"
+    },
+    {
+      "step": "8",
+      "topic": "스키마 설계와 실무 확장: 테이블, 제약조건, 데이터 타입, Import/Export",
+      "objectives": "테이블을 설계·생성·변경하고, 제약조건과 데이터 타입을 적절히 선택하며 CSV import/export를 수행할 수 있다.",
+      "key_contents": "CREATE TABLE, ALTER TABLE, DROP/TRUNCATE TABLE, SERIAL, IDENTITY, SEQUENCE, PK, FK, CHECK, UNIQUE, NOT NULL, DEFAULT, 문자형, 숫자형, 날짜시간형, UUID, JSON, Array, CSV Import/Export"
+    },
+    {
+      "step": "9",
+      "topic": "조건식과 실전 SQL 작성법",
+      "objectives": "CASE, COALESCE, NULLIF, CAST를 사용해 null 처리와 데이터 정제를 수행할 수 있다.",
+      "key_contents": "CASE, COALESCE, NULLIF, CAST"
+    },
+    {
+      "step": "10",
+      "topic": "성능과 실행 계획",
+      "objectives": "EXPLAIN을 통해 느린 쿼리의 실행 계획을 해석하는 기초를 익힌다.",
+      "key_contents": "EXPLAIN, 실행 계획 해석, 쿼리 개선의 시작점"
+    },
+    {
+      "step": "11",
+      "topic": "Views, Indexes, Functions, Triggers",
+      "objectives": "View, Index, PL/pgSQL 함수, Trigger의 역할과 활용 사례를 이해한다.",
+      "key_contents": "PL/pgSQL, Triggers, Views, Indexes"
+    }
+  ]
+}

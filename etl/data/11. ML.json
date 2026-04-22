@@ -1,163 +1,146 @@
-[
-  {
-    "step": "1",
-    "topic": "데이터 이해와 기초 통계",
-    "objectives": "머신러닝 전에 필요한 데이터 이해와 기초 통계 개념을 익히고, 데이터 분포를 읽을 수 있다.",
-    "key_contents": "mean, median, mode, standard deviation, percentile, data distribution, normal distribution, basic data exploration",
-    "urls": [
-      "https://www.w3schools.com/python/python_ml_mean_median_mode.asp",
-      "https://www.w3schools.com/python/python_ml_standard_deviation.asp",
-      "https://www.w3schools.com/python/python_ml_percentile.asp",
-      "https://www.w3schools.com/python/python_ml_data_distribution.asp",
-      "https://www.w3schools.com/python/python_ml_normal_data_distribution.asp",
-      "https://www.kaggle.com/code/dansbecker/basic-data-exploration"
-    ]
-  },
-  {
-    "step": "2",
-    "topic": "데이터 전처리와 EDA",
-    "objectives": "결측치, 이상치, 스케일링 등 기초 전처리를 수행하고 탐색적 데이터 분석의 역할을 설명할 수 있다.",
-    "key_contents": "data cleaning, data preprocessing, feature scaling, categorical variable encoding, EDA, train dataset inspection, preprocessing workflow",
-    "urls": [
-      "https://www.w3schools.com/python/python_ml_scale.asp",
-      "https://www.w3schools.com/python/python_ml_preprocessing.asp",
-      "https://www.kaggle.com/code/alexisbcook/missing-values",
-      "https://www.kaggle.com/code/alexisbcook/handling-missing-values",
-      "https://www.kaggle.com/code/alexisbcook/scaling-and-normalization",
-      "https://www.geeksforgeeks.org/data-analysis/data-cleansing-introduction/",
-      "https://www.geeksforgeeks.org/machine-learning/feature-engineering-scaling-normalization-and-standardization/",
-      "https://www.geeksforgeeks.org/data-analysis/data-preprocessing-machine-learning-python/",
-      "https://www.geeksforgeeks.org/data-analysis/what-is-exploratory-data-analysis/",
-      "https://www.geeksforgeeks.org/data-analysis/exploratory-data-analysis-in-python/",
-      "https://www.geeksforgeeks.org/data-analysis/advanced-eda/",
-      "https://www.geeksforgeeks.org/data-analysis/time-series-data-visualization-in-python/"
-    ]
-  },
-  {
-    "step": "3",
-    "topic": "모델의 작동 원리와 첫 번째 예측 모델",
-    "objectives": "모델이 입력에서 예측을 만드는 기본 원리를 이해하고, 첫 번째 지도학습 모델을 구현할 수 있다.",
-    "key_contents": "how models work, features and target, decision tree intuition, your first machine learning model, fit and predict",
-    "urls": [
-      "https://www.w3schools.com/python/python_ml_train_test.asp",
-      "https://www.kaggle.com/code/dansbecker/your-first-machine-learning-model",
-      "https://www.geeksforgeeks.org/machine-learning/supervised-machine-learning/",
-      "https://www.geeksforgeeks.org/machine-learning/unsupervised-learning/",
-      "https://www.geeksforgeeks.org/machine-learning/what-is-reinforcement-learning/"
-    ]
-  },
-  {
-    "step": "4",
-    "topic": "선형 회귀와 회귀 문제",
-    "objectives": "회귀 문제의 개념을 이해하고 선형 회귀를 사용해 연속형 값을 예측할 수 있다.",
-    "key_contents": "regression, linear regression, multiple regression, loss, gradient descent, evaluation for regression",
-    "urls": [
-      "https://www.w3schools.com/python/python_ml_linear_regression.asp",
-      "https://www.w3schools.com/python/python_ml_polynomial_regression.asp",
-      "https://www.w3schools.com/python/python_ml_multiple_regression.asp",
-      "https://www.geeksforgeeks.org/machine-learning/regression-in-machine-learning/",
-      "https://www.geeksforgeeks.org/machine-learning/ml-linear-regression/",
-      "https://www.geeksforgeeks.org/machine-learning/gradient-descent-in-linear-regression/",
-      "https://www.geeksforgeeks.org/machine-learning/ml-multiple-linear-regression-using-python/",
-      "https://developers.google.com/machine-learning/crash-course/linear-regression?hl=ko&_gl=1*8lt26u*_up*MQ..*_ga*MTAzMzY5MzA2MC4xNzc2ODIyNTg5*_ga_SM8HXJ53K2*czE3NzY4MjI1ODkkbzEkZzAkdDE3NzY4MjI1ODkkajYwJGwwJGgw",
-      "https://developers.google.com/machine-learning/crash-course/linear-regression/loss?hl=ko&_gl=1*1njatyp*_up*MQ..*_ga*MTAzMzY5MzA2MC4xNzc2ODIyNTg5*_ga_SM8HXJ53K2*czE3NzY4MjI1ODkkbzEkZzAkdDE3NzY4MjI1ODkkajYwJGwwJGgw",
-      "https://developers.google.com/machine-learning/crash-course/linear-regression/gradient-descent?hl=ko&_gl=1*1njatyp*_up*MQ..*_ga*MTAzMzY5MzA2MC4xNzc2ODIyNTg5*_ga_SM8HXJ53K2*czE3NzY4MjI1ODkkbzEkZzAkdDE3NzY4MjI1ODkkajYwJGwwJGgw"
-    ]
-  },
-  {
-    "step": "5",
-    "topic": "분류와 로지스틱 회귀",
-    "objectives": "분류 문제를 이해하고 로지스틱 회귀를 이용해 범주를 예측할 수 있다.",
-    "key_contents": "classification, logistic regression, thresholds, probability prediction, binary classification",
-    "urls": [
-      "https://www.w3schools.com/python/python_ml_logistic_regression.asp",
-      "https://www.geeksforgeeks.org/machine-learning/understanding-logistic-regression/",
-      "https://www.geeksforgeeks.org/machine-learning/ml-cost-function-in-logistic-regression/",
-      "https://developers.google.com/machine-learning/crash-course/logistic-regression?hl=ko&_gl=1*1jbbj8j*_up*MQ..*_ga*NjQzNTk5ODE3LjE3NzY4MjUwMDQ.*_ga_SM8HXJ53K2*czE3NzY4MjUwMDMkbzEkZzAkdDE3NzY4MjUwMDMkajYwJGwwJGgw",
-      "https://developers.google.com/machine-learning/crash-course/logistic-regression/sigmoid-function?hl=ko&_gl=1*1jbbj8j*_up*MQ..*_ga*NjQzNTk5ODE3LjE3NzY4MjUwMDQ.*_ga_SM8HXJ53K2*czE3NzY4MjUwMDMkbzEkZzAkdDE3NzY4MjUwMDMkajYwJGwwJGgw",
-      "https://developers.google.com/machine-learning/crash-course/logistic-regression/loss-regularization?hl=ko&_gl=1*mq1k0d*_up*MQ..*_ga*NjQzNTk5ODE3LjE3NzY4MjUwMDQ.*_ga_SM8HXJ53K2*czE3NzY4MjUwMDMkbzEkZzAkdDE3NzY4MjUwMDMkajYwJGwwJGgw"
-    ]
-  },
-  {
-    "step": "6",
-    "topic": "모델 검증과 과소적합·과적합",
-    "objectives": "학습 데이터와 검증 데이터의 역할을 이해하고, 과소적합과 과적합을 구분할 수 있다.",
-    "key_contents": "model validation, train/test split, generalization, underfitting, overfitting, data leakage",
-    "urls": [
-      "https://www.geeksforgeeks.org/machine-learning/underfitting-and-overfitting-in-machine-learning/",
-      "https://www.kaggle.com/code/dansbecker/model-validation",
-      "https://www.kaggle.com/code/dansbecker/underfitting-and-overfitting"
-    ]
-  },
-  {
-    "step": "7",
-    "topic": "평가 지표 해석",
-    "objectives": "분류 모델의 주요 평가 지표를 이해하고, 모델 성능을 올바르게 해석할 수 있다.",
-    "key_contents": "confusion matrix, precision, recall, F1-score, AUC-ROC, metric selection",
-    "urls": [
-      "https://www.w3schools.com/python/python_ml_confusion_matrix.asp",
-      "https://www.w3schools.com/python/python_ml_auc_roc.asp",
-      "https://www.geeksforgeeks.org/machine-learning/confusion-matrix-machine-learning/",
-      "https://www.geeksforgeeks.org/machine-learning/precision-and-recall-in-machine-learning/",
-      "https://www.geeksforgeeks.org/machine-learning/f1-score-in-machine-learning/",
-      "https://www.geeksforgeeks.org/machine-learning/auc-roc-curve/"
-    ]
-  },
-  {
-    "step": "8",
-    "topic": "트리 기반 모델과 앙상블",
-    "objectives": "의사결정나무와 랜덤포레스트의 원리를 이해하고, 더 강한 예측 모델을 구성할 수 있다.",
-    "key_contents": "decision tree, random forest, bagging, bootstrap aggregation, ensemble learning",
-    "urls": [
-      "https://www.geeksforgeeks.org/machine-learning/decision-tree-introduction-example/",
-      "https://www.geeksforgeeks.org/machine-learning/decision-tree-algorithms/",
-      "https://www.geeksforgeeks.org/machine-learning/python-decision-tree-regression-using-sklearn/",
-      "https://www.geeksforgeeks.org/machine-learning/building-and-implementing-decision-tree-classifiers-with-scikit-learn-a-comprehensive-guide/",
-      "https://www.geeksforgeeks.org/machine-learning/random-forest-algorithm-in-machine-learning/",
-      "https://www.geeksforgeeks.org/dsa/random-forest-classifier-using-scikit-learn/",
-      "https://www.geeksforgeeks.org/machine-learning/random-forest-regression-in-python/",
-      "https://www.geeksforgeeks.org/machine-learning/random-forest-hyperparameter-tuning-in-python/",
-      "https://www.geeksforgeeks.org/machine-learning/a-comprehensive-guide-to-ensemble-learning/",
-      "https://www.geeksforgeeks.org/machine-learning/what-is-bagging-classifier/",
-      "https://www.geeksforgeeks.org/machine-learning/adaboost-in-machine-learning/",
-      "https://www.w3schools.com/python/python_ml_decision_tree.asp",
-      "https://www.w3schools.com/python/python_ml_bagging.asp"
-    ]
-  },
-  {
-    "step": "9",
-    "topic": "고급 모델링: 교차검증, 하이퍼파라미터 튜닝",
-    "objectives": "더 신뢰도 높은 검증 체계를 만들고, 하이퍼파라미터 튜닝을 통해 최적의 모델을 만들 수 있다.",
-    "key_contents": "cross-validation, grid search, hyperparameter tuning",
-    "urls": [
-      "https://www.w3schools.com/python/python_ml_cross_validation.asp",
-      "https://www.w3schools.com/python/python_ml_grid_search.asp",
-      "https://www.geeksforgeeks.org/machine-learning/cross-validation-machine-learning/",
-      "https://www.geeksforgeeks.org/machine-learning/hyperparameter-tuning/"
-    ]
-  },
-  {
-    "step": "10",
-    "topic": "Feature Engineering",
-    "objectives": "모델 성능을 높이기 위한 feature engineering의 목적과 기본 방법을 이해할 수 있다.",
-    "key_contents": "feature creation, feature extraction, feature selection, feature scaling",
-    "urls": [
-      "https://www.geeksforgeeks.org/machine-learning/what-is-feature-extraction/",
-      "https://www.geeksforgeeks.org/machine-learning/what-is-feature-engineering/",
-      "https://www.geeksforgeeks.org/machine-learning/feature-selection-techniques-in-machine-learning/"
-    ]
-  },
-  {
-    "step": "11",
-    "topic": "비지도학습과 차원 축소",
-    "objectives": "라벨이 없는 데이터에서 패턴을 찾는 기본 방법을 이해하고, 클러스터링과 차원 축소를 설명할 수 있다.",
-    "key_contents": "unsupervised learning, clustering, hierarchical clustering, K-means, dimensionality reduction, PCA",
-    "urls": [
-      "https://www.w3schools.com/python/python_ml_hierarchial_clustering.asp",
-      "https://www.w3schools.com/python/python_ml_k-means.asp",
-      "https://www.geeksforgeeks.org/machine-learning/clustering-in-machine-learning/",
-      "https://www.geeksforgeeks.org/machine-learning/association-rule/",
-      "https://www.geeksforgeeks.org/machine-learning/dimensionality-reduction/"
-    ]
-  }
-]
+{
+  "tech": "ML",
+  "urls": [
+    "https://www.w3schools.com/python/python_ml_mean_median_mode.asp",
+    "https://www.w3schools.com/python/python_ml_standard_deviation.asp",
+    "https://www.w3schools.com/python/python_ml_percentile.asp",
+    "https://www.w3schools.com/python/python_ml_data_distribution.asp",
+    "https://www.w3schools.com/python/python_ml_normal_data_distribution.asp",
+    "https://www.kaggle.com/code/dansbecker/basic-data-exploration",
+    "https://www.w3schools.com/python/python_ml_scale.asp",
+    "https://www.w3schools.com/python/python_ml_preprocessing.asp",
+    "https://www.kaggle.com/code/alexisbcook/missing-values",
+    "https://www.kaggle.com/code/alexisbcook/handling-missing-values",
+    "https://www.kaggle.com/code/alexisbcook/scaling-and-normalization",
+    "https://www.geeksforgeeks.org/data-analysis/data-cleansing-introduction/",
+    "https://www.geeksforgeeks.org/machine-learning/feature-engineering-scaling-normalization-and-standardization/",
+    "https://www.geeksforgeeks.org/data-analysis/data-preprocessing-machine-learning-python/",
+    "https://www.geeksforgeeks.org/data-analysis/what-is-exploratory-data-analysis/",
+    "https://www.geeksforgeeks.org/data-analysis/exploratory-data-analysis-in-python/",
+    "https://www.geeksforgeeks.org/data-analysis/advanced-eda/",
+    "https://www.geeksforgeeks.org/data-analysis/time-series-data-visualization-in-python/",
+    "https://www.w3schools.com/python/python_ml_train_test.asp",
+    "https://www.kaggle.com/code/dansbecker/your-first-machine-learning-model",
+    "https://www.geeksforgeeks.org/machine-learning/supervised-machine-learning/",
+    "https://www.geeksforgeeks.org/machine-learning/unsupervised-learning/",
+    "https://www.geeksforgeeks.org/machine-learning/what-is-reinforcement-learning/",
+    "https://www.w3schools.com/python/python_ml_linear_regression.asp",
+    "https://www.w3schools.com/python/python_ml_polynomial_regression.asp",
+    "https://www.w3schools.com/python/python_ml_multiple_regression.asp",
+    "https://www.geeksforgeeks.org/machine-learning/regression-in-machine-learning/",
+    "https://www.geeksforgeeks.org/machine-learning/ml-linear-regression/",
+    "https://www.geeksforgeeks.org/machine-learning/gradient-descent-in-linear-regression/",
+    "https://www.geeksforgeeks.org/machine-learning/ml-multiple-linear-regression-using-python/",
+    "https://developers.google.com/machine-learning/crash-course/linear-regression?hl=ko&_gl=1*8lt26u*_up*MQ..*_ga*MTAzMzY5MzA2MC4xNzc2ODIyNTg5*_ga_SM8HXJ53K2*czE3NzY4MjI1ODkkbzEkZzAkdDE3NzY4MjI1ODkkajYwJGwwJGgw",
+    "https://developers.google.com/machine-learning/crash-course/linear-regression/loss?hl=ko&_gl=1*1njatyp*_up*MQ..*_ga*MTAzMzY5MzA2MC4xNzc2ODIyNTg5*_ga_SM8HXJ53K2*czE3NzY4MjI1ODkkbzEkZzAkdDE3NzY4MjI1ODkkajYwJGwwJGgw",
+    "https://developers.google.com/machine-learning/crash-course/linear-regression/gradient-descent?hl=ko&_gl=1*1njatyp*_up*MQ..*_ga*MTAzMzY5MzA2MC4xNzc2ODIyNTg5*_ga_SM8HXJ53K2*czE3NzY4MjI1ODkkbzEkZzAkdDE3NzY4MjI1ODkkajYwJGwwJGgw",
+    "https://www.w3schools.com/python/python_ml_logistic_regression.asp",
+    "https://www.geeksforgeeks.org/machine-learning/understanding-logistic-regression/",
+    "https://www.geeksforgeeks.org/machine-learning/ml-cost-function-in-logistic-regression/",
+    "https://developers.google.com/machine-learning/crash-course/logistic-regression?hl=ko&_gl=1*1jbbj8j*_up*MQ..*_ga*NjQzNTk5ODE3LjE3NzY4MjUwMDQ.*_ga_SM8HXJ53K2*czE3NzY4MjUwMDMkbzEkZzAkdDE3NzY4MjUwMDMkajYwJGwwJGgw",
+    "https://developers.google.com/machine-learning/crash-course/logistic-regression/sigmoid-function?hl=ko&_gl=1*1jbbj8j*_up*MQ..*_ga*NjQzNTk5ODE3LjE3NzY4MjUwMDQ.*_ga_SM8HXJ53K2*czE3NzY4MjUwMDMkbzEkZzAkdDE3NzY4MjUwMDMkajYwJGwwJGgw",
+    "https://developers.google.com/machine-learning/crash-course/logistic-regression/loss-regularization?hl=ko&_gl=1*mq1k0d*_up*MQ..*_ga*NjQzNTk5ODE3LjE3NzY4MjUwMDQ.*_ga_SM8HXJ53K2*czE3NzY4MjUwMDMkbzEkZzAkdDE3NzY4MjUwMDMkajYwJGwwJGgw",
+    "https://www.geeksforgeeks.org/machine-learning/underfitting-and-overfitting-in-machine-learning/",
+    "https://www.kaggle.com/code/dansbecker/model-validation",
+    "https://www.kaggle.com/code/dansbecker/underfitting-and-overfitting",
+    "https://www.w3schools.com/python/python_ml_confusion_matrix.asp",
+    "https://www.w3schools.com/python/python_ml_auc_roc.asp",
+    "https://www.geeksforgeeks.org/machine-learning/confusion-matrix-machine-learning/",
+    "https://www.geeksforgeeks.org/machine-learning/precision-and-recall-in-machine-learning/",
+    "https://www.geeksforgeeks.org/machine-learning/f1-score-in-machine-learning/",
+    "https://www.geeksforgeeks.org/machine-learning/auc-roc-curve/",
+    "https://www.geeksforgeeks.org/machine-learning/decision-tree-introduction-example/",
+    "https://www.geeksforgeeks.org/machine-learning/decision-tree-algorithms/",
+    "https://www.geeksforgeeks.org/machine-learning/python-decision-tree-regression-using-sklearn/",
+    "https://www.geeksforgeeks.org/machine-learning/building-and-implementing-decision-tree-classifiers-with-scikit-learn-a-comprehensive-guide/",
+    "https://www.geeksforgeeks.org/machine-learning/random-forest-algorithm-in-machine-learning/",
+    "https://www.geeksforgeeks.org/dsa/random-forest-classifier-using-scikit-learn/",
+    "https://www.geeksforgeeks.org/machine-learning/random-forest-regression-in-python/",
+    "https://www.geeksforgeeks.org/machine-learning/random-forest-hyperparameter-tuning-in-python/",
+    "https://www.geeksforgeeks.org/machine-learning/a-comprehensive-guide-to-ensemble-learning/",
+    "https://www.geeksforgeeks.org/machine-learning/what-is-bagging-classifier/",
+    "https://www.geeksforgeeks.org/machine-learning/adaboost-in-machine-learning/",
+    "https://www.w3schools.com/python/python_ml_decision_tree.asp",
+    "https://www.w3schools.com/python/python_ml_bagging.asp",
+    "https://www.w3schools.com/python/python_ml_cross_validation.asp",
+    "https://www.w3schools.com/python/python_ml_grid_search.asp",
+    "https://www.geeksforgeeks.org/machine-learning/cross-validation-machine-learning/",
+    "https://www.geeksforgeeks.org/machine-learning/hyperparameter-tuning/",
+    "https://www.geeksforgeeks.org/machine-learning/what-is-feature-extraction/",
+    "https://www.geeksforgeeks.org/machine-learning/what-is-feature-engineering/",
+    "https://www.geeksforgeeks.org/machine-learning/feature-selection-techniques-in-machine-learning/",
+    "https://www.w3schools.com/python/python_ml_hierarchial_clustering.asp",
+    "https://www.w3schools.com/python/python_ml_k-means.asp",
+    "https://www.geeksforgeeks.org/machine-learning/clustering-in-machine-learning/",
+    "https://www.geeksforgeeks.org/machine-learning/association-rule/",
+    "https://www.geeksforgeeks.org/machine-learning/dimensionality-reduction/"
+  ],
+  "curriculum": [
+    {
+      "step": "1",
+      "topic": "데이터 이해와 기초 통계",
+      "objectives": "머신러닝 전에 필요한 데이터 이해와 기초 통계 개념을 익히고, 데이터 분포를 읽을 수 있다.",
+      "key_contents": "mean, median, mode, standard deviation, percentile, data distribution, normal distribution, basic data exploration"
+    },
+    {
+      "step": "2",
+      "topic": "데이터 전처리와 EDA",
+      "objectives": "결측치, 이상치, 스케일링 등 기초 전처리를 수행하고 탐색적 데이터 분석의 역할을 설명할 수 있다.",
+      "key_contents": "data cleaning, data preprocessing, feature scaling, categorical variable encoding, EDA, train dataset inspection, preprocessing workflow"
+    },
+    {
+      "step": "3",
+      "topic": "모델의 작동 원리와 첫 번째 예측 모델",
+      "objectives": "모델이 입력에서 예측을 만드는 기본 원리를 이해하고, 첫 번째 지도학습 모델을 구현할 수 있다.",
+      "key_contents": "how models work, features and target, decision tree intuition, your first machine learning model, fit and predict"
+    },
+    {
+      "step": "4",
+      "topic": "선형 회귀와 회귀 문제",
+      "objectives": "회귀 문제의 개념을 이해하고 선형 회귀를 사용해 연속형 값을 예측할 수 있다.",
+      "key_contents": "regression, linear regression, multiple regression, loss, gradient descent, evaluation for regression"
+    },
+    {
+      "step": "5",
+      "topic": "분류와 로지스틱 회귀",
+      "objectives": "분류 문제를 이해하고 로지스틱 회귀를 이용해 범주를 예측할 수 있다.",
+      "key_contents": "classification, logistic regression, thresholds, probability prediction, binary classification"
+    },
+    {
+      "step": "6",
+      "topic": "모델 검증과 과소적합·과적합",
+      "objectives": "학습 데이터와 검증 데이터의 역할을 이해하고, 과소적합과 과적합을 구분할 수 있다.",
+      "key_contents": "model validation, train/test split, generalization, underfitting, overfitting, data leakage"
+    },
+    {
+      "step": "7",
+      "topic": "평가 지표 해석",
+      "objectives": "분류 모델의 주요 평가 지표를 이해하고, 모델 성능을 올바르게 해석할 수 있다.",
+      "key_contents": "confusion matrix, precision, recall, F1-score, AUC-ROC, metric selection"
+    },
+    {
+      "step": "8",
+      "topic": "트리 기반 모델과 앙상블",
+      "objectives": "의사결정나무와 랜덤포레스트의 원리를 이해하고, 더 강한 예측 모델을 구성할 수 있다.",
+      "key_contents": "decision tree, random forest, bagging, bootstrap aggregation, ensemble learning"
+    },
+    {
+      "step": "9",
+      "topic": "고급 모델링: 교차검증, 하이퍼파라미터 튜닝",
+      "objectives": "더 신뢰도 높은 검증 체계를 만들고, 하이퍼파라미터 튜닝을 통해 최적의 모델을 만들 수 있다.",
+      "key_contents": "cross-validation, grid search, hyperparameter tuning"
+    },
+    {
+      "step": "10",
+      "topic": "Feature Engineering",
+      "objectives": "모델 성능을 높이기 위한 feature engineering의 목적과 기본 방법을 이해할 수 있다.",
+      "key_contents": "feature creation, feature extraction, feature selection, feature scaling"
+    },
+    {
+      "step": "11",
+      "topic": "비지도학습과 차원 축소",
+      "objectives": "라벨이 없는 데이터에서 패턴을 찾는 기본 방법을 이해하고, 클러스터링과 차원 축소를 설명할 수 있다.",
+      "key_contents": "unsupervised learning, clustering, hierarchical clustering, K-means, dimensionality reduction, PCA"
+    }
+  ]
+}

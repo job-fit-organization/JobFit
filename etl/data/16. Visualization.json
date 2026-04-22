@@ -1,128 +1,113 @@
-[
-  {
-    "step": "1",
-    "topic": "데이터 시각화 개요와 Python 시각화 생태계 이해",
-    "objectives": "데이터 시각화의 목적과 주요 활용 장면을 이해하고, Python에서 자주 사용하는 시각화 라이브러리의 역할을 구분할 수 있다.",
-    "key_contents": "데이터 시각화의 필요성, 좋은 차트의 조건, 차트 선택의 중요성을 학습한다. Python 시각화 생태계에서 Matplotlib, Seaborn, Pandas plotting, Plotly의 역할을 개괄적으로 이해한다. 정적 시각화와 인터랙티브 시각화의 차이를 소개한다.",
-    "urls": [
-      "https://www.geeksforgeeks.org/data-visualization/data-visualization-and-its-importance/",
-      "https://www.geeksforgeeks.org/r-language/types-of-data-visualization/",
-      "https://www.geeksforgeeks.org/data-visualization/choosing-the-right-chart-type-a-technical-guide/",
-      "https://www.geeksforgeeks.org/data-visualization/how-to-select-colors-for-data-visualizations/"
-    ]
-  },
-  {
-    "step": "2",
-    "topic": "Matplotlib 기초와 첫 그래프 그리기",
-    "objectives": "Matplotlib의 기본 구조를 이해하고, 간단한 그래프를 직접 생성할 수 있다.",
-    "key_contents": "Matplotlib의 개념과 역할을 이해한다. pyplot 기반의 기본 작성 흐름을 익힌다. figure, axis, plot 호출의 기본 구조를 학습하고 첫 번째 선 그래프를 실습한다.",
-    "urls": [
-      "https://www.w3schools.com/python/matplotlib_getting_started.asp",
-      "https://www.w3schools.com/python/matplotlib_pyplot.asp",
-      "https://www.w3schools.com/python/matplotlib_plotting.asp",
-      "https://www.geeksforgeeks.org/python/matplotlib-tutorial/",
-      "https://www.geeksforgeeks.org/installation-guide/install-matplotlib-python/",
-      "https://www.geeksforgeeks.org/python/simple-plot-in-python-using-matplotlib/"
-    ]
-  },
-  {
-    "step": "3",
-    "topic": "선 그래프와 시계열 시각화",
-    "objectives": "시간 흐름이나 연속적인 변화 패턴을 선 그래프로 효과적으로 표현할 수 있다.",
-    "key_contents": "line chart의 용도와 해석 방법을 익힌다. 시계열 데이터 또는 순서가 있는 데이터에 적합한 시각화 방법을 학습한다. 여러 개의 선을 한 그래프에 배치해 그룹별 추세를 비교하는 방법을 실습한다.",
-    "urls": [
-      "https://www.geeksforgeeks.org/python/line-chart-in-matplotlib-python/"
-    ]
-  },
-  {
-    "step": "4",
-    "topic": "막대그래프와 히트맵으로 범주 비교하기",
-    "objectives": "범주형 데이터 비교와 표 형태 데이터의 패턴 분석에 적합한 시각화 방법을 사용할 수 있다.",
-    "key_contents": "bar chart를 활용해 카테고리별 수치 비교를 수행한다. heatmap을 활용해 행렬형 데이터나 상호 비교 데이터를 색상으로 표현하는 방법을 익힌다. 범주 비교와 색상 기반 패턴 탐색의 차이를 이해한다.",
-    "urls": [
-      "https://www.w3schools.com/python/matplotlib_bars.asp",
-      "https://www.geeksforgeeks.org/pandas/bar-plot-in-matplotlib/",
-      "https://www.geeksforgeeks.org/python/adding-value-labels-on-a-matplotlib-bar-chart/"
-    ]
-  },
-  {
-    "step": "5",
-    "topic": "산점도로 변수 간 관계 탐색하기",
-    "objectives": "두 변수 간 관계와 분포, 이상치 패턴을 산점도로 해석할 수 있다.",
-    "key_contents": "scatter plot의 목적과 해석법을 학습한다. 두 연속형 변수의 관계를 표현하고, 색상이나 그룹을 추가해 세 번째 정보까지 함께 표현하는 방법을 익힌다. 관계 탐색과 이상치 탐색에 적합한 활용 사례를 다룬다.",
-    "urls": [
-      "https://www.w3schools.com/python/matplotlib_scatter.asp",
-      "https://www.geeksforgeeks.org/python/matplotlib-pyplot-scatter-in-python/"
-    ]
-  },
-  {
-    "step": "6",
-    "topic": "분포 시각화: 히스토그램과 밀도곡선",
-    "objectives": "수치형 데이터의 분포, 치우침, 집중 구간을 시각적으로 파악할 수 있다.",
-    "key_contents": "histogram으로 데이터 분포를 확인하는 방법을 익힌다. density plot 또는 KDE 기반의 부드러운 분포 시각화 개념을 이해한다. 단일 변수 분포와 그룹별 분포 비교 방법을 실습한다.",
-    "urls": [
-      "https://www.w3schools.com/python/matplotlib_histograms.asp",
-      "https://www.geeksforgeeks.org/data-visualization/plotting-histogram-in-python-using-matplotlib/"
-    ]
-  },
-  {
-    "step": "7",
-    "topic": "Matplotlib 커스터마이징과 그래프 가독성 개선",
-    "objectives": "그래프 제목, 축 라벨, 범례, 마커, 선 스타일, 그리드 등을 조정해 전달력을 높일 수 있다.",
-    "key_contents": "labels, markers, lines, grid, subplot 개념을 익힌다. 제목과 축 라벨을 명확하게 작성하는 방법을 배운다. 마커와 선 스타일을 조정하고, 여러 그래프를 한 화면에 배치하는 subplot 기초를 실습한다.",
-    "urls": [
-      "https://www.w3schools.com/python/matplotlib_markers.asp",
-      "https://www.w3schools.com/python/matplotlib_line.asp",
-      "https://www.w3schools.com/python/matplotlib_labels.asp",
-      "https://www.w3schools.com/python/matplotlib_grid.asp",
-      "https://www.w3schools.com/python/matplotlib_subplot.asp",
-      "https://www.geeksforgeeks.org/python/matplotlib-markers-module-in-python/",
-      "https://www.geeksforgeeks.org/python/grids-in-matplotlib/",
-      "https://www.geeksforgeeks.org/python/how-to-create-subplots-in-matplotlib-with-python/",
-      "https://www.geeksforgeeks.org/python/style-plots-using-matplotlib/",
-      "https://www.geeksforgeeks.org/python/how-to-change-the-size-of-figures-drawn-with-matplotlib/",
-      "https://www.geeksforgeeks.org/python/how-to-change-the-transparency-of-a-graph-plot-in-matplotlib-with-python/",
-      "https://www.geeksforgeeks.org/python/how-to-change-fonts-in-matplotlib/",
-      "https://www.geeksforgeeks.org/python/how-to-set-tick-labels-font-size-in-matplotlib/",
-      "https://www.geeksforgeeks.org/data-visualization/how-to-set-plot-background-color-in-matplotlib/",
-      "https://www.geeksforgeeks.org/python/how-to-adjust-position-of-axis-labels-in-matplotlib/",
-      "https://www.geeksforgeeks.org/python/hide-axis-borders-and-white-spaces-in-matplotlib/"
-    ]
-  },
-  {
-    "step": "8",
-    "topic": "Seaborn으로 더 빠르고 보기 좋은 통계 시각화 만들기",
-    "objectives": "Seaborn을 활용해 적은 코드로 통계적 의미가 드러나는 시각화를 만들 수 있다.",
-    "key_contents": "Seaborn의 장점과 Matplotlib 위에서 동작하는 구조를 이해한다. lineplot, barplot, scatterplot, histplot 등 대표 함수의 사용 흐름을 익힌다. 스타일과 테마 적용을 통해 시각적 완성도를 높이는 방법을 학습한다.",
-    "urls": [
-      "https://www.kaggle.com/code/alexisbcook/hello-seaborn",
-      "https://www.kaggle.com/code/alexisbcook/line-charts",
-      "https://www.kaggle.com/code/alexisbcook/bar-charts-and-heatmaps",
-      "https://www.kaggle.com/code/alexisbcook/scatter-plots",
-      "https://www.kaggle.com/code/alexisbcook/distributions",
-      "https://www.geeksforgeeks.org/data-visualization/data-visualization-with-python-seaborn/"
-    ]
-  },
-  {
-    "step": "9",
-    "topic": "Pandas plotting과 빠른 EDA 시각화",
-    "objectives": "Pandas DataFrame에서 빠르게 기본 시각화를 생성해 탐색적 데이터 분석에 활용할 수 있다.",
-    "key_contents": "Pandas의 기본 plotting 기능을 사용해 빠르게 그래프를 생성하는 방법을 익힌다. 정교한 시각화보다 빠른 탐색에 적합한 상황을 이해한다. 데이터 확인용 시각화와 발표용 시각화의 차이를 구분한다.",
-    "urls": [
-      "https://www.geeksforgeeks.org/pandas/pandas-built-in-data-visualization-ml/",
-      "https://www.geeksforgeeks.org/python/how-to-plot-timeseries-based-charts-using-pandas/"
-    ]
-  },
-  {
-    "step": "10",
-    "topic": "인터랙티브 시각화와 도구 선택 전략",
-    "objectives": "Plotly 등 인터랙티브 도구의 필요성을 이해하고 목적에 맞는 시각화 라이브러리를 선택할 수 있다.",
-    "key_contents": "정적 시각화와 인터랙티브 시각화의 차이를 비교한다. Plotly의 특징과 대시보드 친화적 장점을 개괄적으로 소개한다. Matplotlib, Seaborn, Pandas, Plotly를 용도별로 선택하는 기준을 정리한다.",
-    "urls": [
-      "https://www.geeksforgeeks.org/data-visualization/using-plotly-for-interactive-data-visualization-in-python/",
-      "https://www.geeksforgeeks.org/python/introduction-to-altair-in-python/",
-      "https://www.geeksforgeeks.org/data-visualization/python-bokeh-tutorial-interactive-data-visualization-with-bokeh/",
-      "https://www.geeksforgeeks.org/data-visualization/data-visualization-with-pygal/"
-    ]
-  }
-]
+{
+  "tech": "Visualization",
+  "urls": [
+    "https://www.geeksforgeeks.org/data-visualization/data-visualization-and-its-importance/",
+    "https://www.geeksforgeeks.org/r-language/types-of-data-visualization/",
+    "https://www.geeksforgeeks.org/data-visualization/choosing-the-right-chart-type-a-technical-guide/",
+    "https://www.geeksforgeeks.org/data-visualization/how-to-select-colors-for-data-visualizations/",
+    "https://www.w3schools.com/python/matplotlib_getting_started.asp",
+    "https://www.w3schools.com/python/matplotlib_pyplot.asp",
+    "https://www.w3schools.com/python/matplotlib_plotting.asp",
+    "https://www.geeksforgeeks.org/python/matplotlib-tutorial/",
+    "https://www.geeksforgeeks.org/installation-guide/install-matplotlib-python/",
+    "https://www.geeksforgeeks.org/python/simple-plot-in-python-using-matplotlib/",
+    "https://www.geeksforgeeks.org/python/line-chart-in-matplotlib-python/",
+    "https://www.w3schools.com/python/matplotlib_bars.asp",
+    "https://www.geeksforgeeks.org/pandas/bar-plot-in-matplotlib/",
+    "https://www.geeksforgeeks.org/python/adding-value-labels-on-a-matplotlib-bar-chart/",
+    "https://www.w3schools.com/python/matplotlib_scatter.asp",
+    "https://www.geeksforgeeks.org/python/matplotlib-pyplot-scatter-in-python/",
+    "https://www.w3schools.com/python/matplotlib_histograms.asp",
+    "https://www.geeksforgeeks.org/data-visualization/plotting-histogram-in-python-using-matplotlib/",
+    "https://www.w3schools.com/python/matplotlib_markers.asp",
+    "https://www.w3schools.com/python/matplotlib_line.asp",
+    "https://www.w3schools.com/python/matplotlib_labels.asp",
+    "https://www.w3schools.com/python/matplotlib_grid.asp",
+    "https://www.w3schools.com/python/matplotlib_subplot.asp",
+    "https://www.geeksforgeeks.org/python/matplotlib-markers-module-in-python/",
+    "https://www.geeksforgeeks.org/python/grids-in-matplotlib/",
+    "https://www.geeksforgeeks.org/python/how-to-create-subplots-in-matplotlib-with-python/",
+    "https://www.geeksforgeeks.org/python/style-plots-using-matplotlib/",
+    "https://www.geeksforgeeks.org/python/how-to-change-the-size-of-figures-drawn-with-matplotlib/",
+    "https://www.geeksforgeeks.org/python/how-to-change-the-transparency-of-a-graph-plot-in-matplotlib-with-python/",
+    "https://www.geeksforgeeks.org/python/how-to-change-fonts-in-matplotlib/",
+    "https://www.geeksforgeeks.org/python/how-to-set-tick-labels-font-size-in-matplotlib/",
+    "https://www.geeksforgeeks.org/data-visualization/how-to-set-plot-background-color-in-matplotlib/",
+    "https://www.geeksforgeeks.org/python/how-to-adjust-position-of-axis-labels-in-matplotlib/",
+    "https://www.geeksforgeeks.org/python/hide-axis-borders-and-white-spaces-in-matplotlib/",
+    "https://www.kaggle.com/code/alexisbcook/hello-seaborn",
+    "https://www.kaggle.com/code/alexisbcook/line-charts",
+    "https://www.kaggle.com/code/alexisbcook/bar-charts-and-heatmaps",
+    "https://www.kaggle.com/code/alexisbcook/scatter-plots",
+    "https://www.kaggle.com/code/alexisbcook/distributions",
+    "https://www.geeksforgeeks.org/data-visualization/data-visualization-with-python-seaborn/",
+    "https://www.geeksforgeeks.org/pandas/pandas-built-in-data-visualization-ml/",
+    "https://www.geeksforgeeks.org/python/how-to-plot-timeseries-based-charts-using-pandas/",
+    "https://www.geeksforgeeks.org/data-visualization/using-plotly-for-interactive-data-visualization-in-python/",
+    "https://www.geeksforgeeks.org/python/introduction-to-altair-in-python/",
+    "https://www.geeksforgeeks.org/data-visualization/python-bokeh-tutorial-interactive-data-visualization-with-bokeh/",
+    "https://www.geeksforgeeks.org/data-visualization/data-visualization-with-pygal/"
+  ],
+  "curriculum": [
+    {
+      "step": "1",
+      "topic": "데이터 시각화 개요와 Python 시각화 생태계 이해",
+      "objectives": "데이터 시각화의 목적과 주요 활용 장면을 이해하고, Python에서 자주 사용하는 시각화 라이브러리의 역할을 구분할 수 있다.",
+      "key_contents": "데이터 시각화의 필요성, 좋은 차트의 조건, 차트 선택의 중요성을 학습한다. Python 시각화 생태계에서 Matplotlib, Seaborn, Pandas plotting, Plotly의 역할을 개괄적으로 이해한다. 정적 시각화와 인터랙티브 시각화의 차이를 소개한다."
+    },
+    {
+      "step": "2",
+      "topic": "Matplotlib 기초와 첫 그래프 그리기",
+      "objectives": "Matplotlib의 기본 구조를 이해하고, 간단한 그래프를 직접 생성할 수 있다.",
+      "key_contents": "Matplotlib의 개념과 역할을 이해한다. pyplot 기반의 기본 작성 흐름을 익힌다. figure, axis, plot 호출의 기본 구조를 학습하고 첫 번째 선 그래프를 실습한다."
+    },
+    {
+      "step": "3",
+      "topic": "선 그래프와 시계열 시각화",
+      "objectives": "시간 흐름이나 연속적인 변화 패턴을 선 그래프로 효과적으로 표현할 수 있다.",
+      "key_contents": "line chart의 용도와 해석 방법을 익힌다. 시계열 데이터 또는 순서가 있는 데이터에 적합한 시각화 방법을 학습한다. 여러 개의 선을 한 그래프에 배치해 그룹별 추세를 비교하는 방법을 실습한다."
+    },
+    {
+      "step": "4",
+      "topic": "막대그래프와 히트맵으로 범주 비교하기",
+      "objectives": "범주형 데이터 비교와 표 형태 데이터의 패턴 분석에 적합한 시각화 방법을 사용할 수 있다.",
+      "key_contents": "bar chart를 활용해 카테고리별 수치 비교를 수행한다. heatmap을 활용해 행렬형 데이터나 상호 비교 데이터를 색상으로 표현하는 방법을 익힌다. 범주 비교와 색상 기반 패턴 탐색의 차이를 이해한다."
+    },
+    {
+      "step": "5",
+      "topic": "산점도로 변수 간 관계 탐색하기",
+      "objectives": "두 변수 간 관계와 분포, 이상치 패턴을 산점도로 해석할 수 있다.",
+      "key_contents": "scatter plot의 목적과 해석법을 학습한다. 두 연속형 변수의 관계를 표현하고, 색상이나 그룹을 추가해 세 번째 정보까지 함께 표현하는 방법을 익힌다. 관계 탐색과 이상치 탐색에 적합한 활용 사례를 다룬다."
+    },
+    {
+      "step": "6",
+      "topic": "분포 시각화: 히스토그램과 밀도곡선",
+      "objectives": "수치형 데이터의 분포, 치우침, 집중 구간을 시각적으로 파악할 수 있다.",
+      "key_contents": "histogram으로 데이터 분포를 확인하는 방법을 익힌다. density plot 또는 KDE 기반의 부드러운 분포 시각화 개념을 이해한다. 단일 변수 분포와 그룹별 분포 비교 방법을 실습한다."
+    },
+    {
+      "step": "7",
+      "topic": "Matplotlib 커스터마이징과 그래프 가독성 개선",
+      "objectives": "그래프 제목, 축 라벨, 범례, 마커, 선 스타일, 그리드 등을 조정해 전달력을 높일 수 있다.",
+      "key_contents": "labels, markers, lines, grid, subplot 개념을 익힌다. 제목과 축 라벨을 명확하게 작성하는 방법을 배운다. 마커와 선 스타일을 조정하고, 여러 그래프를 한 화면에 배치하는 subplot 기초를 실습한다."
+    },
+    {
+      "step": "8",
+      "topic": "Seaborn으로 더 빠르고 보기 좋은 통계 시각화 만들기",
+      "objectives": "Seaborn을 활용해 적은 코드로 통계적 의미가 드러나는 시각화를 만들 수 있다.",
+      "key_contents": "Seaborn의 장점과 Matplotlib 위에서 동작하는 구조를 이해한다. lineplot, barplot, scatterplot, histplot 등 대표 함수의 사용 흐름을 익힌다. 스타일과 테마 적용을 통해 시각적 완성도를 높이는 방법을 학습한다."
+    },
+    {
+      "step": "9",
+      "topic": "Pandas plotting과 빠른 EDA 시각화",
+      "objectives": "Pandas DataFrame에서 빠르게 기본 시각화를 생성해 탐색적 데이터 분석에 활용할 수 있다.",
+      "key_contents": "Pandas의 기본 plotting 기능을 사용해 빠르게 그래프를 생성하는 방법을 익힌다. 정교한 시각화보다 빠른 탐색에 적합한 상황을 이해한다. 데이터 확인용 시각화와 발표용 시각화의 차이를 구분한다."
+    },
+    {
+      "step": "10",
+      "topic": "인터랙티브 시각화와 도구 선택 전략",
+      "objectives": "Plotly 등 인터랙티브 도구의 필요성을 이해하고 목적에 맞는 시각화 라이브러리를 선택할 수 있다.",
+      "key_contents": "정적 시각화와 인터랙티브 시각화의 차이를 비교한다. Plotly의 특징과 대시보드 친화적 장점을 개괄적으로 소개한다. Matplotlib, Seaborn, Pandas, Plotly를 용도별로 선택하는 기준을 정리한다."
+    }
+  ]
+}
