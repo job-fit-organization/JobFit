@@ -1,0 +1,186 @@
+import os
+import re
+from pathlib import Path
+
+from langchain_core.output_parsers import StrOutputParser
+
+from common.llm_pipeline.retriever import __get_context
+from common.llm_pipeline.prompts import (
+    __get_beginner_material_prompt, __get_advanced_material_prompt,
+    __get_quiz_prompt, __get_review_prompt
+)
+from common.llm_pipeline.models import __get_generate_llm, __get_review_llm
+from common.llm_pipeline.state import State
+
+DATA_DIR = Path(__file__).parent / "data"
+
+# 1-1. 초급자 강의 자료 생성 노드
+def generate_beginner_material_node(state: State) -> State:
+    print(f"📝 [Step {state['step']}] 초급자용 강의자료 생성 중... (PGVector 검색)")
+    urls_md = "\n".join(f"- {u}" for u in state["urls"])
+
+    beginner_query = f"{state['topic']} 기본 개념, 사용법, 예제, 입문"
+    beginner_context = __get_context(beginner_query, state['tech_name'], k=8)
+    beginner_prompt = __get_beginner_material_prompt()
+
+    llm = __get_generate_llm(os.getenv("GENERATE_MODEL"))
+    beginner_chain = beginner_prompt | llm | StrOutputParser()
+
+    result = beginner_chain.invoke({
+        'urls_md': urls_md,
+        'topic': state['topic'],
+        'objectives': state['objectives'],
+        'key_contents': state['key_contents'],
+        'context': beginner_context,
+    })
+
+    return {
+        **state,
+        "beginner_material": result
+    }
+
+# 1-2. 경력자 강의 자료 생성 노드
+def generate_advanced_material_node(state: State) -> State:
+    print(f"📝 [Step {state['step']}] 경력자용 강의자료 생성 중... (PGVector 검색)")
+    collection_name = state['tech_name']
+    urls_md = "\n".join(f"- {u}" for u in state["urls"])
+
+    advanced_query = f"{state['topic']} 내부 동작 원리, 성능 최적화, 트레이드오프, 아키텍처"
+    advanced_context = __get_context(advanced_query, collection_name, k=8)
+    advanced_prompt = __get_advanced_material_prompt()
+
+    llm = __get_generate_llm(os.getenv("GENERATE_MODEL"))
+    advanced_chain = advanced_prompt | llm | StrOutputParser()
+
+    result = advanced_chain.invoke({
+        'urls_md': urls_md,
+        'topic': state['topic'],
+        'objectives': state['objectives'],
+        'key_contents': state['key_contents'],
+        'context': advanced_context,
+    })
+
+    return {
+        **state,
+        "advanced_material": result
+    }
+
+# 2. 문제 생성 노드
+def generate_quiz_node(state: State) -> State:
+    print(f"📝 [Step {state['step']}] 문제 생성 중 (초급:중급:고급 = 1:2:1, PGVector 검색)...")
+    collection_name = state['tech_name']
+    quiz_query = f"{state['topic']} {state['key_contents']} 개념 정의 예제 주의사항"
+    quiz_context = __get_context(quiz_query, collection_name, k=8)
+    quiz_prompt = __get_quiz_prompt()
+
+    # 1:2:1 비율 계산
+    total = 8
+    easy = total // 4
+    hard = total // 4
+    medium = total - easy - hard
+
+    quiz_chain = quiz_prompt | __get_generate_llm(os.getenv("GENERATE_MODEL")) | StrOutputParser()
+    result = quiz_chain.invoke({
+        "total": total,
+        "easy": easy,
+        "medium": medium,
+        "hard": hard,
+        "topic": state["topic"],
+        "objectives": state["objectives"],
+        "key_contents": state["key_contents"],
+        "context": quiz_context
+    })
+    
+    return {
+        **state,
+        "quiz": result
+    }
+
+# 3. 검수 노드
+def review_beginner_material_node(state: State) -> State:
+    if state.get("skip_review"):
+        return {"beginner_review": "*(검수 생략)*"}
+        
+    REVIEW_MODEL_NM = os.getenv("REVIEW_MODEL", "gpt-4.1")
+    review_model = __get_review_llm(REVIEW_MODEL_NM)
+    review_prompt = __get_review_prompt()
+
+    review_chain = review_prompt | review_model | StrOutputParser()
+
+    print(f"🔍 [Step {state['step']}] 초급자용 강의자료 검수 중... (모델: {REVIEW_MODEL_NM})")
+    result = review_chain.invoke({
+        "target": "처음 배우는 학생 (비전공자·입문자)",
+        "material": state["beginner_material"],
+    })
+
+    return {
+        **state,
+        "beginner_review": result
+    }
+
+def review_advanced_material_node(state: State) -> State:
+    if state.get("skip_review"):
+        return {"advanced_review": "*(검수 생략)*"}
+        
+    REVIEW_MODEL_NM = os.getenv("REVIEW_MODEL", "gpt-4.1")
+    review_model = __get_review_llm(REVIEW_MODEL_NM)
+    review_prompt = __get_review_prompt()
+
+    review_chain = review_prompt | review_model | StrOutputParser()
+
+    print(f"🔍 [Step {state['step']}] 경력자용 강의자료 검수 중... (모델: {REVIEW_MODEL_NM})")
+    result = review_chain.invoke({
+        "target": "개발 경험이 있는 학생 (전공자·경력자)",
+        "material": state["advanced_material"],
+    })
+
+    return {
+        **state,
+        "advanced_review": result
+    }
+
+# 4. 결과 저장 노드
+def save_files_node(state: State) -> State:
+    print(f"💾 [Step {state['step']}] 파일 저장 중...")
+
+    tech = state["tech_name"]
+    step = state["step"].zfill(2)  # 01, 02, ...
+    topic_safe = re.sub(r"[^\w가-힣\s]", "", state["topic"])[:40].strip()
+    step_label = f"{step}_{topic_safe}"
+
+    # 디렉토리 생성
+    base = DATA_DIR / tech
+    beginner_dir = base / "beginner"
+    advanced_dir = base / "advanced"
+    for d in [beginner_dir, advanced_dir]:
+        d.mkdir(parents=True, exist_ok=True)
+
+    # ── 초급자 강의자료 + 검수
+    beginner_path = beginner_dir / f"{step_label}_curriculum.md"
+    beginner_review_path = beginner_dir / f"{step_label}_review.md"
+    with open(beginner_path, "w", encoding="utf-8") as f:
+        f.write(state.get("beginner_lecture", ""))
+    with open(beginner_review_path, "w", encoding="utf-8") as f:
+        header = f"# 검수 결과 — 초급자 강의자료\n> Step {state['step']}: {state['topic']}\n\n"
+        f.write(header + state.get("beginner_review", ""))
+
+    # ── 경력자 강의자료 + 검수
+    advanced_path = advanced_dir / f"{step_label}_curriculum.md"
+    advanced_review_path = advanced_dir / f"{step_label}_review.md"
+    with open(advanced_path, "w", encoding="utf-8") as f:
+        f.write(state.get("advanced_lecture", ""))
+    with open(advanced_review_path, "w", encoding="utf-8") as f:
+        header = f"# 검수 결과 — 경력자 강의자료\n> Step {state['step']}: {state['topic']}\n\n"
+        f.write(header + state.get("advanced_review", ""))
+
+    # ── 문제 파일 (beginner + advanced 공용)
+    problems_beginner = advanced_dir / f"{step_label}_problems.md"
+    problems_advanced = beginner_dir / f"{step_label}_problems.md"
+    problems_content = state.get("problems", "")
+    for path in [problems_beginner, problems_advanced]:
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(problems_content)
+
+    print(f"  ✅ 저장 완료: {beginner_dir.name}/{step_label}_*")
+    print(f"  ✅ 저장 완료: {advanced_dir.name}/{step_label}_*")
+    return state
