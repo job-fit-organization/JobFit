@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  jobfit-db:
+    build: .
+    container_name: jobfit_postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: jobfit
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin1234
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - jobfit_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  jobfit_postgres_data:
