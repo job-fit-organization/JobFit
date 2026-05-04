@@ -13,7 +13,7 @@ load_dotenv()
 _embedding = OpenAIEmbeddings(model="text-embedding-3-small")
 CONNECTION_STRING="postgresql://admin:admin1234@localhost:5432/jobfit"
 
-def create_pgvector_db(collection_name: str, urls: List[str], force: bool=True) -> int:
+def create_pgvector_db(collection_name: str, urls: List[str]) -> int:
     # 링크들을 하나씩 크롤링해서 문서화(로드)
     raw_docs = do_crawl(urls)
     if not raw_docs:
@@ -30,11 +30,13 @@ def create_pgvector_db(collection_name: str, urls: List[str], force: bool=True) 
 
     # 임베딩 및 벡터 DB 적재
     vectorstore = PGVector(
-        connection_string=CONNECTION_STRING,
+        connection=CONNECTION_STRING,
         embeddings=_embedding,
         collection_name=collection_name,
-        pre_delete_collection=force,
+        pre_delete_collection=True,
         use_jsonb=True,
     )
     vectorstore.add_documents(docs)
     print(f"  🔷 PGVector '{collection_name}' 저장 완료 ({len(docs)}청크)")
+
+    return len(docs)

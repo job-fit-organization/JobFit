@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 # LLM을 활용해 설명을 자동 생성하기 위한 모듈
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from common.llm_pipeline.models import __get_generate_llm
+from common.llm_pipeline.models import __get_review_llm
 
 load_dotenv()
 
@@ -23,7 +23,7 @@ def generate_desc(name: str, context_type: str) -> str:
     prompt = ChatPromptTemplate.from_template(
         "당신은 IT 커리어 컨설턴트입니다. '{name}' {context_type}에 대해 초보자도 이해할 수 있도록 2~3문장으로 핵심만 요약해 설명해주세요."
     )
-    llm = __get_generate_llm(os.getenv("GENERATE_MODEL", "gpt-5.4-mini"))
+    llm = __get_review_llm(os.getenv("REVIEW_MODEL", "gpt-5.4-mini"))
     chain = prompt | llm | StrOutputParser()
     
     print(f"[{context_type}] {name} 설명 생성 중...")
@@ -48,7 +48,7 @@ def seed_metadata():
                         job_id_map[job_name] = res[0]
                         print(f"  - {job_name}: 이미 존재 (ID: {res[0]})")
                     else:
-                        job_desc = generate_desc(job_name, "IT 직무 혹은 공통 학습 경로")
+                        job_desc = generate_desc(job_name, "직무")
                         cur.execute(
                             "INSERT INTO Job (job_name, job_desc) VALUES (%s, %s) RETURNING id",
                             (job_name, job_desc)
