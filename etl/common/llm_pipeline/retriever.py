@@ -4,12 +4,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-CONNECTION_STRING="postgresql://admin:admin1234@localhost:5432/jobfit_pgvector"
+CONNECTION_STRING="postgresql://admin:admin1234@localhost:5432/jobfit"
 
 _embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
 def __get_context(query:str, collection_name: str, k: int = 6):
-    """컬렉션명 규칙: {tech_name}"""
+    """컬렉션명 규칙: {skill_name}"""
     store = PGVector(
         embeddings=_embeddings,
         collection_name=collection_name,

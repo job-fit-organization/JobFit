@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 _embedding = OpenAIEmbeddings(model="text-embedding-3-small")
-CONNECTION_STRING="postgresql://admin:admin1234@localhost:5432/jobfit_pgvector"
+CONNECTION_STRING="postgresql://admin:admin1234@localhost:5432/jobfit"
 
 def create_pgvector_db(collection_name: str, urls: List[str], force: bool=True) -> int:
     # 링크들을 하나씩 크롤링해서 문서화(로드)

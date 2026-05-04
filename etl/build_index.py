@@ -4,11 +4,11 @@ PGVector 인덱스 빌드 스크립트
 etl/data/*.json 파일의 모든 URL을 크롤링하여
 기술 단위 컬렉션으로 PGVector에 적재합니다.
 
-컬렉션명 규칙: {tech_name}  (e.g. postgresql, docker, python)
+컬렉션명 규칙: {skill_name}  (e.g. postgresql, docker, python)
 
 JSON 구조:
   {
-    "tech": "postgresql",
+    "skill": "postgresql",
     "urls": ["url1", "url2", ...],   ← 기술 전체 URL 목록
     "curriculum": [
       {"step": "1", "topic": "...", "objectives": "...", "key_contents": "..."},
@@ -18,7 +18,7 @@ JSON 구조:
 
 사용법:
   python build_index.py                        # 전체 기술 인덱싱
-  python build_index.py --tech docker python   # 특정 기술만
+  python build_index.py --skill docker python   # 특정 기술만
   python build_index.py --no-force             # 이미 있는 컬렉션 건너뜀
 """
 
@@ -53,7 +53,7 @@ warnings.filterwarnings('ignore')
 # ──────────────────────────────────────────────
 DATA_DIR = Path(__file__).parent / "data"
 
-PGVECTOR_URL = "postgresql://admin:admin1234@localhost:5432/jobfit_pgvector"
+PGVECTOR_URL = "postgresql://admin:admin1234@localhost:5432/jobfit"
 
 _splitter = RecursiveCharacterTextSplitter(
     chunk_size=800,
@@ -176,13 +176,13 @@ def crawl_urls(urls: List[str]) -> List[Document]:
 
 
 
-def index_tech(
-    tech_name: str,
+def index_skill(
+    skill_name: str,
     urls: List[str],
     force: bool = True,
 ) -> int:
     """기술 단위 URL 전체를 하나의 컬렉션에 인덱싱. 저장된 청크 수 반환."""
-    collection_name = tech_name  # 컬렉션명 = 기술명
+    collection_name = skill_name  # 컬렉션명 = 기술명
 
     if not force:
         try:
@@ -229,11 +229,11 @@ def main():
         description="PGVector 인덱스 빌드 — data/*.json 기술 단위로 크롤링 후 적재"
     )
     parser.add_argument(
-        "--tech",
+        "--skill",
         type=str,
         nargs="*",
         default=None,
-        help="처리할 기술명 목록 (미지정 시 전체). 예: --tech postgresql docker",
+        help="처리할 기술명 목록 (미지정 시 전체). 예: --skill postgresql docker",
     )
     parser.add_argument(
         "--force",
@@ -254,15 +254,15 @@ def main():
         print(f"❌ {DATA_DIR} 에서 JSON 파일을 찾을 수 없습니다.")
         return
 
-    # tech 필터: JSON 내부의 "tech" 필드 기준
-    if args.tech:
-        tech_filter = set(t.lower() for t in args.tech)
+    # skill 필터: JSON 내부의 "skill" 필드 기준
+    if args.skill:
+        skill_filter = set(t.lower() for t in args.skill)
         json_files = [
             f for f in json_files
-            if load_data(f).get("tech", "").lower() in tech_filter
+            if load_data(f).get("skill", "").lower() in skill_filter
         ]
         if not json_files:
-            print(f"❌ 지정한 기술명에 해당하는 파일이 없습니다: {args.tech}")
+            print(f"❌ 지정한 기술명에 해당하는 파일이 없습니다: {args.skill}")
             return
 
     print("=" * 65)
@@ -270,29 +270,29 @@ def main():
     print(f"   대상 파일  : {len(json_files)}개")
     print(f"   덮어쓰기   : {'예' if args.force else '아니오 (기존 건너뜀)'}")
     print(f"   PGVector   : {PGVECTOR_URL.split('@')[-1]}")
-    print(f"   컬렉션 규칙: {{tech_name}}  (예: postgresql, docker)")
+    print(f"   컬렉션 규칙: {{skill_name}}  (예: postgresql, docker)")
     print("=" * 65)
 
     total_chunks = 0
-    total_techs = 0
+    total_skills = 0
 
     for json_file in json_files:
         data = load_data(json_file)
-        tech_name = data.get("tech", json_file.stem).lower()
+        skill_name = data.get("skill", json_file.stem).lower()
         urls = data.get("urls", [])
         curriculum = data.get("curriculum", [])
 
         print(f"\n{'─'*65}")
-        print(f"📚 [{tech_name.upper()}]  steps={len(curriculum)}, urls={len(urls)}")
+        print(f"📚 [{skill_name.upper()}]  steps={len(curriculum)}, urls={len(urls)}")
         print(f"{'─'*65}")
 
-        n = index_tech(tech_name=tech_name, urls=urls, force=args.force)
+        n = index_skill(skill_name=skill_name, urls=urls, force=args.force)
         total_chunks += n
-        total_techs += 1
+        total_skills += 1
 
     print("\n" + "=" * 65)
     print(f"🎉 인덱싱 완료!")
-    print(f"   처리 기술  : {total_techs}개")
+    print(f"   처리 기술  : {total_skills}개")
     print(f"   총 청크 수 : {total_chunks}개")
     print("=" * 65)
 

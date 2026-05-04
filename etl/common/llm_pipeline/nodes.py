@@ -30,7 +30,7 @@ def generate_material_node(state: State) -> State:
         query = f"{state['topic']} 내부 동작 원리, 성능 최적화, 트레이드오프, 아키텍처"
         prompt = __get_advanced_material_prompt()
 
-    context = __get_context(query, state["skill_name"], k=8)
+    context = __get_context(query, state["skill_name"], k=10)
     llm = __get_generate_llm(os.getenv("GENERATE_MODEL"))
     chain = prompt | llm | StrOutputParser()
 
@@ -139,6 +139,8 @@ def save_files_node(state: State) -> State:
             level=level,
             step=state["step"],
             topic=state["topic"],
+            objectives=state.get("objectives", ""),
+            key_contents=state.get("key_contents", "")
         )
         print(f"  ✅ 퀴즈 {inserted}문제 DB 저장 완료 (quiz_question / quiz_choice)")
     else:
