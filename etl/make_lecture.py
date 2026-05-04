@@ -11,10 +11,12 @@ JSON 커리큘럼 파일을 입력받아:
   5. 결과 저장: data/<기술명>/<난이도>/<step>_curriculum.md / problems.md / review.md
 
 사용법:
-  python make_lecture.py                          # 기본 (postgresql, 전체 step)
-  python make_lecture.py --tech postgresql        # 기술명 지정
-  python make_lecture.py --steps 1 2 3            # 특정 step만 처리
-  python make_lecture.py --skip-review            # 검수 생략
+  python make_lecture.py                               # 기본 (data/ 디렉토리 전체 JSON)
+  python make_lecture.py --data-dir data/              # 디렉토리 지정 (내부 *.json 전부 처리)
+  python make_lecture.py --data-file data/1.postgresql.json  # 단일 파일
+  python make_lecture.py --tech postgresql             # 기술명 지정 (단일 파일 모드)
+  python make_lecture.py --steps 1 2 3                 # 특정 step만 처리
+  python make_lecture.py --skip-review                 # 검수 생략
 """
 
 import os
@@ -23,6 +25,7 @@ import json
 import argparse
 from pathlib import Path
 from typing import List
+from tqdm import tqdm
 
 os.environ["USER_AGENT"] = "lecture-agent/1.0"
 
@@ -424,17 +427,25 @@ def load_data(json_path: Path) -> dict:
 
 def main():
     parser = argparse.ArgumentParser(description="LangChain 기반 강의자료 생성 파이프라인")
-    parser.add_argument(
+
+    source_group = parser.add_mutually_exclusive_group()
+    source_group.add_argument(
+        "--data-dir",
+        type=str,
+        default=None,
+        help="JSON 파일이 있는 디렉토리 경로 (etl/ 기준 상대경로 또는 절대경로). 미지정 시 etl/data/ 사용",
+    )
+    source_group.add_argument(
         "--data-file",
         type=str,
-        default="data/1. postgresql.json",
-        help="처리할 JSON 파일 경로 (etl/ 기준 상대경로 또는 절대경로)",
+        default=None,
+        help="처리할 단일 JSON 파일 경로 (etl/ 기준 상대경로 또는 절대경로)",
     )
     parser.add_argument(
         "--tech",
         type=str,
         default=None,
-        help="기술명 오버라이드 (미지정 시 파일명에서 자동 추출)",
+        help="기술명 오버라이드 (--data-file 단일 파일 모드에서만 적용, 미지정 시 파일의 tech 필드 사용)",
     )
     parser.add_argument(
         "--steps",
@@ -450,72 +461,99 @@ def main():
     )
     args = parser.parse_args()
 
-    # 파일 경로 해석
-    data_file = Path(args.data_file)
-    if not data_file.is_absolute():
-        data_file = Path(__file__).parent / data_file
-    if not data_file.exists():
-        print(f"❌ 파일을 찾을 수 없습니다: {data_file}")
-        return
+    # ── 처리할 JSON 파일 목록 수집 ──────────────────────────
+    etl_dir = Path(__file__).parent
 
-    data = load_data(data_file)
-    tech_name = args.tech or data.get("tech", data_file.stem).lower()
-    curriculum = data.get("curriculum", [])
-    all_urls = data.get("urls", [])
+    if args.data_file:
+        # 단일 파일 모드
+        p = Path(args.data_file)
+        if not p.is_absolute():
+            p = etl_dir / p
+        if not p.exists():
+            print(f"❌ 파일을 찾을 수 없습니다: {p}")
+            return
+        data_files = [p]
+    else:
+        # 디렉토리 모드 (기본값: etl/data/)
+        raw_dir = args.data_dir or "data"
+        d = Path(raw_dir)
+        if not d.is_absolute():
+            d = etl_dir / d
+        if not d.is_dir():
+            print(f"❌ 디렉토리를 찾을 수 없습니다: {d}")
+            return
+        data_files = sorted(d.glob("*.json"))
+        if not data_files:
+            print(f"❌ 디렉토리에 JSON 파일이 없습니다: {d}")
+            return
+        print(f"📂 {d} 에서 JSON 파일 {len(data_files)}개 발견: {[f.name for f in data_files]}")
+
+    # --tech 는 단일 파일 모드에서만 의미 있음
+    if args.tech and len(data_files) > 1:
+        print("⚠️  --tech 옵션은 단일 파일(--data-file) 모드에서만 적용됩니다. 다중 파일에서는 각 파일의 tech 필드를 사용합니다.")
 
     # step 필터
     target_steps = set(args.steps) if args.steps else None
 
-    print("=" * 60)
-    print(f"🚀 강의자료 생성 파이프라인 시작")
-    print(f"   기술명  : {tech_name}")
-    print(f"   데이터  : {data_file.name}")
-    print(f"   총 Step : {len(curriculum)}")
-    print(f"   총 URL  : {len(all_urls)}")
-    print(f"   컨렉션 : {tech_name}  (기술 단위)")
-    print(f"   생성 LLM: {GENERATE_MODEL}")
-    print(f"   검수 LLM: {REVIEW_MODEL}")
-    print(f"   검수     : {'생략' if args.skip_review else '포함'}")
-    print("=" * 60)
-
     graph = build_graph()
 
-    for item in curriculum:
-        step_num = str(item["step"])
-        if target_steps and step_num not in target_steps:
-            print(f"⏭️  Step {step_num} 건너뜀")
-            continue
+    for file_idx, data_file in tqdm(enumerate(data_files, start=1), total=len(data_files), desc="기술 목록 처리"):
+        data = load_data(data_file)
+        tech_name = (args.tech if len(data_files) == 1 else None) or data.get("tech", data_file.stem).lower()
+        curriculum = data.get("curriculum", [])
+        all_urls = data.get("urls", [])
 
-        print(f"\n{'─'*60}")
-        print(f"📚 Step {step_num}: {item['topic']}")
-        print(f"{'─'*60}")
+        print("=" * 60)
+        print(f"🚀 [{file_idx}/{len(data_files)}] 강의자료 생성 파이프라인 시작")
+        print(f"   기술명  : {tech_name}")
+        print(f"   데이터  : {data_file.name}")
+        print(f"   총 Step : {len(curriculum)}")
+        print(f"   총 URL  : {len(all_urls)}")
+        print(f"   컨렉션 : {tech_name}  (기술 단위)")
+        print(f"   생성 LLM: {GENERATE_MODEL}")
+        print(f"   검수 LLM: {REVIEW_MODEL}")
+        print(f"   검수     : {'생략' if args.skip_review else '포함'}")
+        print("=" * 60)
 
-        initial_state: LectureState = {
-            "tech_name": tech_name,
-            "step": step_num,
-            "topic": item["topic"],
-            "objectives": item["objectives"],
-            "key_contents": item["key_contents"],
-            "urls": all_urls,  # 기술 전체 URL (프롬프트의 참고 링크 섹션용)
-            "beginner_lecture": "",
-            "advanced_lecture": "",
-            "problems": "",
-            "beginner_review": "",
-            "advanced_review": "",
-            "skip_review": args.skip_review,
-        }
+        for item in curriculum:
+            step_num = str(item["step"])
+            if target_steps and step_num not in target_steps:
+                print(f"⏭️  Step {step_num} 건너뜀")
+                continue
 
-        try:
-            graph.invoke(initial_state)
-            print(f"✅ Step {step_num} 완료!")
-        except Exception as e:
-            print(f"❌ Step {step_num} 실패: {e}")
-            import traceback
-            traceback.print_exc()
+            print(f"\n{'─'*60}")
+            print(f"📚 Step {step_num}: {item['topic']}")
+            print(f"{'─'*60}")
 
-    print("\n" + "=" * 60)
-    print(f"🎉 전체 처리 완료! 결과물 위치: etl/data/{tech_name}/")
-    print("=" * 60)
+            initial_state: LectureState = {
+                "tech_name": tech_name,
+                "step": step_num,
+                "topic": item["topic"],
+                "objectives": item["objectives"],
+                "key_contents": item["key_contents"],
+                "urls": all_urls,  # 기술 전체 URL (프롬프트의 참고 링크 섹션용)
+                "beginner_lecture": "",
+                "advanced_lecture": "",
+                "problems": "",
+                "beginner_review": "",
+                "advanced_review": "",
+                "skip_review": args.skip_review,
+            }
+
+            try:
+                graph.invoke(initial_state)
+                print(f"✅ Step {step_num} 완료!")
+            except Exception as e:
+                print(f"❌ Step {step_num} 실패: {e}")
+                import traceback
+                traceback.print_exc()
+
+        print("\n" + "=" * 60)
+        print(f"🎉 [{file_idx}/{len(data_files)}] {tech_name} 완료! 결과물 위치: etl/data/{tech_name}/")
+        print("=" * 60)
+
+    if len(data_files) > 1:
+        print(f"\n✨ 전체 {len(data_files)}개 파일 처리 완료!")
 
 
 if __name__ == "__main__":
