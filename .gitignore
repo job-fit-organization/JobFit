@@ -60,4 +60,4 @@ next-env.d.ts
 
 # data
 local_backups
-database
+etl/database
