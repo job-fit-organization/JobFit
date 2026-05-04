@@ -17,32 +17,23 @@ CREATE TABLE Skill (
     skill_level  VARCHAR(10) NOT NULL
 );
 
--- 로드맵 테이블 (job - skill 연결)
+-- 로드맵 테이블 (job - skill 연결 및 트리 구조 학습)
 CREATE TABLE Roadmap (
-    id        SERIAL PRIMARY KEY,
-    job_id    INT NOT NULL,
-    skill_id  INT NOT NULL,
+    id                SERIAL PRIMARY KEY,
+    job_id            INT NOT NULL,
+    skill_id          INT NOT NULL,
+    parent_roadmap_id INT,          -- 트리 구조를 위한 상위 노드 (선행 단계), NULL이면 시작점(루트)
 
     FOREIGN KEY (job_id) REFERENCES Job(id) ON DELETE CASCADE,
-    FOREIGN KEY (skill_id) REFERENCES Skill(id) ON DELETE CASCADE
-);
-
--- 선행 스킬 (N:M)
-CREATE TABLE SkillPrerequisite (
-    skill_id        INT NOT NULL,
-    prerequisite_id INT NOT NULL,
-
-    PRIMARY KEY (skill_id, prerequisite_id),
-
     FOREIGN KEY (skill_id) REFERENCES Skill(id) ON DELETE CASCADE,
-    FOREIGN KEY (prerequisite_id) REFERENCES Skill(id) ON DELETE CASCADE
+    FOREIGN KEY (parent_roadmap_id) REFERENCES Roadmap(id) ON DELETE SET NULL
 );
 
 -- 커리큘럼
 CREATE TABLE Curriculum (
     id               SERIAL PRIMARY KEY,
     skill_id         INT NOT NULL,
-    curriculum_step  VARCHAR(30) NOT NULL,
+    curriculum_step  VARCHAR(30) NOT NULL,  -- {skill_name}_{step}
     topic            TEXT NOT NULL,
     objectives       TEXT NOT NULL,
     key_contents     TEXT NOT NULL,
