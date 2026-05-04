@@ -1,5 +1,6 @@
 {
-  "tech": "postgresql",
+  "skill": "postgresql",
+  "level": "beginner",
   "urls": [
     "https://neon.com/postgresql/postgresql-getting-started",
     "https://neon.com/postgresql/postgresql-getting-started/install-postgresql/",

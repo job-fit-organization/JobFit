@@ -1,5 +1,6 @@
 {
-  "tech": "AWS",
+  "skill": "AWS",
+  "level": "advanced",
   "urls": [
     "https://www.w3schools.com/aws/aws_cloudessentials_cloudcomputing.php",
     "https://www.w3schools.com/aws/aws_cloudessentials_infrastructure_intro.php",

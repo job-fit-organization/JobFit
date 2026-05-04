@@ -1,5 +1,6 @@
 {
-  "tech": "ML",
+  "skill": "ML",
+  "level": "beginner",
   "urls": [
     "https://www.w3schools.com/python/python_ml_mean_median_mode.asp",
     "https://www.w3schools.com/python/python_ml_standard_deviation.asp",

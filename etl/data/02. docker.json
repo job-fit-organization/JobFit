@@ -1,5 +1,6 @@
 {
-  "tech": "docker",
+  "skill": "docker",
+  "level": "advanced",
   "urls": [
     "https://docker-curriculum.com/",
     "https://www.geeksforgeeks.org/devops/introduction-to-docker/",

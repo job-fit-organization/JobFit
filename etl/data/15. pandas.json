@@ -1,5 +1,6 @@
 {
-  "tech": "pandas",
+  "skill": "pandas",
+  "level": "beginner",
   "urls": [
     "https://www.w3schools.com/python/pandas/default.asp",
     "https://www.w3schools.com/python/pandas/pandas_intro.asp",

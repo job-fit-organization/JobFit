@@ -1,5 +1,6 @@
 {
-  "tech": "HuggingFace",
+  "skill": "HuggingFace",
+  "level": "advanced",
   "urls": [
     "https://huggingface.co/learn/llm-course/chapter1/1",
     "https://huggingface.co/learn/llm-course/chapter1/2",

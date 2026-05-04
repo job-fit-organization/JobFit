@@ -1,5 +1,6 @@
 {
-  "tech": "MCP",
+  "skill": "MCP",
+  "level": "advanced",
   "urls": [
     "https://huggingface.co/learn/mcp-course/en/unit1/introduction",
     "https://modelcontextprotocol.io/docs/getting-started/intro",

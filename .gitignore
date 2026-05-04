@@ -57,3 +57,7 @@ next-env.d.ts
 
 # caches
 *.pyc
+
+# data
+database
+local_backups

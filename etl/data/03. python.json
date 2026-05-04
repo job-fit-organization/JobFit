@@ -1,5 +1,6 @@
 {
-  "tech": "python",
+  "skill": "python",
+  "level": "beginner",
   "urls": [
     "https://www.w3schools.com/python/default.asp",
     "https://www.w3schools.com/python/python_intro.asp",

@@ -1,5 +1,6 @@
 {
-  "tech": "TimeSeries",
+  "skill": "TimeSeries",
+  "level": "beginner",
   "urls": [
     "https://otexts.com/fpppy/01-intro.html",
     "https://otexts.com/fpppy/UsingPython.html",

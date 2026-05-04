@@ -1,5 +1,6 @@
 {
-  "tech": "RAG",
+  "skill": "RAG",
+  "level": "beginner",
   "urls": [
     "https://www.geeksforgeeks.org/nlp/what-is-retrieval-augmented-generation-rag/",
     "https://www.geeksforgeeks.org/artificial-intelligence/rag-with-langchain/",

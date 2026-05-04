@@ -1,5 +1,6 @@
 {
-  "tech": "A2A",
+  "skill": "A2A",
+  "level": "advanced",
   "urls": [
     "https://adk.dev/a2a/intro/#when-to-use-a2a-vs-local-sub-agents",
     "https://a2a-protocol.org/latest/topics/what-is-a2a/#the-with-a2a-solution",

@@ -1,5 +1,6 @@
 {
-  "tech": "Linux",
+  "skill": "Linux",
+  "level": "advanced",
   "urls": [
     "https://ryanstutorials.net/linuxtutorial/commandline.php",
     "https://www.geeksforgeeks.org/linux-unix/basic-linux-commands/",

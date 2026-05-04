@@ -1,5 +1,6 @@
 {
-  "tech": "GitHub",
+  "skill": "GitHub",
+  "level": "beginner",
   "urls": [
     "https://www.geeksforgeeks.org/git/git-introduction/",
     "https://www.geeksforgeeks.org/git/git-vs-github/",
