@@ -37,7 +37,7 @@ def seed_metadata():
                 # ======================================================
                 # 1. 직무(Job) 데이터 정의 및 적재
                 # ======================================================
-                jobs_data = ["AI Agent", "Data Scientist"]
+                jobs_data = ["AI Agent Engineer", "Data Scientist"]
                 job_id_map = {}
                 
                 print("\n🚀 [1] 직무(Job) 데이터 적재 시작...")

@@ -43,15 +43,13 @@ def generate_material_node(state: State) -> State:
     })
 
     return {
-        **state,
         "material": result
     }
 
 # 2. 문제 생성 노드
 def generate_quiz_node(state: State) -> State:
-    print(f"📝 [Step {state['step']}] 문제 생성 중 (초급:중급:고급 = 1:2:1, PGVector 검색)...")
-    quiz_query = f"{state['topic']} {state['key_contents']} 개념 정의 예제 주의사항"
-    quiz_context = __get_context(quiz_query, state["skill_name"], k=8)
+    print(f"📝 [Step {state['step']}] 문제 생성 중 (초급:중급:고급 = 1:2:1, 생성된 강의자료 기반)...")
+    quiz_context = state.get("material", "")
     quiz_prompt = __get_quiz_prompt()
 
     # 1:2:1 비율 계산
@@ -75,14 +73,13 @@ def generate_quiz_node(state: State) -> State:
 
     print(f"   ✔ 문제 {len(result)}개 파싱 완료")
     return {
-        **state,
         "quiz": result
     }
 
 # 3. 검수 노드
 def review_material_node(state: State) -> State:
     if state.get("skip_review"):
-        return {**state, "review": "*(검수 생략)*"}
+        return {"review": "*(검수 생략)*"}
 
     REVIEW_MODEL_NM = os.getenv("REVIEW_MODEL", "gpt-4.1")
     review_model = __get_review_llm(REVIEW_MODEL_NM)
@@ -100,7 +97,6 @@ def review_material_node(state: State) -> State:
     })
 
     return {
-        **state,
         "review": result
     }
 
@@ -112,19 +108,19 @@ def save_files_node(state: State) -> State:
     level = state["level"]
     step = state["step"].zfill(2)  # 01, 02, ...
     topic_safe = re.sub(r"[^\w가-힣\s]", "", state["topic"])[:40].strip()
-    step_label = f"{topic_safe}_{step}"
+    step_label = f"{step}_{topic_safe}"
 
     # 디렉토리 생성
     level_dir = DATA_DIR / level / skill
     level_dir.mkdir(parents=True, exist_ok=True)
 
     # ── 강의자료
-    material_path = level_dir / f"{step_label}_material.md"
+    material_path = level_dir / f"material_{step_label}.md"
     with open(material_path, "w", encoding="utf-8") as f:
         f.write(state.get("material", ""))
 
     # ── 검수 결과
-    review_path = level_dir / f"{step_label}_review.md"
+    review_path = level_dir / f"review_{step_label}.md"
     level_label = "초급자" if level == "beginner" else "경력자"
     with open(review_path, "w", encoding="utf-8") as f:
         header = f"# 검수 결과 — {level_label} 강의자료\n> Step {state['step']}: {state['topic']}\n\n"
@@ -147,4 +143,4 @@ def save_files_node(state: State) -> State:
         print("  ⚠️  퀴즈 데이터 없음 — DB 저장 생략")
 
     print(f"  ✅ 저장 완료: {level_dir.relative_to(DATA_DIR)}/{step_label}_*")
-    return state
+    return {}

@@ -17,9 +17,9 @@ def build_graph() -> StateGraph:
     workflow.add_node("save", save_files_node)
 
     # 엣지 연결
-    # material과 quiz는 독립적으로 병렬 실행
+    # material 생성 후 quiz와 review를 병렬 실행
     workflow.add_edge(START, "material")
-    workflow.add_edge(START, "quiz")
+    workflow.add_edge("material", "quiz")
     workflow.add_edge("material", "review")
     workflow.add_edge("review", "save")
     workflow.add_edge("quiz", "save")
