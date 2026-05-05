@@ -13,7 +13,7 @@ from common.llm_pipeline.models import __get_generate_llm, __get_review_llm
 from common.llm_pipeline.db import save_quiz_to_db
 from common.llm_pipeline.state import State
 
-DATA_DIR = Path(__file__).parent / "data"
+DATA_DIR = Path(__file__).parent.parent.parent / "data"
 
 # 1. 강의 자료 생성 노드 (level에 따라 beginner/advanced 프롬프트 분기)
 def generate_material_node(state: State) -> State:
