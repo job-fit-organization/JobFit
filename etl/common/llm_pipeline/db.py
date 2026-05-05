@@ -60,7 +60,7 @@ def save_quiz_to_db(
                     skill_id = cur.fetchone()[0]
 
                 # 2) Curriculum 테이블 조회 또는 생성
-                curriculum_step_val = f"{skill}_{step}"
+                curriculum_step_val = f"{skill}_{int(step):02d}"
                 cur.execute(
                     "SELECT id FROM Curriculum WHERE skill_id = %s AND curriculum_step = %s",
                     (skill_id, curriculum_step_val)
