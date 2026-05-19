@@ -119,13 +119,13 @@ def seed_metadata():
                 # --- [AI Agent 로드맵 구성] ---
                 # 1. 공통 스킬 추가
                 for skill, parent in common_roadmaps:
-                    roadmaps_data.append(("AI Agent", skill, parent))
+                    roadmaps_data.append(("AI Agent Engineer", skill, parent))
                 # 2. 특화 스킬 추가 (Python 기반 기술이므로 python 하위에 연결)
                 roadmaps_data.extend([
-                    ("AI Agent", "langchain", "python"),
-                    ("AI Agent", "rag", "langchain"),
-                    ("AI Agent", "mcp", "rag"),
-                    ("AI Agent", "a2a", "mcp"),
+                    ("AI Agent Engineer", "langchain", "python"),
+                    ("AI Agent Engineer", "rag", "langchain"),
+                    ("AI Agent Engineer", "mcp", "rag"),
+                    ("AI Agent Engineer", "a2a", "mcp"),
                 ])
 
                 # --- [Data Scientist 로드맵 구성] ---

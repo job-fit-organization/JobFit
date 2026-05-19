@@ -117,3 +117,19 @@ def __get_review_prompt():
 
 ## 강의자료 (대상: {target}\n\n{material})
 """)
+
+def __get_revise_prompt():
+    return ChatPromptTemplate.from_template(
+        template="""
+당신은 IT 교육 콘텐츠 전문가입니다.
+기존 강의자료와 해당 강의자료에 대한 전문가의 검수 피드백이 주어집니다.
+검수 피드백의 '지적 사항'을 충실히 반영하여 강의자료를 수정 및 보완하세요.
+수정된 강의자료 전체를 마크다운 형식으로 출력하세요. 다른 인사말이나 설명은 포함하지 마세요.
+기존 강의자료의 구성(슬라이드 분리 `---` 등)과 스타일은 최대한 유지해야 합니다.
+
+## 검수 피드백
+{review}
+
+## 기존 강의자료
+{material}
+""")

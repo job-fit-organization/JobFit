@@ -7,7 +7,7 @@ from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
 from common.llm_pipeline.retriever import __get_context
 from common.llm_pipeline.prompts import (
     __get_beginner_material_prompt, __get_advanced_material_prompt,
-    __get_quiz_prompt, __get_review_prompt
+    __get_quiz_prompt, __get_review_prompt, __get_revise_prompt
 )
 from common.llm_pipeline.models import __get_generate_llm, __get_review_llm
 from common.llm_pipeline.db import save_quiz_to_db
@@ -58,20 +58,35 @@ def generate_quiz_node(state: State) -> State:
     hard = total // 4
     medium = total - easy - hard
 
-    # JSON 배열을 바로 파싱
+    # JSON 배열을 바로 파싱 (재시도 로직 추가)
     quiz_chain = quiz_prompt | __get_generate_llm(os.getenv("GENERATE_MODEL")) | JsonOutputParser()
-    result: list = quiz_chain.invoke({
-        "total": total,
-        "easy": easy,
-        "medium": medium,
-        "hard": hard,
-        "topic": state["topic"],
-        "objectives": state["objectives"],
-        "key_contents": state["key_contents"],
-        "context": quiz_context
-    })
+    
+    result = []
+    max_retries = 3
+    for attempt in range(max_retries):
+        try:
+            parsed = quiz_chain.invoke({
+                "total": total,
+                "easy": easy,
+                "medium": medium,
+                "hard": hard,
+                "topic": state["topic"],
+                "objectives": state["objectives"],
+                "key_contents": state["key_contents"],
+                "context": quiz_context
+            })
+            if parsed:
+                result = parsed
+                break
+            print(f"   ⚠️ 문제 파싱 실패 (결과가 비어있음). 재시도 {attempt + 1}/{max_retries}...")
+        except Exception as e:
+            print(f"   ⚠️ 문제 파싱 중 에러 발생. 재시도 {attempt + 1}/{max_retries}...")
+            
+    if not result:
+        print("   ❌ 문제 생성 최종 실패 (빈 리스트 반환).")
+    else:
+        print(f"   ✔ 문제 {len(result)}개 파싱 완료")
 
-    print(f"   ✔ 문제 {len(result)}개 파싱 완료")
     return {
         "quiz": result
     }
@@ -99,6 +114,29 @@ def review_material_node(state: State) -> State:
     return {
         "review": result
     }
+
+# 3.5. 피드백 반영 노드 (새로 추가)
+def revise_material_node(state: State) -> State:
+    review = state.get("review", "")
+    # 피드백이 문제 없거나 생략인 경우 기존 material 그대로 유지
+    if "✅ 문제 없음" in review or "*(검수 생략)*" in review:
+        print(f"✨ [Step {state['step']}] 검수 결과 문제 없음 (수정 생략)")
+        return {}
+
+    print(f"🔧 [Step {state['step']}] 검수 피드백 기반 강의자료 수정 중...")
+    prompt = __get_revise_prompt()
+    llm = __get_generate_llm(os.getenv("GENERATE_MODEL"))
+    chain = prompt | llm | StrOutputParser()
+    
+    result = chain.invoke({
+        "material": state["material"],
+        "review": review
+    })
+
+    return {
+        "material": result
+    }
+
 
 # 4. 결과 저장 노드
 def save_files_node(state: State) -> State:

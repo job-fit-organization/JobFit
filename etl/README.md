@@ -88,9 +88,11 @@
 - 공통: SQL, Docker, Python, Github, Linux, AWS
     - Beginner: SQL, Python, Github
     - Advanced: Linux, docker, AWS
+
 - AI Agent: RAG, A2A, MCP, LangChain
     - Beginner: LangChain, RAG, 
     - Advanced: A2A, MCP
+
 - Data Scientist: ML, Pytorch, Huggingface(sLLM), 시계열분석, pandas, seaborn, matplotlib
     - Beginner: ML, 시계열분석, pandas, seaborn, matplotlib
     - Advanced: Pytorch, Huggingface(sLLM)
