@@ -143,24 +143,109 @@
   <template id="roadmap">
     <section class="page">
       <div class="section-heading center">
-        <p class="eyebrow">직무 기반 로드맵</p>
-        <h2>데이터 사이언티스트 기술 로드맵</h2>
-        <p>기초부터 실무 활용까지 단계별로 학습할 수 있도록 구성했습니다.</p>
+        <h2 style="font-size: 2.2rem; margin-bottom: 10px;">데이터 사이언티스트<br/>기술 로드맵</h2>
+        <p style="margin-bottom: 24px;">핵심 기술을 단계별로 학습하고, 노드를 클릭해 각 기술의 상세 학습 페이지로 이동하세요.</p>
+        <div class="button-row center" style="margin-bottom: 40px;">
+          <button class="outline" style="min-width: 140px; border-radius: 8px;">순서대로 시작</button>
+          <button class="primary" style="min-width: 140px; background: #000; border-radius: 8px;">로드맵 저장</button>
+        </div>
       </div>
-      <div class="roadmap-panel">
-        <button class="node done" data-skill="Python">Python</button>
-        <button class="node done" data-skill="SQL">SQL</button>
-        <button class="node progress" data-skill="Pandas">Pandas</button>
-        <button class="node" data-skill="Visualization">Visualization</button>
-        <button class="node" data-skill="Machine Learning">Machine Learning</button>
-        <button class="node" data-skill="Docker">Docker</button>
+      
+      <div class="roadmap-board">
+        <!-- Dashed lines -->
+        <div class="r-line h-line" style="top: 38%;"></div>
+        <div class="r-line h-line" style="top: 68%;"></div>
+        <div class="r-line v-line" style="top: 68%; height: 32%; left: 50%;"></div>
+        
+        <!-- Badges -->
+        <div class="r-badge" style="top: 20px; right: 20px;">공통 기초</div>
+        <div class="r-badge" style="top: calc(38% + 20px); right: 20px;">DS 기초</div>
+        <div class="r-badge" style="top: calc(68% + 20px); right: calc(50% + 20px);">DS 심화</div>
+        <div class="r-badge" style="top: calc(68% + 20px); right: 20px;">공통 심화</div>
+
+        <!-- SVG Arrows -->
+        <svg class="r-arrows" width="100%" height="100%">
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L6,3 z" fill="#ffd700" />
+            </marker>
+          </defs>
+          
+          <!-- Python to Pandas & Visualization -->
+          <line x1="20%" y1="15%" x2="20%" y2="30%" stroke="#ffd700" stroke-width="3" />
+          <line x1="20%" y1="30%" x2="12%" y2="30%" stroke="#ffd700" stroke-width="3" />
+          <line x1="20%" y1="30%" x2="28%" y2="30%" stroke="#ffd700" stroke-width="3" />
+          <line x1="12%" y1="30%" x2="12%" y2="39%" stroke="#ffd700" stroke-width="3" marker-end="url(#arrowhead)" />
+          <line x1="28%" y1="30%" x2="28%" y2="39%" stroke="#ffd700" stroke-width="3" marker-end="url(#arrowhead)" />
+          
+          <!-- SQL to MySQL & PostgreSQL -->
+          <line x1="40%" y1="25%" x2="48%" y2="25%" stroke="#ffd700" stroke-width="3" />
+          <line x1="48%" y1="25%" x2="48%" y2="15%" stroke="#ffd700" stroke-width="3" />
+          <line x1="48%" y1="25%" x2="48%" y2="30%" stroke="#ffd700" stroke-width="3" />
+          <line x1="48%" y1="15%" x2="52%" y2="15%" stroke="#ffd700" stroke-width="3" marker-end="url(#arrowhead)" />
+          <line x1="48%" y1="30%" x2="52%" y2="30%" stroke="#ffd700" stroke-width="3" marker-end="url(#arrowhead)" />
+
+          <!-- DS flow -->
+          <line x1="12%" y1="45%" x2="12%" y2="54%" stroke="#ffd700" stroke-width="3" marker-end="url(#arrowhead)" />
+          <line x1="12%" y1="60%" x2="12%" y2="69%" stroke="#ffd700" stroke-width="3" marker-end="url(#arrowhead)" />
+          <line x1="12%" y1="75%" x2="12%" y2="82%" stroke="#ffd700" stroke-width="3" marker-end="url(#arrowhead)" />
+
+          <!-- GitHub to Docker, Linux, AWS -->
+          <line x1="75%" y1="28%" x2="75%" y2="78%" stroke="#ffd700" stroke-width="3" />
+          <line x1="75%" y1="78%" x2="60%" y2="78%" stroke="#ffd700" stroke-width="3" />
+          <line x1="75%" y1="78%" x2="90%" y2="78%" stroke="#ffd700" stroke-width="3" />
+          <line x1="60%" y1="78%" x2="60%" y2="82%" stroke="#ffd700" stroke-width="3" marker-end="url(#arrowhead)" />
+          <line x1="75%" y1="78%" x2="75%" y2="82%" stroke="#ffd700" stroke-width="3" marker-end="url(#arrowhead)" />
+          <line x1="90%" y1="78%" x2="90%" y2="82%" stroke="#ffd700" stroke-width="3" marker-end="url(#arrowhead)" />
+        </svg>
+
+        <!-- Nodes -->
+        <div class="r-node" style="top: 15%; left: 20%;" data-skill="Python">
+          <div class="r-icon">🐍</div><div class="r-label">Python</div>
+        </div>
+        <div class="r-node" style="top: 25%; left: 40%;" data-skill="SQL">
+          <div class="r-icon">🗄️</div><div class="r-label">SQL</div>
+        </div>
+        <div class="r-node" style="top: 15%; left: 55%;" data-skill="MySQL">
+          <div class="r-icon">🐬</div><div class="r-label">MySQL</div>
+        </div>
+        <div class="r-node" style="top: 30%; left: 55%;" data-skill="PostgreSQL">
+          <div class="r-icon">🐘</div><div class="r-label">PostgreSQL</div>
+        </div>
+        <div class="r-node" style="top: 28%; left: 75%;" data-skill="GitHub">
+          <div class="r-icon">🧠</div><div class="r-label">GitHub</div>
+        </div>
+        <div class="r-node" style="top: 45%; left: 12%;" data-skill="Pandas">
+          <div class="r-icon">📊</div><div class="r-label">Pandas</div>
+        </div>
+        <div class="r-node" style="top: 45%; left: 28%;" data-skill="Visualization">
+          <div class="r-icon">🧾</div><div class="r-label">Visualization</div>
+        </div>
+        <div class="r-node" style="top: 60%; left: 12%;" data-skill="Machine Learning">
+          <div class="r-icon">🤖</div><div class="r-label">Machine Learning</div>
+        </div>
+        <div class="r-node" style="top: 75%; left: 12%;" data-skill="Pytorch">
+          <div class="r-icon">🔥</div><div class="r-label">Pytorch</div>
+        </div>
+        <div class="r-node" style="top: 88%; left: 12%;" data-skill="HuggingFace">
+          <div class="r-icon">🤗</div><div class="r-label">HuggingFace</div>
+        </div>
+        <div class="r-node" style="top: 88%; left: 60%;" data-skill="Docker">
+          <div class="r-icon">🐳</div><div class="r-label">Docker</div>
+        </div>
+        <div class="r-node" style="top: 88%; left: 75%;" data-skill="Linux">
+          <div class="r-icon">🐧</div><div class="r-label">Linux</div>
+        </div>
+        <div class="r-node" style="top: 88%; left: 90%;" data-skill="AWS">
+          <div class="r-icon">☁️</div><div class="r-label">AWS</div>
+        </div>
       </div>
     </section>
   </template>
 
   <template id="skill-detail">
     <section class="page">
-      <button class="text-button" data-page="skill-select">← 기술 목록으로 돌아가기</button>
+      <button class="text-button" id="backToSkillBtn" data-page="skill-select">← 기술 목록으로 돌아가기</button>
       <section class="skill-hero">
         <div>
           <p class="eyebrow">기술 상세</p>

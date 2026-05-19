@@ -3,7 +3,8 @@ const app = document.querySelector("#app");
 const state = {
   selectedJob: "data-scientist",
   selectedSkill: "React",
-  currentQuestion: 0
+  currentQuestion: 0,
+  fromPage: "skill-select"
 };
 
 const jobs = [
@@ -144,6 +145,7 @@ function renderSkillCards() {
     grid.querySelectorAll("[data-skill]").forEach(card => {
       card.addEventListener("click", () => {
         state.selectedSkill = card.dataset.skill;
+        state.fromPage = "skill-select";
         navigate("skill-detail");
       });
     });
@@ -170,6 +172,17 @@ function renderJobDetail() {
 }
 
 function renderSkillDetail() {
+  const backBtn = document.querySelector("#backToSkillBtn");
+  if (backBtn) {
+    if (state.fromPage === "roadmap") {
+      backBtn.textContent = "← 로드맵으로 돌아가기";
+      backBtn.dataset.page = "roadmap";
+    } else {
+      backBtn.textContent = "← 기술 목록으로 돌아가기";
+      backBtn.dataset.page = "skill-select";
+    }
+  }
+
   document.querySelector("#skillTitle").textContent = state.selectedSkill;
   document.querySelector("#skillSummary").textContent = `${state.selectedSkill} 기술을 이해하고 실무에 적용하기 위한 단계별 커리큘럼입니다.`;
   document.querySelector("#curriculumList").innerHTML = curriculum.map(([step, title, desc, status]) => `
@@ -201,9 +214,10 @@ document.addEventListener("click", event => {
   const pageButton = event.target.closest("[data-page]");
   if (pageButton) navigate(pageButton.dataset.page);
 
-  const roadmapNode = event.target.closest(".node");
+  const roadmapNode = event.target.closest(".r-node");
   if (roadmapNode) {
     state.selectedSkill = roadmapNode.dataset.skill;
+    state.fromPage = "roadmap";
     navigate("skill-detail");
   }
 
