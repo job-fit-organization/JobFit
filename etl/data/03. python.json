@@ -1,0 +1,145 @@
+{
+  "skill": "python",
+  "level": "beginner",
+  "urls": [
+    "https://www.w3schools.com/python/default.asp",
+    "https://www.w3schools.com/python/python_intro.asp",
+    "https://www.w3schools.com/python/python_getstarted.asp",
+    "https://www.w3schools.com/python/python_syntax.asp",
+    "https://www.geeksforgeeks.org/python/introduction-to-python/",
+    "https://www.geeksforgeeks.org/python/download-and-install-python-3-latest-version/",
+    "https://www.w3schools.com/python/python_variables.asp",
+    "https://www.w3schools.com/python/python_variables_names.asp",
+    "https://www.w3schools.com/python/python_datatypes.asp",
+    "https://www.w3schools.com/python/python_casting.asp",
+    "https://www.geeksforgeeks.org/python/python-variables/",
+    "https://www.geeksforgeeks.org/python/input-and-output-in-python/",
+    "https://www.w3schools.com/python/python_operators.asp",
+    "https://www.w3schools.com/python/python_booleans.asp",
+    "https://www.w3schools.com/python/python_conditions.asp",
+    "https://www.w3schools.com/python/python_match.asp",
+    "https://www.w3schools.com/python/python_while_loops.asp",
+    "https://www.w3schools.com/python/python_for_loops.asp",
+    "https://www.geeksforgeeks.org/python/python-operators/",
+    "https://www.geeksforgeeks.org/python/python-if-else/",
+    "https://www.geeksforgeeks.org/python/loops-in-python/",
+    "https://www.w3schools.com/python/python_strings.asp",
+    "https://www.w3schools.com/python/python_strings_slicing.asp",
+    "https://www.w3schools.com/python/python_string_formatting.asp",
+    "https://www.w3schools.com/python/python_lists.asp",
+    "https://www.w3schools.com/python/python_tuples.asp",
+    "https://www.w3schools.com/python/python_sets.asp",
+    "https://www.w3schools.com/python/python_dictionaries.asp",
+    "https://www.geeksforgeeks.org/python/python-data-types/",
+    "https://www.w3schools.com/python/python_functions.asp",
+    "https://www.w3schools.com/python/python_scope.asp",
+    "https://www.geeksforgeeks.org/python/functions-in-python/",
+    "https://www.geeksforgeeks.org/python/global-local-variables-python/",
+    "https://www.geeksforgeeks.org/python/recursion-in-python/",
+    "https://www.w3schools.com/python/python_lambda.asp",
+    "https://www.w3schools.com/python/python_range.asp",
+    "https://www.w3schools.com/python/python_iterators.asp",
+    "https://www.geeksforgeeks.org/python/python-lambda-anonymous-functions-filter-map-reduce/",
+    "https://www.geeksforgeeks.org/python/python-map-function/",
+    "https://www.geeksforgeeks.org/python/reduce-in-python/",
+    "https://www.geeksforgeeks.org/python/filter-in-python/",
+    "https://www.geeksforgeeks.org/python/iterators-in-python/",
+    "https://www.geeksforgeeks.org/python/generators-in-python/",
+    "https://www.w3schools.com/python/python_modules.asp",
+    "https://www.w3schools.com/python/python_pip.asp",
+    "https://www.w3schools.com/python/python_virtualenv.asp",
+    "https://www.geeksforgeeks.org/python/python-packages/",
+    "https://www.geeksforgeeks.org/python/python-modules/",
+    "https://www.geeksforgeeks.org/python/built-in-modules-in-python/",
+    "https://www.w3schools.com/python/python_classes.asp",
+    "https://www.w3schools.com/python/python_inheritance.asp",
+    "https://www.geeksforgeeks.org/python/python-oops-concepts/",
+    "https://www.geeksforgeeks.org/python/python-classes-and-objects/",
+    "https://www.geeksforgeeks.org/python/inheritance-in-python/",
+    "https://www.w3schools.com/python/python_try_except.asp",
+    "https://www.geeksforgeeks.org/python/python-exception-handling/",
+    "https://www.geeksforgeeks.org/python/file-handling-python/",
+    "https://www.geeksforgeeks.org/python/reading-writing-text-files-python/",
+    "https://www.geeksforgeeks.org/python/pathlib-module-in-python/",
+    "https://www.w3schools.com/python/python_json.asp",
+    "https://www.w3schools.com/python/python_regex.asp",
+    "https://www.w3schools.com/python/python_datetime.asp",
+    "https://www.w3schools.com/python/python_math.asp",
+    "https://www.w3schools.com/python/python_none.asp",
+    "https://www.geeksforgeeks.org/python/json-with-python/",
+    "https://www.geeksforgeeks.org/python-regex/",
+    "https://www.w3schools.com/python/python_ref_modules.asp",
+    "https://www.w3schools.com/python/ref_module_pathlib.asp",
+    "https://www.w3schools.com/python/ref_module_os.asp",
+    "https://www.w3schools.com/python/ref_module_collections.asp",
+    "https://www.geeksforgeeks.org/python/os-module-python-examples/"
+  ],
+  "curriculum": [
+    {
+      "step": "1",
+      "topic": "Python 시작하기: 소개, 설치, 첫 프로그램",
+      "objectives": "Python의 특징과 활용 분야를 이해하고, 개발 환경을 준비한 뒤 첫 Python 프로그램을 실행할 수 있다.",
+      "key_contents": "Python 소개, 설치/실행 환경, Syntax, Statements, Output, Comments, Hello World"
+    },
+    {
+      "step": "2",
+      "topic": "변수, 데이터 타입, 입력과 출력",
+      "objectives": "변수와 기본 데이터 타입을 이해하고, 입력과 출력을 활용하는 프로그램을 작성할 수 있다.",
+      "key_contents": "Variables, Variable Names, Assign Multiple Values, Data Types, Type Casting, Input and Output"
+    },
+    {
+      "step": "3",
+      "topic": "연산자와 제어문",
+      "objectives": "연산자와 조건문, 반복문을 사용해 프로그램의 흐름을 제어할 수 있다.",
+      "key_contents": "Operators, Boolean, If/Elif/Else, Match, While Loops, For Loops, break/continue/pass"
+    },
+    {
+      "step": "4",
+      "topic": "문자열과 주요 자료구조",
+      "objectives": "문자열과 리스트, 튜플, 집합, 딕셔너리를 이해하고 상황에 맞게 활용할 수 있다.",
+      "key_contents": "Strings, Slicing, String Formatting, Lists, Tuples, Sets, Dictionaries"
+    },
+    {
+      "step": "5",
+      "topic": "함수와 스코프",
+      "objectives": "함수를 정의하고 호출할 수 있으며, 매개변수, 반환값, 스코프 개념을 이해할 수 있다.",
+      "key_contents": "Functions, Arguments, *args/**kwargs, Return Values, Scope, Global and Local Variables, Recursion"
+    },
+    {
+      "step": "6",
+      "topic": "고급 함수형 표현과 반복 처리",
+      "objectives": "람다, map/filter/reduce, range, iterator, generator를 활용해 효율적인 코드를 작성할 수 있다.",
+      "key_contents": "Lambda, map, filter, reduce, range, Iterators, Generators"
+    },
+    {
+      "step": "7",
+      "topic": "모듈, 패키지, 환경 관리",
+      "objectives": "모듈과 패키지의 개념을 이해하고, 외부 패키지를 설치하며 가상환경의 필요성을 설명할 수 있다.",
+      "key_contents": "Modules, Built-in Modules, Import, PIP, Virtual Environment, Packages"
+    },
+    {
+      "step": "8",
+      "topic": "객체지향 프로그래밍 기초",
+      "objectives": "클래스와 객체를 만들고, 속성, 메서드, 생성자, 상속, 다형성을 이해할 수 있다.",
+      "key_contents": "OOP, Classes/Objects, __init__, self, Properties, Methods, Inheritance, Polymorphism"
+    },
+    {
+      "step": "9",
+      "topic": "예외 처리와 파일 처리",
+      "objectives": "예외를 처리해 안정적인 프로그램을 만들고, 파일 읽기/쓰기 및 경로 관리를 수행할 수 있다.",
+      "key_contents": "Try/Except, Built-in Exceptions, User-defined Exceptions, File Handling, Read Files, Write/Create Files, os, pathlib"
+    },
+    {
+      "step": "10",
+      "topic": "실전 활용: JSON, 정규표현식, 날짜, 유틸리티",
+      "objectives": "실무에서 자주 사용하는 JSON, 정규표현식, 날짜/시간, 수학 유틸리티를 다룰 수 있다.",
+      "key_contents": "JSON, RegEx, Dates, Math, None, String Formatting"
+    },
+    {
+      "step": "11",
+      "topic": "표준 라이브러리와 생산성 향상",
+      "objectives": "Python 표준 라이브러리의 역할을 이해하고 문제 해결에 적절한 라이브러리를 선택할 수 있다.",
+      "key_contents": "Built-in Modules, pathlib, os, collections, itertools 기초"
+    }
+  ]
+}

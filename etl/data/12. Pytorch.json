@@ -1,0 +1,85 @@
+{
+  "skill": "Pytorch",
+  "level": "advanced",
+  "urls": [
+    "https://docs.pytorch.org/tutorials/beginner/basics/tensorqs_tutorial.html",
+    "https://docs.pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html",
+    "https://www.learnpytorch.io/00_pytorch_fundamentals/",
+    "https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial2/Introduction_to_PyTorch.html#Tensors",
+    "https://docs.pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html",
+    "https://www.learnpytorch.io/01_pytorch_workflow/",
+    "https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial2/Introduction_to_PyTorch.html#Learning-by-example:-Continuous-XOR",
+    "https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html",
+    "https://docs.pytorch.org/tutorials/beginner/blitz/autograd_tutorial.html",
+    "https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial2/Introduction_to_PyTorch.html#Dynamic-Computation-Graph-and-Backpropagation",
+    "https://docs.pytorch.org/tutorials/beginner/basics/data_tutorial.html",
+    "https://www.learnpytorch.io/04_pytorch_custom_datasets/",
+    "https://docs.pytorch.org/tutorials/beginner/basics/transforms_tutorial.html",
+    "https://www.learnpytorch.io/03_pytorch_computer_vision/",
+    "https://docs.pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html",
+    "https://docs.pytorch.org/tutorials/beginner/blitz/neural_networks_tutorial.html",
+    "https://www.learnpytorch.io/02_pytorch_classification/",
+    "https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html",
+    "https://www.learnpytorch.io/06_pytorch_transfer_learning/",
+    "https://www.learnpytorch.io/07_pytorch_experiment_tracking/",
+    "https://uvadlc-notebooks.readthedocs.io/en/latest/tutorial_notebooks/tutorial2/Introduction_to_PyTorch.html#TensorBoard-logging",
+    "https://docs.pytorch.org/tutorials/beginner/basics/saveloadrun_tutorial.html",
+    "https://www.learnpytorch.io/09_pytorch_model_deployment/"
+  ],
+  "curriculum": [
+    {
+      "step": "1",
+      "topic": "PyTorch 개요와 Tensor 기본 연산",
+      "objectives": "PyTorch의 핵심 데이터 구조인 Tensor를 이해하고 생성, 변환, 연산을 수행할 수 있다.",
+      "key_contents": "Tensor 생성, shape와 dtype, device 개념, indexing/slicing, broadcasting, NumPy와 Tensor 변환, 기본 수치 연산"
+    },
+    {
+      "step": "2",
+      "topic": "PyTorch 워크플로 이해",
+      "objectives": "머신러닝 문제를 PyTorch로 해결하는 전체 흐름을 이해하고 재현할 수 있다.",
+      "key_contents": "데이터 준비, 모델 정의, 손실 함수, 옵티마이저, 학습 루프, 평가 루프, 추론 흐름, 실험 반복 구조"
+    },
+    {
+      "step": "3",
+      "topic": "자동미분과 동적 계산 그래프",
+      "objectives": "autograd와 backpropagation의 원리를 이해하고 gradient 계산 과정을 설명할 수 있다.",
+      "key_contents": "requires_grad, computation graph, backward(), grad_fn, gradient 추적, PyTorch의 dynamic computation graph 개념"
+    },
+    {
+      "step": "4",
+      "topic": "데이터셋과 DataLoader 활용",
+      "objectives": "PyTorch에서 데이터를 표준화된 방식으로 다루고 배치 단위 학습을 구성할 수 있다.",
+      "key_contents": "Dataset 클래스, __len__, __getitem__, DataLoader, batch, shuffle, mini-batch 학습, 사용자 정의 데이터셋 작성"
+    },
+    {
+      "step": "5",
+      "topic": "Transforms와 데이터 전처리",
+      "objectives": "학습용 입력 데이터를 모델에 적합한 형태로 변환하고 전처리 파이프라인을 설계할 수 있다.",
+      "key_contents": "Transforms 개념, 정규화, 텐서 변환, 이미지 전처리, augmentation 기초, 데이터 파이프라인 구성"
+    },
+    {
+      "step": "6",
+      "topic": "nn.Module로 신경망 구성하기",
+      "objectives": "PyTorch의 모듈 구조를 이해하고 간단한 신경망을 직접 정의할 수 있다.",
+      "key_contents": "nn.Module 구조, __init__와 forward, layer 정의, parameter 등록, 간단한 분류기 구현, 모델 아키텍처 설계"
+    },
+    {
+      "step": "7",
+      "topic": "손실 함수와 최적화 루프",
+      "objectives": "손실 함수와 옵티마이저를 선택하고 학습 루프를 구현할 수 있다.",
+      "key_contents": "loss function 개념, optimizer 사용법, zero_grad, backward, step, epoch 기반 학습, train/eval 모드 구분"
+    },
+    {
+      "step": "8",
+      "topic": "전이학습과 실험 추적",
+      "objectives": "사전학습 모델을 활용하고 실험 결과를 체계적으로 기록·비교할 수 있다.",
+      "key_contents": "transfer learning 개념, pretrained model 활용, fine-tuning, experiment tracking, TensorBoard/실험 로그 관리"
+    },
+    {
+      "step": "9",
+      "topic": "모델 저장, 불러오기, 배포",
+      "objectives": "학습한 모델을 저장·재사용하고 간단한 배포 흐름까지 설명할 수 있다.",
+      "key_contents": "state_dict 저장/불러오기, 추론용 모델 사용, 재현 가능한 모델 관리, 간단한 모델 배포 개요"
+    }
+  ]
+}

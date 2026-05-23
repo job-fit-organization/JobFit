@@ -1,0 +1,127 @@
+{
+  "skill": "LangChain",
+  "level": "beginner",
+  "urls": [
+    "https://wikidocs.net/233341",
+    "https://wikidocs.net/233342",
+    "https://wikidocs.net/250954",
+    "https://www.geeksforgeeks.org/artificial-intelligence/introduction-to-langchain/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/large-language-model-llm/",
+    "https://www.geeksforgeeks.org/python/python-basics/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/langchain-apis-environment-setup/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/modules-of-langchain/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/what-is-ai-model/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/what-is-an-ai-prompt/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/agents-artificial-intelligence/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/ai-agent-memory/",
+    "https://wikidocs.net/233347",
+    "https://wikidocs.net/233351",
+    "https://wikidocs.net/233348",
+    "https://wikidocs.net/233349",
+    "https://wikidocs.net/233350",
+    "https://www.geeksforgeeks.org/artificial-intelligence/prompt-templates/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/chatprompttemplate-in-langchain/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/few-shot-prompting/",
+    "https://wikidocs.net/233771",
+    "https://wikidocs.net/233786",
+    "https://wikidocs.net/233787",
+    "https://wikidocs.net/233788",
+    "https://wikidocs.net/233789",
+    "https://wikidocs.net/233793",
+    "https://www.geeksforgeeks.org/artificial-intelligence/output-parsers-in-langchain/",
+    "https://wikidocs.net/233344",
+    "https://wikidocs.net/233345",
+    "https://wikidocs.net/233346",
+    "https://www.geeksforgeeks.org/artificial-intelligence/langchain/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/llm-chains/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/sequential-chains-in-langchain/",
+    "https://www.geeksforgeeks.org/data-science/custom-chains-in-langchain/",
+    "https://wikidocs.net/233801",
+    "https://wikidocs.net/233800",
+    "https://wikidocs.net/233807",
+    "https://wikidocs.net/233810",
+    "https://wikidocs.net/233813",
+    "https://www.geeksforgeeks.org/artificial-intelligence/memory-in-langchain-1/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/conversation-buffer-memory-with-langchain/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/conversation-buffer-window-memory-in-langchain/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/conversation-summary-memory-in-langchain/",
+    "https://wikidocs.net/233782",
+    "https://wikidocs.net/262582",
+    "https://wikidocs.net/262585",
+    "https://wikidocs.net/262586",
+    "https://www.geeksforgeeks.org/artificial-intelligence/agents-and-tools-in-langchain/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/building-a-math-application-with-langchain-agents/",
+    "https://wikidocs.net/264613",
+    "https://wikidocs.net/267808",
+    "https://wikidocs.net/265766",
+    "https://www.geeksforgeeks.org/machine-learning/what-is-langgraph/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/langchain-vs-langgraph/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/tracing-with-langchain/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/llm-as-a-judge/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/langchain-callbacks/",
+    "https://www.geeksforgeeks.org/nlp/introduction-to-langsmith/",
+    "https://www.geeksforgeeks.org/data-science/debugging-and-testing-llms-in-langsmith/"
+  ],
+  "curriculum": [
+    {
+      "step": "1",
+      "topic": "LangChain 개요와 개발 환경 준비",
+      "objectives": "LangChain의 역할과 전체 생태계를 이해하고, Python 및 API 기반 실습 환경을 구성할 수 있다.",
+      "key_contents": "LangChain의 개념, LLM 애플리케이션 구조, Python 기초 점검, API 키 발급 및 환경변수 설정, LangSmith 추적 설정, 첫 번째 LangChain 실행"
+    },
+    {
+      "step": "2",
+      "topic": "LangChain 핵심 구성요소 이해",
+      "objectives": "Models, Prompts, Agents, Memory 등 핵심 모듈의 역할을 구분하고 전체 흐름을 설명할 수 있다.",
+      "key_contents": "LangChain 주요 모듈 소개, 모델 호출 구조, 프롬프트와 체인의 관계, 에이전트와 메모리의 차이, LangChain 기반 앱 아키텍처 개요"
+    },
+    {
+      "step": "3",
+      "topic": "프롬프트 설계와 Prompt Template 활용",
+      "objectives": "재사용 가능한 프롬프트를 설계하고, 다양한 입력 조건에 맞는 템플릿을 구성할 수 있다.",
+      "key_contents": "PromptTemplate, ChatPromptTemplate, Few-shot Prompting, LangChain Hub 활용, 프롬프트 엔지니어링 기초, 역할 기반 프롬프트 설계"
+    },
+    {
+      "step": "4",
+      "topic": "출력 파싱과 구조화된 응답 처리",
+      "objectives": "LLM의 응답을 JSON, 리스트, Pydantic 모델 등 구조화된 형태로 변환할 수 있다.",
+      "key_contents": "Output Parser 개념, JSON 출력 파서, Structured Output, PydanticOutputParser, 오류 보정(OutputFixingParser), 자동 후처리"
+    },
+    {
+      "step": "5",
+      "topic": "LCEL과 Runnable 기반 체인 구성",
+      "objectives": "LangChain Expression Language와 Runnable 인터페이스를 사용해 모듈형 워크플로를 설계할 수 있다.",
+      "key_contents": "LCEL 기초, Runnable 개념, RunnablePassthrough, RunnableLambda, RunnableParallel, 입력-출력 연결, 체인 조합 방식 이해"
+    },
+    {
+      "step": "6",
+      "topic": "기본 체인과 실전형 워크플로 설계",
+      "objectives": "순차형 체인과 사용자 정의 체인을 만들고 실제 업무 흐름에 맞게 연결할 수 있다.",
+      "key_contents": "LLM Chain, Sequential Chain, Custom Chain, 입력-처리-출력 파이프라인 설계"
+    },
+    {
+      "step": "7",
+      "topic": "대화 메모리와 상태 유지",
+      "objectives": "대화형 애플리케이션에서 문맥을 유지하는 다양한 메모리 전략을 적용할 수 있다.",
+      "key_contents": "ConversationBufferMemory, Window Memory, Summary Memory, Token Buffer Memory"
+    },
+    {
+      "step": "8",
+      "topic": "Agent와 Tool 사용",
+      "objectives": "도구를 호출하는 Agent를 구성하고, 문제 해결 중심의 멀티스텝 실행 흐름을 설계할 수 있다.",
+      "key_contents": "Agent 개념, Tools 바인딩, 계산/검색/문서분석 도구 연결, CSV/Excel 분석 Agent"
+    },
+    {
+      "step": "9",
+      "topic": "LangGraph로 고급 에이전트 워크플로 확장",
+      "objectives": "상태 기반 그래프 구조를 사용해 복잡한 에이전트 흐름을 설계할 수 있다.",
+      "key_contents": "LangGraph 핵심 개념, 노드와 엣지, 상태 관리, 분기와 병렬 처리, Replay, 사람 개입, Plan-and-Execute, Multi-Agent Collaboration"
+    },
+    {
+      "step": "10",
+      "topic": "평가, 디버깅, 운영 품질 관리",
+      "objectives": "LangChain 애플리케이션의 성능을 평가하고 디버깅하며 품질을 개선할 수 있다.",
+      "key_contents": "LangSmith 추적, tracing, callbacks, RAGAS, LLM-as-Judge, groundedness 평가, 실험 비교, 응답 품질 측정, 운영 중 문제 분석"
+    }
+  ]
+}
