@@ -1,0 +1,65 @@
+{
+  "skill": "A2A",
+  "level": "advanced",
+  "urls": [
+    "https://adk.dev/a2a/intro/#when-to-use-a2a-vs-local-sub-agents",
+    "https://a2a-protocol.org/latest/topics/what-is-a2a/#the-with-a2a-solution",
+    "https://a2a-protocol.org/latest/tutorials/python/2-setup/",
+    "https://a2aprotocol.ai/blog/python-a2a-tutorial",
+    "https://a2a-protocol.org/latest/tutorials/python/3-agent-skills-and-card/",
+    "https://a2a-protocol.org/latest/tutorials/python/4-agent-executor/",
+    "https://a2a-protocol.org/latest/tutorials/python/5-start-server/",
+    "https://a2a-protocol.org/latest/tutorials/python/6-interact-with-server/",
+    "https://a2a-protocol.org/latest/tutorials/python/7-streaming-and-multiturn/"
+  ],
+  "curriculum": [
+    {
+      "step": "1",
+      "topic": "A2A 개요와 적용 판단: 언제 A2A를 쓰는가",
+      "objectives": "A2A의 목적과 기본 개념을 이해하고, local sub-agent와 remote agent(A2A)의 차이를 설명할 수 있다.",
+      "key_contents": "A2A 개요, 에이전트 간 표준 통신, local sub-agents vs remote agents, 독립 서비스 연동, 타 팀/타 언어 에이전트 협업, 강한 인터페이스 계약의 필요성"
+    },
+    {
+      "step": "2",
+      "topic": "Python 개발환경과 A2A 프로젝트 시작",
+      "objectives": "Python 기반 A2A 개발 환경을 구성하고, 예제 저장소 또는 새 프로젝트를 이용해 실습을 시작할 수 있다.",
+      "key_contents": "Python 3.10+ 또는 3.12 환경, virtual environment, uv 또는 venv/pip, 저장소 클론, SDK 설치, 설치 검증"
+    },
+    {
+      "step": "3",
+      "topic": "Agent Skill 설계",
+      "objectives": "에이전트가 수행할 수 있는 기능을 Agent Skill로 정의하고, skill 설계 요소를 이해할 수 있다.",
+      "key_contents": "AgentSkill, id, name, description, tags, examples, inputModes, outputModes, capability 단위 설계"
+    },
+    {
+      "step": "4",
+      "topic": "Agent Card와 에이전트 자기 기술(Self-Description)",
+      "objectives": "Agent Card의 역할을 이해하고, 원격 에이전트가 자신의 능력과 접근 방식을 외부에 공개하는 구조를 설명할 수 있다.",
+      "key_contents": "Agent Card, capabilities, skills, authentication metadata, default input/output modes, agent discovery의 기초"
+    },
+    {
+      "step": "5",
+      "topic": "Agent Executor와 Task 처리 모델",
+      "objectives": "A2A 서버 내부에서 요청을 처리하는 실행 로직을 이해하고, execute/cancel 흐름과 이벤트 기반 응답 구조를 설명할 수 있다.",
+      "key_contents": "AgentExecutor, RequestContext, EventQueue, execute, cancel, task lifecycle, message/task/status/artifact 이벤트"
+    },
+    {
+      "step": "6",
+      "topic": "A2A 서버 구성과 실행",
+      "objectives": "A2A 서버를 구성하고 실행하여, 외부 클라이언트가 접근 가능한 에이전트 엔드포인트를 만들 수 있다.",
+      "key_contents": "A2AStarletteApplication 또는 A2AServer, Starlette/Uvicorn 기반 실행, request handler, in-memory task store, 서버 부팅"
+    },
+    {
+      "step": "7",
+      "topic": "클라이언트 상호작용과 기본 요청 처리",
+      "objectives": "실행 중인 A2A 서버에 클라이언트로 접속하여 Agent Card를 읽고, non-streaming과 streaming 요청을 보낼 수 있다.",
+      "key_contents": "A2AClient, A2ACardResolver, Agent Card fetch, message/send, message/stream, CLI 기반 테스트, 기본 응답 검증"
+    },
+    {
+      "step": "8",
+      "topic": "Streaming, 비동기 처리, Multi-turn 대화",
+      "objectives": "A2A의 스트리밍 응답과 멀티턴 상호작용을 이해하고, 상태를 가진 대화형 에이전트를 설계할 수 있다.",
+      "key_contents": "streaming responses, asynchronous operations, multi-turn conversations, task state management, LangGraph 기반 고급 예제"
+    }
+  ]
+}

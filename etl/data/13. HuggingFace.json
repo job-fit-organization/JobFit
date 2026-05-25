@@ -1,0 +1,164 @@
+{
+  "skill": "HuggingFace",
+  "level": "advanced",
+  "urls": [
+    "https://huggingface.co/learn/llm-course/chapter1/1",
+    "https://huggingface.co/learn/llm-course/chapter1/2",
+    "https://www.geeksforgeeks.org/artificial-intelligence/introduction-to-hugging-face-transformers/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/how-to-access-huggingface-api-key/",
+    "https://www.geeksforgeeks.org/installation-guide/how-to-install-hugging-face-transformers-a-comprehensive-guide/",
+    "https://huggingface.co/learn/llm-course/chapter1/4",
+    "https://huggingface.co/learn/llm-course/chapter1/5",
+    "https://huggingface.co/learn/llm-course/chapter1/6",
+    "https://www.geeksforgeeks.org/machine-learning/getting-started-with-transformers/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/ml-attention-mechanism/",
+    "https://www.geeksforgeeks.org/nlp/encoder-decoder-models/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/model-configurations-and-parameters-in-hugging-face/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/automodel-and-auto-classes-in-hugging-face/",
+    "https://www.geeksforgeeks.org/deep-learning/how-to-use-hugging-face-pretrained-model/",
+    "https://huggingface.co/learn/llm-course/chapter1/3",
+    "https://huggingface.co/learn/llm-course/chapter2/2",
+    "https://huggingface.co/learn/llm-course/chapter2/3",
+    "https://www.geeksforgeeks.org/artificial-intelligence/hugging-face-models-hub/",
+    "https://www.geeksforgeeks.org/data-science/hugging-face-model-card/",
+    "https://www.geeksforgeeks.org/nlp/how-to-download-a-model-from-hugging-face/",
+    "https://huggingface.co/learn/llm-course/chapter2/4",
+    "https://huggingface.co/learn/llm-course/chapter2/5",
+    "https://huggingface.co/learn/llm-course/chapter2/6",
+    "https://huggingface.co/learn/llm-course/chapter5/2",
+    "https://huggingface.co/learn/llm-course/chapter5/3",
+    "https://huggingface.co/learn/llm-course/chapter5/4",
+    "https://huggingface.co/learn/llm-course/chapter5/5",
+    "https://huggingface.co/learn/llm-course/chapter5/6",
+    "https://huggingface.co/learn/llm-course/chapter6/2",
+    "https://huggingface.co/learn/llm-course/chapter6/3",
+    "https://huggingface.co/learn/llm-course/chapter6/4",
+    "https://huggingface.co/learn/llm-course/chapter6/5",
+    "https://huggingface.co/learn/llm-course/chapter6/6",
+    "https://huggingface.co/learn/llm-course/chapter6/7",
+    "https://huggingface.co/learn/llm-course/chapter6/8",
+    "https://www.geeksforgeeks.org/nlp/what-is-tokenization/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/types-of-tokenizers/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/hugging-face-dataset-hub/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/dataset-inspection-and-visualization/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/creating-a-custom-dataset-on-hugging-face/",
+    "https://www.geeksforgeeks.org/nlp/text-preprocessing-for-nlp-tasks/",
+    "https://huggingface.co/learn/llm-course/chapter3/2",
+    "https://huggingface.co/learn/llm-course/chapter3/3",
+    "https://huggingface.co/learn/llm-course/chapter3/4",
+    "https://www.geeksforgeeks.org/deep-learning/fine-tuning-large-language-model-llm/",
+    "https://huggingface.co/learn/llm-course/chapter11/2",
+    "https://huggingface.co/learn/llm-course/chapter11/3",
+    "https://www.geeksforgeeks.org/artificial-intelligence/supervised-fine-tuning-sft-for-llms/",
+    "https://huggingface.co/learn/llm-course/chapter11/4",
+    "https://www.geeksforgeeks.org/deep-learning/what-is-low-rank-adaptation-lora/",
+    "https://www.geeksforgeeks.org/deep-learning/what-is-qlora-quantized-low-rank-adapter/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/what-is-parameter-efficient-fine-tuning-peft/",
+    "https://huggingface.co/learn/llm-course/chapter3/5",
+    "https://huggingface.co/learn/llm-course/chapter11/5",
+    "https://www.geeksforgeeks.org/artificial-intelligence/evaluate-library-for-hugging-face/",
+    "https://www.geeksforgeeks.org/data-science/human-evaluation-strategies/",
+    "https://www.geeksforgeeks.org/data-science/a-b-testing-using-python/",
+    "https://www.geeksforgeeks.org/nlp/understanding-bleu-and-rouge-score-for-nlp-evaluation/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/task-specific-metrics-in-hugging-face/",
+    "https://huggingface.co/learn/llm-course/chapter4/1",
+    "https://huggingface.co/learn/llm-course/chapter4/3",
+    "https://huggingface.co/learn/llm-course/chapter4/4",
+    "https://huggingface.co/learn/llm-course/chapter9/2",
+    "https://huggingface.co/learn/llm-course/chapter9/3",
+    "https://huggingface.co/learn/llm-course/chapter9/4",
+    "https://huggingface.co/learn/llm-course/chapter9/5",
+    "https://huggingface.co/learn/llm-course/chapter9/6",
+    "https://huggingface.co/learn/llm-course/chapter9/7",
+    "https://www.geeksforgeeks.org/data-science/deploying-model-on-hugging-face-spaces/",
+    "https://www.geeksforgeeks.org/python/creating-first-rest-api-with-fastapi/",
+    "https://www.geeksforgeeks.org/python/fastapi-mounting-flask-app/",
+    "https://www.geeksforgeeks.org/machine-learning/deploy-a-machine-learning-model-using-streamlit-library/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/python-creating-user-interfaces-for-ai-models-using-gradio/",
+    "https://huggingface.co/learn/llm-course/chapter12/2",
+    "https://www.geeksforgeeks.org/machine-learning/reinforcement-learning-from-human-feedback/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/instruction-tuning-for-large-language-models/",
+    "https://www.geeksforgeeks.org/artificial-intelligence/constitutional-ai/",
+    "https://www.geeksforgeeks.org/nlp/what-is-llm-distillation/"
+  ],
+  "curriculum": [
+    {
+      "step": "1",
+      "topic": "Hugging Face 생태계와 sLLM 파인튜닝 개요",
+      "objectives": "Hugging Face 생태계의 핵심 구성요소를 이해하고, sLLM 파인튜닝이 필요한 상황을 설명할 수 있다.",
+      "key_contents": "Hugging Face Hub, Transformers, Datasets, Tokenizers, Accelerate, sLLM 개념, prompting vs fine-tuning, 파인튜닝 전체 파이프라인"
+    },
+    {
+      "step": "2",
+      "topic": "개발 환경 구축과 Hugging Face 시작하기",
+      "objectives": "Python 기반 실습 환경을 구성하고, Hugging Face 계정과 기본 라이브러리를 준비할 수 있다.",
+      "key_contents": "Python 환경, transformers 설치, 계정 생성, Hub 사용 준비, 로컬/노트북 환경 구성"
+    },
+    {
+      "step": "3",
+      "topic": "Transformers와 사전학습 모델 이해",
+      "objectives": "Transformer 구조와 Hugging Face의 Auto classes를 이해하고, 사전학습 모델을 불러와 활용할 수 있다.",
+      "key_contents": "Transformer basics, attention, encoder/decoder 계열, AutoModel, AutoTokenizer, pretrained model loading"
+    },
+    {
+      "step": "4",
+      "topic": "파이프라인과 Hub 활용 기초",
+      "objectives": "pipeline API와 Hub를 사용해 모델을 빠르게 실험하고, 모델 카드와 저장소 구조를 이해할 수 있다.",
+      "key_contents": "pipeline API, pretrained inference, model hub 탐색, model cards, save/load locally"
+    },
+    {
+      "step": "5",
+      "topic": "토크나이저와 데이터셋 준비",
+      "objectives": "텍스트를 모델 입력으로 바꾸는 과정을 이해하고, 파인튜닝용 데이터셋을 불러오고 전처리할 수 있다.",
+      "key_contents": "tokenization, tokenizer types, Datasets library, dataset loading, preprocessing, input formatting"
+    },
+    {
+      "step": "6",
+      "topic": "기본 파인튜닝: Trainer API로 태스크 적응",
+      "objectives": "Hugging Face Trainer API를 사용해 사전학습 모델을 자신의 데이터셋에 맞게 파인튜닝할 수 있다.",
+      "key_contents": "Trainer API, training arguments, dataset split, collator, GPU 필요성, fine-tuning workflow"
+    },
+    {
+      "step": "7",
+      "topic": "Chat Templates와 Instruction 데이터 설계",
+      "objectives": "대화형 sLLM 파인튜닝을 위해 chat template과 instruction dataset 구조를 설계할 수 있다.",
+      "key_contents": "chat templates, system/user/assistant roles, instruction-response pairs, conversational formatting, supervised fine-tuning data design"
+    },
+    {
+      "step": "8",
+      "topic": "Supervised Fine-Tuning",
+      "objectives": "SFTTrainer를 이용해 sLLM을 instruction-following 모델로 적응시킬 수 있다.",
+      "key_contents": "supervised fine-tuning, SFT, SFTTrainer, labeled instruction data, task adaptation, assistant-like behavior"
+    },
+    {
+      "step": "9",
+      "topic": "PEFT 입문: LoRA와 QLoRA",
+      "objectives": "전체 파인튜닝과 PEFT의 차이를 이해하고, LoRA/QLoRA를 활용한 메모리 효율적 파인튜닝 전략을 설명할 수 있다.",
+      "key_contents": "PEFT, LoRA, QLoRA, trainable adapters, frozen base model, memory efficiency, consumer GPU 친화적 학습"
+    },
+    {
+      "step": "10",
+      "topic": "평가와 학습 곡선 해석",
+      "objectives": "파인튜닝된 모델의 품질을 정량·정성적으로 평가하고, 학습 곡선을 해석할 수 있다.",
+      "key_contents": "evaluation, task-specific metrics, qualitative inspection, loss curves, overfitting signals, human evaluation basics"
+    },
+    {
+      "step": "11",
+      "topic": "모델 공유와 재사용",
+      "objectives": "학습한 모델과 토크나이저를 Hugging Face Hub에 업로드하고, 다른 사용자와 공유할 수 있다.",
+      "key_contents": "push to hub, model repository, tokenizer sharing, model cards, reproducibility, experiment packaging"
+    },
+    {
+      "step": "13주차",
+      "topic": "배포와 데모 구성",
+      "objectives": "파인튜닝한 sLLM을 간단한 데모 또는 API 형태로 배포하는 흐름을 이해할 수 있다.",
+      "key_contents": "Spaces, demo deployment, inference endpoint concept, REST API basics, Gradio/Streamlit/FastAPI 연결"
+    },
+    {
+      "step": "14주차",
+      "topic": "고급 확장: RLHF, Instruction Tuning, Distillation 개요",
+      "objectives": "SFT 이후의 고급 정렬 및 경량화 기법을 개괄적으로 이해하고 다음 학습 방향을 설계할 수 있다.",
+      "key_contents": "RLHF, instruction tuning, constitutional AI, distillation, advanced post-training overview"
+    }
+  ]
+}
