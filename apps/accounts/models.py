@@ -71,3 +71,27 @@ def save_user_profile(sender, instance, **kwargs):
     """
     if hasattr(instance, 'profile'):
         instance.profile.save()
+
+class UserSelectedJob(models.Model):
+    """
+    사용자가 매핑하여 선택한 관심 직무를 저장하는 테이블 (1유저당 관심 직무 관리)
+    """
+    user_profile = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+        # related_name을 지정하지 않음으로써 Django 기본 룰인 'userselectedjob_set' 역참조명을 자동 활성화합니다.
+        verbose_name="사용자 프로필"
+    )
+    job = models.ForeignKey(
+        'learning.Job',  # learning 앱의 Job 모델을 스트링으로 안전하게 참조
+        on_delete=models.CASCADE,
+        verbose_name="선택한 직무"
+    )
+    selected_at = models.DateTimeField(auto_now_add=True, verbose_name="선택 일시")
+    class Meta:
+        db_table = 'user_selected_job'
+        unique_together = ('user_profile', 'job')
+        verbose_name = '사용자 관심 직무'
+        verbose_name_plural = '사용자 관심 직무 목록'
+    def __str__(self):
+        return f"{self.user_profile.user.username} -> {self.job.job_name}"
