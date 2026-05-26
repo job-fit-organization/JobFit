@@ -1,0 +1,73 @@
+from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+
+# Create your models here.
+class UserProfile(models.Model):
+    """
+    Django의 내장 User 모델을 확장하여 소셜 로그인 정보 및 프로필 메타데이터를 저장하는 모델
+    """
+    # 1. 빌트인 User와 1:1 강제 매핑
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile',
+        verbose_name='사용자 계정'
+    )
+
+    # 2. 소셜 로그인 정보
+    social_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name='소셜 고유 ID'
+    )
+    provider = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        choices =[
+            ('github', 'GitHub'),
+            ('google', 'Google'),
+            ('kakao', 'Kakao'),
+            ('naver', 'Naver')
+        ],
+        verbose_name='소셜 제공처'
+    )
+    profile_image_url = models.URLField(
+        blank=True,
+        null=True,
+        verbose_name='프로필 이미지 URL'
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="생성일")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="수정일")
+
+    class Meta:
+        db_table = 'user_profiles'
+        verbose_name = '사용자 프로필'
+        verbose_name_plural = '사용자 프로필 목록'
+    
+    def __str__(self):
+        return f"{self.user.username} ({self.provider or 'Local'})의 프로필"
+
+# 3. django signals를 통한 자동 동기화
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """
+    새로운 User 인스턴스가 데이터베이스에 저장(생성)될 때 호출되는 수신기.
+    자동으로 매핑된 UserProfile 레코드를 생성
+    """
+    if created:
+        UserProfile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    """
+    User 인스턴스가 업데이트될 때 호출되는 수신기.
+    프로필 정보의 변경 사항을 데이터베이스에 저장
+    """
+    if hasattr(instance, 'profile'):
+        instance.profile.save()
