@@ -1,0 +1,45 @@
+<!-- templates/mode_select.html -->
+{% extends 'base.html' %}
+
+{% block title %}학습 모드 선택 - JobFit{% endblock %}
+
+{% block content %}
+<section class="page narrow" style="padding-top: 60px; text-align: center;">
+  <div class="section-heading center">
+    <p class="eyebrow">시작하기</p>
+    <h2 class="text-outfit" style="font-size: 32px; font-weight: 800; margin-bottom: 12px;">커리어 여정의 첫 단추</h2>
+    <p style="color: var(--muted); font-size: 16px;">원하시는 로드맵 탐색 스타일을 선택해 주세요.</p>
+  </div>
+
+  <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 40px; text-align: left;">
+    <!-- 직무 기반 로드맵 링크 -->
+    <a href="{% url 'learning:job_select' %}" class="card glass-card" style="text-decoration: none; color: inherit; padding: 30px; border-radius: 20px; border: 1px solid var(--line); background: rgba(28, 28, 30, 0.6); display: flex; flex-direction: column; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; height: 100%;">
+      <div style="width: 50px; height: 50px; border-radius: 12px; background: rgba(0, 196, 159, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+        <i data-lucide="briefcase" style="width: 24px; height: 24px; color: #00c49f;"></i>
+      </div>
+      <h3 class="text-outfit" style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">직무 기반 커리어 패스</h3>
+      <p style="color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
+        목표로 하는 특정 핵심 직무(예: AI Application Developer, Data Scientist)를 타겟팅하여, 선행 조건이 완벽히 구조화된 학습 커리큘럼을 차근차근 밟아갑니다.
+      </p>
+      <div style="margin-top: auto; display: flex; align-items: center; gap: 6px; font-weight: 600; color: #00c49f; font-size: 14px;">
+        직무 로드맵 보기 <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+      </div>
+    </a>
+
+    <!-- 기술 기반 탐색 (준비 중 모듈) -->
+    <div class="card glass-card muted-card" style="padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); background: rgba(20, 20, 20, 0.4); display: flex; flex-direction: column; height: 100%; position: relative; opacity: 0.6;">
+      <div style="width: 50px; height: 50px; border-radius: 12px; background: rgba(244, 119, 37, 0.1); display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+        <i data-lucide="code" style="width: 24px; height: 24px; color: #f47725;"></i>
+      </div>
+      <span style="position: absolute; top: 20px; right: 20px; font-size: 11px; padding: 4px 10px; border-radius: 20px; background: rgba(255,255,255,0.08); color: var(--muted); font-weight: 600;">준비 중</span>
+      <h3 class="text-outfit" style="font-size: 20px; font-weight: 700; margin-bottom: 12px;">기술 스택별 도서관</h3>
+      <p style="color: var(--muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
+        직무 제한 없이 전체 기술 컬렉션(Python, RAG, Docker 등)을 자유롭게 탐색하며 필요한 유닛들만 개별적으로 조립하는 자기주도 학습 모드입니다.
+      </p>
+      <div style="margin-top: auto; display: flex; align-items: center; gap: 6px; font-weight: 600; color: var(--muted); font-size: 14px;">
+        기술 도서관 탐색 <i data-lucide="lock" style="width: 14px; height: 14px;"></i>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

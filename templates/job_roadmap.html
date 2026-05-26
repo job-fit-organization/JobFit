@@ -1,0 +1,196 @@
+<!-- templates/job_roadmap.html -->
+{% extends 'base.html' %}
+
+{% block title %}{{ job.job_name }} 로드맵 - JobFit{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* 1. 라이트 테마 기반의 입체적인 2D 로드맵 컨테이너 */
+  #roadmap-board-container {
+    position: relative;
+    width: 100%;
+    height: 800px;
+    background: #f7f7f5; /* 목업의 정갈한 라이트 배경색 계승 */
+    border: 1px solid #e2e2dd;
+    border-radius: 24px;
+    overflow: hidden;
+    margin-top: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+  }
+
+  /* 격자 점선 */
+  .r-line {
+    position: absolute;
+    background: transparent;
+    border-top: 2px dashed #cbd5e0;
+    width: 100%;
+    z-index: 1;
+  }
+  .r-line.v-line {
+    border-top: none;
+    border-left: 2px dashed #cbd5e0;
+    width: auto;
+  }
+
+  /* 2. 라이트 모드용 정밀 영역 배너 */
+  .r-badge {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #cbd5e0;
+    color: #2d3748;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 13px;
+    z-index: 2;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  }
+
+  .r-arrows {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* 3. 라이트 모드용 미려한 2D 노드 디자인 */
+  .r-node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 3;
+    cursor: pointer;
+    transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .r-node:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+
+  .r-icon {
+    width: 52px;
+    height: 52px;
+    background: #ffffff;
+    border: 3px solid #e2e2dd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    margin-bottom: 6px;
+    transition: all 0.25s ease;
+  }
+
+  .r-label {
+    background: #ffffff;
+    color: #1a202c;
+    border: 1px solid #cbd5e0;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  }
+
+  /* --- 상태별 라이트 모드 색상 마킹 프리셋 --- */
+  /* [완료상태: 녹색 글로우] */
+  .r-node.completed .r-icon {
+    border-color: #00c49f;
+    background: #e6fffa;
+    box-shadow: 0 0 15px rgba(0, 196, 159, 0.25);
+  }
+  .r-node.completed .r-label {
+    border-color: #00c49f;
+    background: #00c49f;
+    color: #ffffff;
+  }
+
+  /* [진행상태: 주황 글로우] */
+  .r-node.in_progress .r-icon {
+    border-color: #f47725;
+    background: #fffaf0;
+    box-shadow: 0 0 15px rgba(244, 119, 37, 0.25);
+  }
+  .r-node.in_progress .r-label {
+    border-color: #f47725;
+    background: #f47725;
+    color: #ffffff;
+  }
+
+  /* [미시작상태: 연회색 Muted] */
+  .r-node.not_started .r-icon {
+    border-color: #e2e2dd;
+    background: #f7f7f5;
+    opacity: 0.8;
+  }
+  .r-node.not_started .r-label {
+    color: #718096;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page" style="padding-top: 40px;">
+  <div class="section-heading center">
+    <h2 class="text-outfit" style="font-size: 32px; font-weight: 800; margin-bottom: 12px; color: #171717;">
+      {{ job.job_name }} 기술 로드맵
+    </h2>
+    <p style="color: var(--muted); font-size: 16px; margin-bottom: 30px;">
+      핵심 기술을 단계별로 학습하고, 노드를 클릭하여 해당 상세 학습 화면으로 이동하세요.
+    </p>
+  </div>
+  
+  <!-- 2D 고정형 로드맵 보드 시작 -->
+  <div id="roadmap-board-container">
+    <!-- 1. SVG 자동 화살표 연결 (루프 실행) -->
+    <svg class="r-arrows" width="100%" height="100%">
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L6,3 z" fill="#cbd5e0" />
+        </marker>
+        <marker id="arrowhead-active" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L6,3 z" fill="#00c49f" />
+        </marker>
+      </defs>
+      
+      {% for edge in db_edges %}
+      <line x1="{{ edge.x1 }}%" y1="{{ edge.y1 }}%" x2="{{ edge.x2 }}%" y2="{{ edge.y2 }}%" 
+            stroke="{% if edge.status == 'completed' %}#00c49f{% else %}#cbd5e0{% endif %}" 
+            stroke-width="3" 
+            marker-end="url({% if edge.status == 'completed' %}#arrowhead-active{% else %}#arrowhead{% endif %})" />
+      {% endfor %}
+    </svg>
+    
+    <!-- 2. 실시간 노드 루프 자동 렌더링 -->
+    {% for node in db_nodes %}
+    <div class="r-node {{ node.status }}" 
+        style="top: {{ node.top }}%; left: {{ node.left }}%;" 
+        data-skill-id="{{ node.id }}" 
+        data-skill-name="{{ node.name }}">
+      <div class="r-icon">{{ node.icon }}</div>
+      <div class="r-label">{{ node.name }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // 노드 클릭 시 추후 기술 학습 화면 등으로 리다이렉트할 브릿지 마련
+  document.querySelectorAll('.r-node').forEach(node => {
+  node.addEventListener('click', function() {
+    const skillId = this.getAttribute('data-skill-id');
+    if (skillId) {
+      // 1단계에서 신설한 /learning/skills/<skill_id>/ 주소로 전환
+      window.location.href = `/skills/${skillId}/`;
+    }
+  });
+});
+</script>
+{% endblock %}

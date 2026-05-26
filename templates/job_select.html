@@ -1,0 +1,81 @@
+<!-- templates/job_select.html -->
+{% extends 'base.html' %}
+
+{% block title %}직무 선택 - JobFit{% endblock %}
+
+{% block content %}
+<section class="page" style="padding-top: 40px;">
+  <div class="section-heading center">
+    <p class="eyebrow">커리어 목표</p>
+    <h2 class="text-outfit" style="font-size: 32px; font-weight: 800; margin-bottom: 12px;">원하시는 직무를 선택해 주세요</h2>
+    <p style="color: var(--muted); font-size: 16px;">선택하신 직무의 핵심 역량 분석 및 단계적 맞춤 학습 로드맵을 자동으로 빌드합니다.</p>
+  </div>
+
+  <!-- 직무 선택을 안전하게 서버로 제출하기 위한 POST 폼 바인딩 -->
+  <form id="job-select-form" method="post" action="{% url 'learning:job_select' %}" style="margin-top: 40px;">
+    {% csrf_token %}
+    <input type="hidden" name="job_id" id="selected-job-id" value="">
+    
+    <div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+      {% for job in jobs %}
+      <article class="card select-job-card" data-job-id="{{ job.id }}" 
+         style="padding: 26px; 
+                border-radius: 20px; 
+                border: 1px solid rgba(255, 0, 0, 0.09); 
+                background: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(251, 251, 255, 0.95) 100%); 
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+                cursor: pointer; 
+                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+                display: flex; 
+                flex-direction: column; 
+                justify-content: space-between; 
+                min-height: 260px;">
+        <div>
+          <!-- 직무 썸네일 그라데이션 배경 이미지 설정 -->
+          <div class="thumb" style="height: 100px; border-radius: 10px; margin-bottom: 20px; background: radial-gradient(at 10% 20%, rgba(0, 196, 159, 0.1) 0px, transparent 50%), #151515; background-image: url('{{ job.job_image_url }}'); background-size: cover; background-position: center; border: 1px solid rgba(255,255,255,0.03);"></div>
+          
+          <h3 class="text-outfit" style="font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text);">{{ job.job_name }}</h3>
+          <p style="color: var(--muted); font-size: 13px; line-height: 1.5;">{{ job.job_desc|default:"정밀 설계된 역량 조건 로드맵과 가중 퀴즈 기반의 종합적인 학습 패스를 제공합니다." }}</p>
+        </div>
+        
+        <div style="margin-top: 20px; display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-size: 11px; font-weight: 700; color: #00c49f; background: rgba(0,196,159,0.08); padding: 4px 10px; border-radius: 20px;">6대 주력 분야</span>
+          <button type="button" class="primary small select-btn" style="border-radius: 8px; font-size: 12px; pointer-events: none;">선택하기</button>
+        </div>
+      </article>
+      {% empty %}
+      <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--muted);">
+        <i data-lucide="info" style="width: 48px; height: 48px; stroke-width: 1.5; margin-bottom: 16px;"></i>
+        <p>등록된 직무 정보가 존재하지 않습니다.</p>
+      </div>
+      {% endfor %}
+    </div>
+  </form>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // 카드 u선택 시 스케일 감소 애니메이션 후 서브밋
+  document.querySelectorAll('.select-job-card').forEach(card => {
+    card.addEventListener('click', function() {
+      const jobId = this.getAttribute('data-job-id');
+      document.getElementById('selected-job-id').value = jobId;
+      
+      this.style.transform = 'scale(0.97)';
+      setTimeout(() => {
+        document.getElementById('job-select-form').submit();
+      }, 120);
+    });
+  });
+</script>
+<style>
+  .select-job-card:hover {
+    border-color: #00c49f !important;
+    box-shadow: 0 0 24px rgba(0, 196, 159, 0.15);
+    transform: translateY(-4px);
+  }
+</style>
+{% endblock %}
