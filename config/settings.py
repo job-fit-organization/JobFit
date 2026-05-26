@@ -148,3 +148,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "/"
 LOGIN_REDIRECT_URL = "/select-mode/"
 LOGOUT_REDIRECT_URL = "/"
+
+import os
+os.environ['PATH'] += os.pathsep + r'C:\Program Files\PostgreSQL\16\bin'
