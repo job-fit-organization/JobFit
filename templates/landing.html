@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load socialaccount %} <!-- [필수] 올얼라이브 소셜 태그 라이브러리 로드 -->
+
+{% block title %}JobFit - 커리어를 극대화하는 AI 학습 로드맵{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="page hero-page">
+  <div class="hero-card premium-mesh-thumb" style="border: 1px solid var(--line);">
+    <p class="eyebrow" style="display: inline-flex; align-items: center; gap: 6px;">
+      <i data-lucide="zap" style="width: 14px; height: 14px; color: #ffb700;"></i>AI 기반 커리어 학습 로드맵
+    </p>
+    <h1 style="font-family: 'Outfit', sans-serif; font-weight: 800; letter-spacing: -0.04em;">JobFit</h1>
+    <p class="hero-text" style="font-size: 16px; max-width: 480px; margin: 0 auto 28px;">
+      성공적인 커리어를 위한 첫걸음. 잠재력을 극대화할 수 있는 최적의 직무 학습 로드맵과 가중 개념 평가 퀴즈를 제공합니다.
+    </p>
+    <a href="#social-box" class="primary" style="text-decoration: none; display: inline-flex; align-items: center; min-height: 46px; padding: 0 24px; border-radius: 12px; font-weight: 700;">
+      무료로 학습 시작하기
+    </a>
+  </div>
+</section>
+
+<!-- Social Login Section -->
+<section class="page narrow" id="social-box" style="padding-top: 20px; text-align: center;">
+  <div class="section-heading center">
+    <p class="eyebrow">간편 연동</p>
+    <h2 style="font-family: 'Outfit', sans-serif; font-weight: 800;">1초 만에 로그인하고 시작하기</h2>
+    <p>사용하시던 소셜 이메일 계정을 통해 안전하고 투명하게 인증이 처리됩니다.</p>
+  </div>
+  
+  <!-- 올얼라이브 공식 주소 매핑 및 4대 소셜 패널 배치 -->
+  <div class="button-row center" style="flex-wrap: wrap; gap: 14px; margin-top: 24px;">
+    <!-- Google -->
+    <a href="{% provider_login_url 'google' next='/login-redirect/' %}" class="outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 14px; font-weight: 600;">
+      <i data-lucide="chrome" style="width: 18px; height: 18px; color: #ea4335;"></i>Google
+    </a>
+    <!-- Github -->
+    <a href="{% provider_login_url 'github' next='/login-redirect/' %}" class="outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 14px; font-weight: 600; background: #24292e; color: white; border-color: #24292e;">
+      <i data-lucide="github" style="width: 18px; height: 18px; fill: white;"></i>GitHub
+    </a>
+    <!-- Kakao -->
+    <a href="{% provider_login_url 'kakao' next='/login-redirect/' %}" class="outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 14px; font-weight: 600; background: #fee500; color: #191919; border-color: #fee500;">
+      <i data-lucide="message-square" style="width: 18px; height: 18px; fill: #191919;"></i>Kakao
+    </a>
+    <!-- Naver -->
+    <a href="{% provider_login_url 'naver' next='/login-redirect/' %}" class="outline" style="text-decoration: none; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 14px; font-weight: 600; background: #03c75a; color: white; border-color: #03c75a;">
+      <i data-lucide="navigation" style="width: 18px; height: 18px; fill: white;"></i>Naver
+    </a>
+  </div>
+</section>
+
+<!-- Visual Job Highlight Area -->
+<section class="page" style="padding-top: 40px;">
+  <div class="section-heading center">
+    <p class="eyebrow">핵심 직무 스펙트럼</p>
+    <h2 style="font-family: 'Outfit', sans-serif; font-weight: 800;">성장을 약속하는 6대 커리어 패스</h2>
+    <p>데이터, 인프라, 백엔드 및 혁신적인 AI 분야의 핵심 테마 로드맵을 지원합니다.</p>
+  </div>
+  <div class="card-grid">
+    <article class="card">
+      <div class="thumb" style="background: radial-gradient(at 10% 20%, rgba(244,119,37,0.15) 0px, transparent 50%), #1a1a1a;"></div>
+      <h3>AI Application Developer</h3>
+      <p>LLM 및 RAG 기반 AI Agent 서비스를 설계하고 구현합니다.</p>
+    </article>
+    <article class="card">
+      <div class="thumb" style="background: radial-gradient(at 90% 80%, rgba(0,154,147,0.15) 0px, transparent 50%), #1a1a1a;"></div>
+      <h3>Data Scientist</h3>
+      <p>데이터 탐색과 기계학습 모델링으로 가치 있는 비즈니스 결정을 도출합니다.</p>
+    </article>
+    <article class="card">
+      <div class="thumb" style="background: radial-gradient(at 50% 50%, rgba(234,0,44,0.08) 0px, transparent 60%), #1a1a1a;"></div>
+      <h3>Prompt Engineer</h3>
+      <p>LLM의 효율을 이끌어내기 위한 최적의 프롬프트를 설계하고 평가합니다.</p>
+    </article>
+  </div>
+</section>
+{% endblock %}

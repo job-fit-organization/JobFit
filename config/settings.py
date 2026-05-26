@@ -35,6 +35,7 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split("
 # Application definition
 
 INSTALLED_APPS = [
+    # Django 기본 앱
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,12 +43,36 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # sites framework
+    "django.contrib.sites",
+
+    # allauth
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+
+    # provider
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.github",
+    "allauth.socialaccount.providers.kakao",
+    "allauth.socialaccount.providers.naver",
+
     # Third-party apps
     "widget_tweaks",
 
     # Local apps
     "apps.accounts",
     "apps.learning",
+]
+
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    # Django 기본 로그인
+    "django.contrib.auth.backends.ModelBackend",
+
+    # django-allauth 로그인
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 MIDDLEWARE = [
@@ -58,6 +83,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # allauth
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -148,6 +176,53 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "/"
 LOGIN_REDIRECT_URL = "/select-mode/"
 LOGOUT_REDIRECT_URL = "/"
+ACCOUNT_LOGOUT_ON_GET = True
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
+ACCOUNT_EMAIL_VERIFICATION = "none"
+# ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 
 import os
 os.environ['PATH'] += os.pathsep + r'C:\Program Files\PostgreSQL\16\bin'
+
+# settings.py 최하단 추가
+
+# 4대 소셜 프로바이더 OAuth 자격 증명 설정 (.env 매핑)
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'APP': {
+            'client_id': os.getenv("GOOGLE_CLIENT_ID", ""),
+            'secret': os.getenv("GOOGLE_CLIENT_SECRET", ""),
+            'key': ''
+        }
+    },
+    'github': {
+        'SCOPE': ['user:email'],
+        'APP': {
+            'client_id': os.getenv("GITHUB_CLIENT_ID", ""),
+            'secret': os.getenv("GITHUB_CLIENT_SECRET", ""),
+            'key': ''
+        }
+    },
+    'kakao': {
+        'APP': {
+            'client_id': os.getenv("KAKAO_REST_API_KEY", ""), # 기존 .env 키 연동
+            'secret': os.getenv("KAKAO_CLIENT_SECRET", ""),   # 필요시 추가
+            'key': ''
+        }
+    },
+    'naver': {
+        'APP': {
+            'client_id': os.getenv("NAVER_CLIENT_ID", ""),
+            'secret': os.getenv("NAVER_CLIENT_SECRET", ""),
+            'key': ''
+        }
+    }
+}
+
+# 로그인 리다이렉트 타겟을 커스텀 분기용 뷰로 변경
+LOGIN_REDIRECT_URL = "/login-redirect/"
