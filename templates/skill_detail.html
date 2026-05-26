@@ -1,0 +1,241 @@
+<!-- templates/skill_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}{{ skill.skill_name }} 학습 - JobFit{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* 라이트 모드 특화 디자인 시스템 */
+  .learning-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 30px;
+    margin-top: 24px;
+    align-items: start;
+  }
+
+  /* 좌측 학습 단계 네비게이터 */
+  .learning-sidebar {
+    background: #ffffff;
+    border: 1px solid #e2e2dd;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+  }
+
+  .step-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    background: #f7f7f5;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 13.5px;
+    text-align: left;
+    transition: all 0.25s ease;
+  }
+
+  .step-btn:hover {
+    background: #edf2f7;
+    color: #1a202c;
+  }
+
+  .step-btn.active {
+    background: #00c49f;
+    color: #ffffff;
+    border-color: #00c49f;
+    box-shadow: 0 4px 12px rgba(0, 196, 159, 0.2);
+  }
+
+  /* 우측 학습 보드 */
+  .learning-board {
+    background: #ffffff;
+    border: 1px solid #e2e2dd;
+    border-radius: 20px;
+    padding: 36px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+    min-height: 560px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .curriculum-content-area {
+    flex-grow: 1;
+  }
+
+  .markdown-body {
+    line-height: 1.8;
+    color: #2d3748;
+    font-size: 15px;
+  }
+
+  .objective-box {
+    background: #f0fff4;
+    border-left: 4px solid #38a169;
+    padding: 16px 20px;
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: #276749;
+  }
+
+  /* 실시간 필기노트 */
+  .note-textarea {
+    width: 100%;
+    height: 120px;
+    border: 1px solid #cbd5e0;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 13.5px;
+    resize: none;
+    background: #f7f7f5;
+    transition: all 0.25s ease;
+  }
+
+  .note-textarea:focus {
+    outline: none;
+    border-color: #00c49f;
+    background: #ffffff;
+    box-shadow: 0 0 8px rgba(0, 196, 159, 0.15);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="page" style="padding-top: 40px;">
+  <!-- 상단 브레드크럼 뒤로가기 버튼 -->
+  <a href="{% url 'learning:job_roadmap' %}" class="ghost small" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; font-weight: 700; color: #718096;">
+    <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i> 내 로드맵 지도로 돌아가기
+  </a>
+
+  <!-- 기술 개요 헤더 패널 (라이트 모드 숲 느낌의 테마) -->
+  <div style="background: linear-gradient(135deg, #009a93 0%, #00c49f 100%); color: #ffffff; padding: 36px; border-radius: 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(0, 196, 159, 0.15); margin-bottom: 30px;">
+    <div>
+      <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; letter-spacing: 0.05em;">{{ skill.skill_level }} 코스</span>
+      <h1 class="text-outfit" style="font-size: 36px; font-weight: 800; margin: 12px 0 8px; color: #ffffff;">{{ skill.skill_name }}</h1>
+      <p style="color: rgba(255,255,255,0.85); font-size: 15px; margin: 0; max-width: 600px;">{{ skill.skill_desc }}</p>
+    </div>
+    <div style="font-size: 48px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));">
+      {{ skill.skill_icon_code|default:"💎" }}
+    </div>
+  </div>
+
+  <!-- 메인 2단 학습 섹션 -->
+  <div class="learning-container">
+    
+    <!-- 좌측 단계 내비게이션 -->
+    <aside class="learning-sidebar">
+      <h3 class="text-outfit" style="font-size: 16px; font-weight: 800; margin-bottom: 16px; color: #1a202c;">학습 단계 커리큘럼</h3>
+      <div id="steps-wrapper">
+        {% for curr in curriculums %}
+        <button class="step-btn {% if forloop.first %}active{% endif %}" data-curr-id="{{ curr.id }}" onclick="switchStep(this)">
+          <span>Step {{ curr.curriculum_step }}</span>
+          <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
+        </button>
+        {% empty %}
+        <p style="font-size: 13px; color: #a0aec0; text-align: center; padding: 20px 0;">등록된 학습 코스가 없습니다.</p>
+        {% endfor %}
+      </div>
+    </aside>
+
+    <!-- 우측 학습 내용 보드 -->
+    <main class="learning-board">
+      
+      <!-- 각 단계 데이터 보관 및 동적 렌더링 영역 -->
+      <div class="curriculum-content-area">
+        {% for curr in curriculums %}
+        <!-- 각 단계의 컨텐츠 블록 (자바스크립트 스왑 제어용) -->
+        <div id="curr-block-{{ curr.id }}" class="curr-block" style="display: {% if forloop.first %}block{% else %}none{% endif %};">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 14px;">
+            <span style="font-size: 12px; font-weight: 700; color: #00c49f; background: #e6fffa; padding: 4px 10px; border-radius: 20px;">단계 주제</span>
+            <h4 style="font-size: 15px; font-weight: 600; color: #718096; margin: 0;">Step {{ curr.curriculum_step }}</h4>
+          </div>
+          
+          <h2 class="text-outfit" style="font-size: 26px; font-weight: 800; margin-bottom: 20px; color: #1a202c;">{{ curr.topic }}</h2>
+          
+          <!-- 학습 목표 박스 -->
+          <div class="objective-box">
+            <h5 style="margin: 0 0 6px 0; font-weight: 800; font-size: 13.5px;"><i data-lucide="target" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> 학습 목표 (Objectives)</h5>
+            <p style="margin: 0; color: #2f855a; line-height: 1.5;">{{ curr.objectives }}</p>
+          </div>
+
+          <!-- 핵심 요약 학습 본문 -->
+          <div class="markdown-body">
+            <h3 class="text-outfit" style="font-size: 16px; font-weight: 800; color: #2d3748; margin-bottom: 12px; border-bottom: 1px solid #e2e2dd; padding-bottom: 8px;">핵심 지식 가이드 (Key Contents)</h3>
+            <div style="white-space: pre-line; color: #4a5568;">
+              {{ curr.key_contents }}
+            </div>
+          </div>
+
+          <!-- 필기 메모 대쉬보드 연동 -->
+          <div style="margin-top: 40px; background: #f7f7f5; border: 1px solid #e2e2dd; padding: 24px; border-radius: 16px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+              <span style="font-size: 14px; font-weight: 700; color: #2d3748; display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="edit-3" style="width: 16px; height: 16px; color: #00c49f;"></i> 나만의 학습 필기 메모
+              </span>
+              <button type="button" class="primary small" style="min-height: 30px; border-radius: 8px; font-size: 12px; padding: 0 12px;" onclick="saveNote('{{ curr.id }}')">메모 저장</button>
+            </div>
+            <!-- Django Context Map에서 각 단계별 등록되어 있던 노트를 안전하게 출력 -->
+            <textarea id="note-input-{{ curr.id }}" class="note-textarea" placeholder="...">{{ curr.user_note_content }}</textarea>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- 우측 하단: 마스터 평가 퀴즈 CTA 배너 -->
+      <hr style="border: 0; border-top: 1px solid #e2e2dd; margin: 40px 0 24px;" />
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; background: #fffaf0; border: 1px solid #feebc8; padding: 20px 24px; border-radius: 16px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 42px; height: 42px; border-radius: 50%; background: #feebc8; display: flex; align-items: center; justify-content: center;">
+            <i data-lucide="award" style="width: 22px; height: 22px; color: #dd6b20;"></i>
+          </div>
+          <div>
+            <h4 style="font-size: 14px; font-weight: 700; color: #7b341e; margin: 0 0 2px 0;">{{ skill.skill_name }} 역량 평가 검증</h4>
+            <p style="font-size: 12.5px; color: #dd6b20; margin: 0;">난이도별 가중치가 설정된 100점 만점 퀴즈를 풀고 패스하여 로드맵을 완성해 보세요!</p>
+          </div>
+        </div>
+        <!-- 퀴즈 시작 버튼 (이후 구현할 퀴즈 뷰 주소 매핑용) -->
+        <a href="#" class="primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px; background: #dd6b20; border-radius: 10px; font-size: 13.5px;">
+          개념 검증 퀴즈 풀기 <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+        </a>
+      </div>
+
+    </main>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // 1. 학습 단계 탭 스왑 제어 함수
+  function switchStep(selectedBtn) {
+    // 모든 버튼에서 active 클래스 제거 및 클릭 버튼 활성화
+    document.querySelectorAll('.step-btn').forEach(btn => btn.classList.remove('active'));
+    selectedBtn.classList.add('active');
+
+    // 모든 컨텐츠 블록 숨기기 및 타겟 블록만 표시
+    const currId = selectedBtn.getAttribute('data-curr-id');
+    document.querySelectorAll('.curr-block').forEach(block => block.style.display = 'none');
+    
+    const targetBlock = document.getElementById(`curr-block-${currId}`);
+    if (targetBlock) {
+      targetBlock.style.display = 'block';
+    }
+  }
+
+  // 2. 필기 메모 저장 처리 함수 (AJAX 연동 전 가상 알림)
+  function saveNote(currId) {
+    const noteText = document.getElementById(`note-input-${currId}`).value;
+    // AJAX 저장 요청을 보낼 엔드포인트 바인딩 포인트입니다.
+    console.log(`Curriculum ID ${currId} 에 저장할 메모 내용:`, noteText);
+    alert("필기 메모가 브라우저에 임시 기록되었습니다. (저장 로직 완료 시 DB 연동)");
+  }
+</script>
+{% endblock %}
