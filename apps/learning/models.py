@@ -27,7 +27,7 @@ class Skill(models.Model):
     """
     개별 학습 기술 노드
     """
-    name = models.CharField(max_length=100, unique=Ture, verbose_names="기술명")
+    name = models.CharField(max_length=100, unique=True, verbose_names="기술명")
     description = models.TextField(blank=True, null=True, verbose_name="기술 설명")
     skill_icon_code = models.CharField(
         max_length=50,
